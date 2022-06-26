@@ -18,8 +18,8 @@ object Utils {
      * @return
      */
 
-    val dollarToEuroRate = Constant.DOLLARS_TO_EURO
-    val euroToDollarRate = Constant.EURO_TO_DOLLARS
+    private val dollarToEuroRate = Constant.DOLLARS_TO_EURO
+    private val euroToDollarRate = Constant.EURO_TO_DOLLARS
 
     fun convertDollarToEuro(dollars: Int): Int {
         return (dollars * dollarToEuroRate).roundToInt()

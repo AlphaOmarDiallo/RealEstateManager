@@ -2,6 +2,9 @@ package com.example.realestatemanager.domain
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.roundToInt
 
 class UtilsTest {
@@ -20,5 +23,18 @@ class UtilsTest {
         val sumInEuro = Utils.convertEuroToDollar(sumToConvert)
         val correctReturn = (Constant.EURO_TO_DOLLARS * sumToConvert).roundToInt()
         assertThat(sumInEuro).isEqualTo(correctReturn)
+    }
+
+    @Test
+    fun return_date_to_ddMMyyyy_format() {
+        val dateOfDay = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern(Constant.DATE_FORMAT, Locale.getDefault())
+        val wrongFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
+        val formattedDate = dateOfDay.format(formatter)
+        val wrongFormattedDate = dateOfDay.format(wrongFormatter)
+        val dateToCheck = Utils.todayDate
+
+        assertThat(dateToCheck).isEqualTo(formattedDate)
+        assertThat(dateToCheck).isNotEqualTo(wrongFormattedDate)
     }
 }
