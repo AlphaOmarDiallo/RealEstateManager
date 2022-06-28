@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RealEstateManager</string>
+    <string name="connectivity_rational">Real Estate Manager needs to access the following permissions in order to provide the best experience depending on your current connectivity</string>
 </resources>

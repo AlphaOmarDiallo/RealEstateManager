@@ -1,13 +1,16 @@
 package com.example.realestatemanager.domain
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.net.wifi.WifiManager
+import android.os.Build
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
+import android.view.View
+import androidx.annotation.RequiresApi
+import com.google.android.material.snackbar.Snackbar
+import java.io.IOException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,43 +59,52 @@ object Utils {
      * @return
      */
     fun isInternetAvailable(context: Context): Boolean {
-        val wifi = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        return wifi.isWifiEnabled
-    }
-
-    fun isInternetAvailable2 (context: Context) {
-        networkRequestCreation()
-        networkCallBackCreation()
-        connectivityManager = getSystemService(context, ConnectivityManager::class.java) as ConnectivityManager
-        Log.e("Utils", "isInternetAvailable2: ", )
-        connectivityManager.requestNetwork(networkRequest, networkCallback)
-        Log.e("Utils", "isInternetAvailable2: " + connectivityManager.requestNetwork(networkRequest, networkCallback))
-    }
-
-    private fun networkRequestCreation() {
-        networkRequest = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .build()
-    }
-
-    private fun networkCallBackCreation () {
-        networkCallback = object :  ConnectivityManager.NetworkCallback() {
-             override fun onAvailable(network: Network) {
-                 super.onAvailable(network)
-             }
-
-             override fun onCapabilitiesChanged(
-                 network: Network,
-                 networkCapabilities: NetworkCapabilities
-             ) {
-                 super.onCapabilitiesChanged(network, networkCapabilities)
-             }
-
-             override fun onLost(network: Network) {
-                 super.onLost(network)
-             }
+        /*val wifi = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        return wifi.isWifiEnabled*/
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            isInternetAvailableBuildVersionCodAboveM(context)
+        } else {
+            isInternetAvailableBuildVersionBelowM()
         }
+    }
+
+    fun isInternetAvailableBuildVersionBelowM(): Boolean {
+        val runtime = Runtime.getRuntime()
+        try {
+            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
+            val exitValue = ipProcess.waitFor()
+            return (exitValue == 0)
+        } catch (exception: IOException) {
+            exception.printStackTrace()
+        }
+        return false
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    @SuppressLint("MissingPermission")
+    fun isInternetAvailableBuildVersionCodAboveM(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    fun snackBarMaker(view: View, text: String) {
+        Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
     }
 }
