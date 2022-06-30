@@ -13,5 +13,4 @@ interface RetrofitAbstractAPI{
         @Query("target") target: String
     ): Call<EurToUsdRate>
 
-
 }
