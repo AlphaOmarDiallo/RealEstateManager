@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -23,15 +22,11 @@ object Utils {
     /**
      * Conversion d'un prix d'un bien immobilier (Dollars vers Euros)
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     * @param dollars
      * @return
      */
 
-    private val dollarToEuroRate = Constant.DOLLARS_TO_EURO
-    private val euroToDollarRate = Constant.EURO_TO_DOLLARS
-    private lateinit var networkRequest: NetworkRequest
-    private lateinit var networkCallback: ConnectivityManager.NetworkCallback
-    private lateinit var connectivityManager: ConnectivityManager
+    private const val dollarToEuroRate = Constant.DOLLARS_TO_EURO
+    private const val euroToDollarRate = Constant.EURO_TO_DOLLARS
 
     fun convertDollarToEuro(dollars: Int): Int {
         return (dollars * dollarToEuroRate).roundToInt()
@@ -68,10 +63,11 @@ object Utils {
         }
     }
 
-    fun isInternetAvailableBuildVersionBelowM(): Boolean {
+    private fun isInternetAvailableBuildVersionBelowM(): Boolean {
+        val ping = "/system/bin/ping -c 1 8.8.8.8"
         val runtime = Runtime.getRuntime()
         try {
-            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
+            val ipProcess = runtime.exec(ping)
             val exitValue = ipProcess.waitFor()
             return (exitValue == 0)
         } catch (exception: IOException) {
@@ -85,17 +81,19 @@ object Utils {
     fun isInternetAvailableBuildVersionCodAboveM(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (connectivityManager != null) {
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
                     return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
                     return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
                     return true
                 }

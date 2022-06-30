@@ -17,6 +17,7 @@ import com.vmadalin.easypermissions.dialogs.SettingsDialog
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var binding: ActivityMainBinding
+    private var connectivity: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +34,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
      * Check connectivity
      */
 
-    private fun checkConnectivity() {
-        Utils.isInternetAvailable(this)
+    private fun checkConnectivity(): Boolean {
+        return Utils.isInternetAvailable(this)
     }
 
     /**

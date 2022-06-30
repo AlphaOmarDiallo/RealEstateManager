@@ -4,7 +4,7 @@
     package="com.example.realestatemanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -28,7 +28,7 @@
         </activity>
         <meta-data
             android:name="abstractAPI"
-            android:value="${ABSTRACT_API_KEY}"/>
+            android:value="${ABSTRACT_API_KEY}" />
     </application>
 
 </manifest>
