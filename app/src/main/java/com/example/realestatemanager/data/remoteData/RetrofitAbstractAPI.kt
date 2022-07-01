@@ -6,7 +6,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface RetrofitAbstractAPI{
+interface RetrofitAbstractAPI {
     @GET("live/")
     suspend fun getEurToUsdConversionRate(
         @Query("api_key") apiKey: String,
@@ -20,4 +20,5 @@ interface RetrofitAbstractAPI{
         @Query("base") base: String,
         @Query("target") target: String
     ): Response<UsdToEurRate>
+
 }

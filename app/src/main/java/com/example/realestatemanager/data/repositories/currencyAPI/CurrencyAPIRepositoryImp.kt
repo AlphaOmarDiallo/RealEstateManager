@@ -10,12 +10,19 @@ import javax.inject.Inject
 class CurrencyAPIRepositoryImp @Inject constructor() : CurrencyAPIRepository {
 
     override suspend fun convertUSDtoEUR(): Response<UsdToEurRate> {
-        return RetrofitInstance.api.getUsdToEurConversionRate(Constant.ABSTRACT_API_KEY, Constant.USD, Constant.EUR)
+        return RetrofitInstance.api.getUsdToEurConversionRate(
+            Constant.ABSTRACT_API_KEY,
+            Constant.USD,
+            Constant.EUR
+        )
     }
 
     override suspend fun convertEURtoUSD(): Response<EurToUsdRate> {
-        return RetrofitInstance.api.getEurToUsdConversionRate(Constant.ABSTRACT_API_KEY, Constant.EUR, Constant.USD)
+        return RetrofitInstance.api.getEurToUsdConversionRate(
+            Constant.ABSTRACT_API_KEY,
+            Constant.EUR,
+            Constant.USD
+        )
     }
-
 
 }

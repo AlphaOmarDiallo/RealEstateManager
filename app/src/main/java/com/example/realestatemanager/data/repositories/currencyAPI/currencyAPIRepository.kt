@@ -6,7 +6,7 @@ import retrofit2.Response
 
 interface CurrencyAPIRepository {
 
-    suspend  fun convertUSDtoEUR(): Response<UsdToEurRate>
+    suspend fun convertUSDtoEUR(): Response<UsdToEurRate>
 
     suspend fun convertEURtoUSD(): Response<EurToUsdRate>
 }

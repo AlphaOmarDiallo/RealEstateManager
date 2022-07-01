@@ -9,7 +9,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.realestatemanager.R
-import com.example.realestatemanager.data.model.eurToUsd.ExchangeRates
 import com.example.realestatemanager.data.viewmodels.MainViewModel
 import com.example.realestatemanager.databinding.ActivityMainBinding
 import com.example.realestatemanager.domain.Constant
@@ -37,21 +36,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkConnectivity()
 
-        viewModel.getUsdRate()
-        viewModel.usdRate.observe(this, this::observeTest)
     }
 
     /**
      * ViewModel setup
      */
-    private fun setupViewModel(){
+    private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
     }
-
-    private fun observeTest(rate: ExchangeRates){
-        Log.d(TAG, "observeTest: " + rate.toString())
-    }
-
 
     /**
      * Check connectivity
