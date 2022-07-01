@@ -41,13 +41,23 @@ class SettingsActivityTest {
     }
 
     @Test
+    fun repository_is_not_null() {
+        assertThat(currencyAPIRepository).isNotNull()
+    }
+
+    @Test
     fun is_Internet_Connectivity_Checked() {
         assertThat(Utils.isInternetAvailable(InstrumentationRegistry.getInstrumentation().targetContext)).isNotNull()
     }
 
     @Test
-    fun repository_is_not_null() {
-        assertThat(currencyAPIRepository).isNotNull()
+    fun is_internet_available_method_below_build_version_M(){
+        assertThat(Utils.isInternetAvailableBuildVersionBelowM()).isNotNull()
+    }
+
+    @Test
+    fun is_internet_available_method_above_build_version_M(){
+        assertThat(Utils.isInternetAvailableBuildVersionCodAboveM(InstrumentationRegistry.getInstrumentation().targetContext)).isNotNull()
     }
 
     //Todo test connectivity method 1 and 2 separately

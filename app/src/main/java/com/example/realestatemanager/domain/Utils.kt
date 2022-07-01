@@ -63,7 +63,7 @@ object Utils {
         }
     }
 
-    private fun isInternetAvailableBuildVersionBelowM(): Boolean {
+    fun isInternetAvailableBuildVersionBelowM(): Boolean {
         val ping = "/system/bin/ping -c 1 8.8.8.8"
         val runtime = Runtime.getRuntime()
         try {

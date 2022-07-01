@@ -16,7 +16,7 @@ object Constant {
 
     //currencyAPI
     const val ABSTRACT_API_KEY = BuildConfig.ABSTRACT_API_KEY
-    const val BASE_URL_CURRENCY_API = "https://exchange-rates.abstractapi.com/v1"
+    const val BASE_URL_CURRENCY_API = "https://exchange-rates.abstractapi.com/v1/"
     const val USD = "usd"
     const val EUR = "eur"
 }

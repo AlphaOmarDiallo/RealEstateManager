@@ -2,11 +2,11 @@ package com.example.realestatemanager.data.repositories.currencyAPI
 
 import com.example.realestatemanager.data.model.eurToUsd.EurToUsdRate
 import com.example.realestatemanager.data.model.usdToEur.UsdToEurRate
-import retrofit2.Call
+import retrofit2.Response
 
 interface CurrencyAPIRepository {
 
-    suspend  fun convertUSDtoEUR(): Call<UsdToEurRate>
+    suspend  fun convertUSDtoEUR(): Response<UsdToEurRate>
 
-    suspend fun convertEURtoUSD(): Call<EurToUsdRate>
+    suspend fun convertEURtoUSD(): Response<EurToUsdRate>
 }
