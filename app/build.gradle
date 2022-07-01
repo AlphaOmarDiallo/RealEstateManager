@@ -57,6 +57,10 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //COROUTINES
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+
     //HILT - DAGGER
     implementation 'com.google.dagger:hilt-android:2.42'
     kapt 'com.google.dagger:hilt-compiler:2.42'
@@ -68,7 +72,7 @@ dependencies {
     kaptTest 'com.google.dagger:hilt-compiler:2.42'
 
     //LIFECYCLE
-    def lifecycle_version = "2.5.0-rc02"
+    def lifecycle_version = "2.6.0-alpha01"
     def arch_version = "2.1.0"
 
     // ViewModel
@@ -91,11 +95,16 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
     // optional - Test helpers for LiveData
     testImplementation "androidx.arch.core:core-testing:$arch_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     //RETROFIT - API CLIENT
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.code.gson:gson:2.8.9'
+
+    //OKHTTP
+    implementation'com.squareup.okhttp3:okhttp:4.10.0'
+    testImplementation'com.squareup.okhttp3:mockwebserver:4.10.0'
 
     //EASY PERMISSIONS - runtime permissions library
     implementation 'com.vmadalin:easypermissions-ktx:1.0.0'

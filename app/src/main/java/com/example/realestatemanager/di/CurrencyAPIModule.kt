@@ -1,8 +1,7 @@
-package com.example.realestatemanager.DI
+package com.example.realestatemanager.di
 
 import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepository
 import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepositoryImp
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
