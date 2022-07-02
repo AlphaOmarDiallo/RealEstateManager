@@ -8,7 +8,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class CurrencyAPIRepositoryImp @Inject constructor(
-    val retrofitAbstractAPI: RetrofitAbstractAPI
+    private val retrofitAbstractAPI: RetrofitAbstractAPI
 ) : CurrencyAPIRepository {
 
     override suspend fun convertUSDtoEUR(): Response<UsdToEurRate> {
