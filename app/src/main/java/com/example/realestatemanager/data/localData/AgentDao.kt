@@ -2,6 +2,7 @@ package com.example.realestatemanager.data.localData
 
 import androidx.room.*
 import com.example.realestatemanager.data.model.Agent
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AgentDao {
@@ -16,6 +17,6 @@ interface AgentDao {
     suspend fun deleteAgent(agent: Agent)
 
     @Query("SELECT * FROM agent_table")
-    fun getListAllAgents(): List<Agent>
+    fun getListAllAgents(): Flow<List<Agent>>
 
 }
