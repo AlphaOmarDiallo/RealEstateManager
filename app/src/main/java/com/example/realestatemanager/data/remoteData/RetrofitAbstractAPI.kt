@@ -7,6 +7,11 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RetrofitAbstractAPI {
+
+    /**
+     * https://app.abstractapi.com/
+     */
+
     @GET("live/")
     suspend fun getEurToUsdConversionRate(
         @Query("api_key") apiKey: String,
