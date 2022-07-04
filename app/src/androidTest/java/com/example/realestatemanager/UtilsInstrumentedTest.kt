@@ -25,7 +25,7 @@ class SettingsActivityTest {
     private lateinit var instrumentationContext: InstrumentationContext
 
     @Inject
-    public lateinit var currencyAPIRepository: CurrencyAPIRepository
+    lateinit var currencyAPIRepository: CurrencyAPIRepository
 
     @get:Rule(order = 1)
     var hiltRule = HiltAndroidRule(this)
@@ -51,14 +51,14 @@ class SettingsActivityTest {
     }
 
     @Test
-    fun is_internet_available_method_below_build_version_M(){
+    fun is_internet_available_method_below_build_version_M() {
         assertThat(Utils.isInternetAvailableBuildVersionBelowM()).isNotNull()
     }
 
     @Test
-    fun is_internet_available_method_above_build_version_M(){
+    fun is_internet_available_method_above_build_version_M() {
         assertThat(Utils.isInternetAvailableBuildVersionCodAboveM(InstrumentationRegistry.getInstrumentation().targetContext)).isNotNull()
     }
 
-    //Todo test connectivity method 1 and 2 separately
+    //Todo test app
 }
