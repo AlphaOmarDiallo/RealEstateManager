@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class Property(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "property_id")
-    val id: Long,
+    val id: Int = 0,
     @ColumnInfo(name = "property_type")
     val type: String,
     @ColumnInfo(name = "property_price")
@@ -33,5 +33,5 @@ data class Property(
     @ColumnInfo(name = "property_off_market_since")
     val offTheMarketSince: Long?,
     @ColumnInfo(name = "property_managing_agent")
-    val agentManagingPropertyId: Int
+    val agentManagingPropertyId: Int?
 )
