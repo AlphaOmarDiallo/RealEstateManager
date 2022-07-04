@@ -19,4 +19,5 @@ object Constant {
     const val BASE_URL_CURRENCY_API = "https://exchange-rates.abstractapi.com/v1/"
     const val USD = "usd"
     const val EUR = "eur"
+
 }
