@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class AgentRepositoryImp @Inject constructor(
     private val agentDao: AgentDao
-): AgentRepository {
+) : AgentRepository {
 
     val allAgent: Flow<List<Agent>> = agentDao.getListAllAgents()
 

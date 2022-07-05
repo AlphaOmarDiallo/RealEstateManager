@@ -8,7 +8,7 @@ import com.example.realestatemanager.data.model.Property
 
 @Database(entities = [Property::class, Agent::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
-abstract class AppDatabase : RoomDatabase() {
+abstract class LocalDatabase : RoomDatabase() {
 
     abstract fun propertyDao(): PropertyDao
 

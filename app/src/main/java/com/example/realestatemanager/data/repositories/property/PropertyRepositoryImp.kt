@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class PropertyRepositoryImp @Inject constructor(
     private val propertyDao: PropertyDao
-): PropertyRepository {
+) : PropertyRepository {
 
     val allProperties: Flow<List<Property>> = propertyDao.getListOfProperties()
 

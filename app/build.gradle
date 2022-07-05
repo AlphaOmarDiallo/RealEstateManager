@@ -124,7 +124,7 @@ dependencies {
     //Firebase Analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'
     //Firestore database
-    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
 }
 

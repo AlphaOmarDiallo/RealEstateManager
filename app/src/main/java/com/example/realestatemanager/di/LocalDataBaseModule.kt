@@ -2,7 +2,7 @@ package com.example.realestatemanager.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.realestatemanager.data.localData.AppDatabase
+import com.example.realestatemanager.data.localData.LocalDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,22 +12,22 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppDataBaseModule {
+class LocalDataBaseModule {
 
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext app: Context) =
         Room.databaseBuilder(
             app,
-            AppDatabase::class.java,
-            "AppDatabase"
+            LocalDatabase::class.java,
+            "LocalDatabase"
         ).build()
 
     @Singleton
     @Provides
-    fun providePropertyDao(database: AppDatabase) = database.propertyDao()
+    fun providePropertyDao(database: LocalDatabase) = database.propertyDao()
 
     @Singleton
     @Provides
-    fun provideAgentDao(database: AppDatabase) = database.agentDao()
+    fun provideAgentDao(database: LocalDatabase) = database.agentDao()
 }
