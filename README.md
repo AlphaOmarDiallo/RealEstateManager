@@ -22,12 +22,12 @@ Tech stack used:
 * LiveData
 * Room persistence library
 * Firebase
-** Firebase Auth
-** Firebase Cloud Firestore
+  * Firebase Auth
+  * Firebase Cloud Firestore
 * REST API with Retrofit
 * Google:
-** Maps API
-** Places API
+  * Maps API
+  * Places API
 * GIT
 
 ## Project setup
