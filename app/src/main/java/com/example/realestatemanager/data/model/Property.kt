@@ -9,11 +9,11 @@ import androidx.room.PrimaryKey
 data class Property(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "property_id")
-    val id: Int = 0,
+    val id: Int,
     @ColumnInfo(name = "property_type")
     val type: String,
     @ColumnInfo(name = "property_price")
-    val price: Int,
+    var price: Int,
     @ColumnInfo(name = "property_surface")
     val surface: Int,
     @ColumnInfo(name = "property_number_of_rooms")
@@ -21,11 +21,11 @@ data class Property(
     @ColumnInfo(name = "property_description")
     val description: String,
     @ColumnInfo(name = "property_photos")
-    val photos: List<Bitmap>,
+    val mainPhoto: List<String>?,
     @ColumnInfo(name = "property_address")
     val address: String,
     @ColumnInfo(name = "property_interest_around")
-    val interestsAround: List<String>,
+    val interestsAround: List<String>?,
     @ColumnInfo(name = "property_sale_status")
     val saleStatus: String,
     @ColumnInfo(name = "property_on_market_since")

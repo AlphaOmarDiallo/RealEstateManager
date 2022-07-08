@@ -3,6 +3,7 @@ package com.example.realestatemanager.testDI
 import android.content.Context
 import androidx.room.Room
 import com.example.realestatemanager.data.localData.LocalDatabase
+import com.example.realestatemanager.di.LocalDataBaseModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [LocalDatabase::class]
+    replaces = [LocalDataBaseModule::class]
 )
 class TestLocalDataBaseModule {
     @Singleton

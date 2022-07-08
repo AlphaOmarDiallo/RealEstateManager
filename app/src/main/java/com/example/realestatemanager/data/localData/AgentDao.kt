@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AgentDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAgent(agent: Agent)
 
     @Update
@@ -18,5 +18,11 @@ interface AgentDao {
 
     @Query("SELECT * FROM agent_table")
     fun getListAllAgents(): Flow<List<Agent>>
+
+    /**
+     * Only for test purpose
+     */
+    @Query("DELETE FROM agent_table")
+    fun nukeTable()
 
 }

@@ -16,5 +16,11 @@ interface PropertyDao {
     @Query("SELECT * FROM property_table")
     fun getListOfProperties(): Flow<List<Property>>
 
+    /**
+     * Only for test purpose, app does not allow to delete properties
+     */
+    @Query("DELETE FROM property_table")
+    fun nukeTable()
+
     //Todo add more queries to get filtered list in order to kee code clean
 }
