@@ -13,7 +13,7 @@ data class Property(
     @ColumnInfo(name = "property_type")
     val type: String,
     @ColumnInfo(name = "property_price")
-    var price: Int,
+    val price: Int,
     @ColumnInfo(name = "property_surface")
     val surface: Int,
     @ColumnInfo(name = "property_number_of_rooms")
