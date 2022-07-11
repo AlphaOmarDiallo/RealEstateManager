@@ -25,6 +25,13 @@ class PropertyListFragment : Fragment() {
     }
     
     @Composable
+    fun MyApp(){
+        RealEstateManagerTheme() {
+            
+        }
+    }
+    
+    @Composable
     fun Test(name: String){
         Text(text = "Bonjour $name")
     }
