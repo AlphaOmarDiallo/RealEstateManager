@@ -1,15 +1,19 @@
 package com.example.realestatemanager.ui
 
+import android.content.ContentValues.TAG
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -97,6 +101,7 @@ class PropertyListFragment : Fragment() {
                         stiffness = Spring.StiffnessLow
                     )
                 )
+                .clickable { Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show() }
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
