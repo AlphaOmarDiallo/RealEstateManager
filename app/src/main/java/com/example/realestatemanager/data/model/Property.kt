@@ -24,6 +24,10 @@ data class Property(
     val mainPhoto: List<String>?,
     @ColumnInfo(name = "property_address")
     val address: String,
+    @ColumnInfo(name = "property_city")
+    val city: String,
+    @ColumnInfo(name = "property_neighbourhood")
+    val neighbourhood: String,
     @ColumnInfo(name = "property_interest_around")
     val interestsAround: List<String>?,
     @ColumnInfo(name = "property_sale_status")

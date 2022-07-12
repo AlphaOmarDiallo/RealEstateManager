@@ -19,7 +19,7 @@ class PropertyListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                Test("Alpha")
+
             }
         }
     }
