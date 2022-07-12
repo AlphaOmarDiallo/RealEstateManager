@@ -1,5 +1,6 @@
 package com.example.realestatemanager.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -196,45 +199,35 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun PropertyAttributes(surface: Int, rooms: Int, bedRooms: Int, bathRoom: Int) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = (Icons.Outlined.Straighten),
-                    contentDescription = "ruler icon"
-                )
-                Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "$surface sq m", fontSize = 11.sp)
-            }
-            Spacer(modifier = Modifier.padding(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = (Icons.Outlined.Home),
-                    contentDescription = "home icon"
-                )
-                Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "$rooms rooms", fontSize = 11.sp)
-            }
-            Spacer(modifier = Modifier.padding(2.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = (Icons.Outlined.Bed),
-                    contentDescription = "bed icon"
-                )
-                Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "$bedRooms bedrooms", fontSize = 11.sp)
-            }
-            Spacer(modifier = Modifier.padding(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = (Icons.Outlined.Bathroom),
-                    contentDescription = "bathroom icon"
-                )
-                Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "$bathRoom bathroom", fontSize = 11.sp)
+        val attributeIndexList = listOf(0, 1, 2, 3)
+        val attributeList = listOf("$surface sq m", "$rooms rooms", "$bedRooms bedrooms", "$bathRoom bathrooms")
+        val attributeIconList = listOf(Icons.Outlined.Straighten, Icons.Outlined.Home, Icons.Outlined.Bed, Icons.Outlined.Bathroom)
+        val contentDescription = listOf("ruler icon", "home icon", "bed icon", "bathroom icon")
+        LazyRow(verticalAlignment = Alignment.CenterVertically) {
+            items(attributeIndexList) { attributeIndex ->
+                AttributeItem(icon = attributeIconList[attributeIndex], description = attributeList[attributeIndex], contentDescription = contentDescription[attributeIndex])
             }
         }
     }
 
+    @Composable
+    fun AttributeItem(icon: ImageVector, description: String, contentDescription: String){
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = (icon),
+                contentDescription = contentDescription
+            )
+            Spacer(modifier = Modifier.padding(2.dp))
+            Text(text = description, fontSize = 11.sp)
+        }
+    }
+
+    @Preview(
+        showBackground = true,
+        widthDp = 320,
+        uiMode = Configuration.UI_MODE_NIGHT_YES,
+        name = "DefaultPreviewDark"
+    )
     @Preview(showBackground = true)
     @Composable
     fun FragmentPreview() {
