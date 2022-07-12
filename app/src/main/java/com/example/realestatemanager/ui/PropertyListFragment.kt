@@ -8,6 +8,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,14 +46,23 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun MyApp() {
         RealEstateManagerTheme() {
-            ListOfProperty(propertyList = SampleProperties.samplePropertyList)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colors.primaryVariant)
+            ) {
+                ListOfProperty(propertyList = SampleProperties.samplePropertyList)
+            }
+
         }
     }
 
     @Composable
-    fun ListOfProperty(propertyList: List<Property>){
-        LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-            items(propertyList){ property ->
+    fun ListOfProperty(propertyList: List<Property>) {
+        LazyColumn(
+            modifier = Modifier.padding(vertical = 4.dp)
+        ) {
+            items(propertyList) { property ->
                 PropertyItem(property = property)
             }
         }
@@ -70,18 +80,20 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun CardContent(property: Property) {
-        var expended by remember { mutableStateOf(false)}
+        var expended by remember { mutableStateOf(false) }
 
-        Row(horizontalArrangement = Arrangement.Center,
+        Row(
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-            .padding(12.dp)
-            .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
+                .padding(12.dp)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
                 )
-            )) {
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.propertyplaceholder),
                 contentDescription = "Image of the property",
@@ -95,9 +107,13 @@ class PropertyListFragment : Fragment() {
 
             Column(
                 modifier = Modifier.weight(2f),
-                verticalArrangement = Arrangement.SpaceAround) {
+                verticalArrangement = Arrangement.SpaceAround
+            ) {
                 TextPropertyType(propertyType = property.type)
-                TextNeighbourhoodAndCity(neighbourhood = property.neighbourhood, city = property.city)
+                TextNeighbourhoodAndCity(
+                    neighbourhood = property.neighbourhood,
+                    city = property.city
+                )
                 TextPrice(price = property.price)
             }
 
@@ -108,18 +124,30 @@ class PropertyListFragment : Fragment() {
     }
 
     @Composable
-    fun TextPropertyType(propertyType: String){
-        Text(text = propertyType, style = MaterialTheme.typography.body1, fontWeight = FontWeight.Bold)
+    fun TextPropertyType(propertyType: String) {
+        Text(
+            text = propertyType,
+            style = MaterialTheme.typography.body1,
+            fontWeight = FontWeight.Bold
+        )
     }
 
     @Composable
-    fun TextNeighbourhoodAndCity(neighbourhood:String, city:String){
-        Text(text = "$neighbourhood, $city", style = MaterialTheme.typography.body1, color = MaterialTheme.colors.secondary)
+    fun TextNeighbourhoodAndCity(neighbourhood: String, city: String) {
+        Text(
+            text = "$neighbourhood, $city",
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.secondary
+        )
     }
 
     @Composable
-    fun TextPrice(price: Int){
-        Text(text = "$$price", style = MaterialTheme.typography.h5, color =  MaterialTheme.colors.primary)
+    fun TextPrice(price: Int) {
+        Text(
+            text = "$$price",
+            style = MaterialTheme.typography.h5,
+            color = MaterialTheme.colors.primary
+        )
     }
 
     @Preview(showBackground = true)
