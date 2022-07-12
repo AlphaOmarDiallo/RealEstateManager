@@ -12,18 +12,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
@@ -45,7 +48,7 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun MyApp() {
-        RealEstateManagerTheme() {
+        RealEstateManagerTheme {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -81,12 +84,10 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false) }
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(4.dp)
+                .fillMaxWidth()
                 .animateContentSize(
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -94,33 +95,64 @@ class PropertyListFragment : Fragment() {
                     )
                 )
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.propertyplaceholder),
-                contentDescription = "Image of the property",
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    //.size(100.dp)
-                    .weight(1f)
-                    .fillMaxSize(),
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Column(
-                modifier = Modifier.weight(2f),
-                verticalArrangement = Arrangement.SpaceAround
+                    .padding(12.dp)
             ) {
-                TextPropertyType(propertyType = property.type)
-                TextNeighbourhoodAndCity(
-                    neighbourhood = property.neighbourhood,
-                    city = property.city
+                Image(
+                    painter = painterResource(id = R.drawable.propertyplaceholder),
+                    contentDescription = "Image of the property",
+                    modifier = Modifier
+                        //.size(100.dp)
+                        .weight(1f)
+                        .fillMaxSize(),
                 )
-                TextPrice(price = property.price)
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Column(
+                    modifier = Modifier.weight(2f),
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
+                    TextPropertyType(propertyType = property.type)
+                    TextNeighbourhoodAndCity(
+                        neighbourhood = property.neighbourhood,
+                        city = property.city
+                    )
+                    TextPrice(price = property.price)
+                }
+
+                IconButton(onClick = { expended = !expended }) {
+                    Icon(
+                        imageVector = if (expended) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                        contentDescription = if (expended) {
+                            stringResource(R.string.show_less)
+                        } else {
+                            stringResource(R.string.show_more)
+                        }
+
+                    )
+                }
             }
-
-            IconButton(onClick = { /*TODO*/ }) {
-
+            if (expended) {
+                Column(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .fillMaxWidth(), horizontalAlignment = Alignment.Start
+                ) {
+                    TextAddress(address = property.address)
+                    PropertyAttributes(
+                        surface = property.surface,
+                        rooms = property.numberOfRooms,
+                        bedRooms = property.numberOfBedrooms,
+                        bathRoom = property.numberOfBathrooms
+                    )
+                }
             }
         }
+
     }
 
     @Composable
@@ -148,6 +180,59 @@ class PropertyListFragment : Fragment() {
             style = MaterialTheme.typography.h5,
             color = MaterialTheme.colors.primary
         )
+    }
+
+    @Composable
+    fun TextAddress(address: String) {
+        Row {
+            Icon(
+                imageVector = (Icons.Outlined.PinDrop),
+                contentDescription = null // decorative element
+            )
+            Spacer(modifier = Modifier.padding(4.dp))
+            Text(text = address, style = MaterialTheme.typography.body2)
+        }
+    }
+
+    @Composable
+    fun PropertyAttributes(surface: Int, rooms: Int, bedRooms: Int, bathRoom: Int) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = (Icons.Outlined.Straighten),
+                    contentDescription = "ruler icon"
+                )
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(text = "$surface sq m", fontSize = 11.sp)
+            }
+            Spacer(modifier = Modifier.padding(4.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = (Icons.Outlined.Home),
+                    contentDescription = "home icon"
+                )
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(text = "$rooms rooms", fontSize = 11.sp)
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = (Icons.Outlined.Bed),
+                    contentDescription = "bed icon"
+                )
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(text = "$bedRooms bedrooms", fontSize = 11.sp)
+            }
+            Spacer(modifier = Modifier.padding(4.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = (Icons.Outlined.Bathroom),
+                    contentDescription = "bathroom icon"
+                )
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(text = "$bathRoom bathroom", fontSize = 11.sp)
+            }
+        }
     }
 
     @Preview(showBackground = true)

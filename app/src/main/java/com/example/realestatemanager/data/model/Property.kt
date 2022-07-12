@@ -1,6 +1,5 @@
 package com.example.realestatemanager.data.model
 
-import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -18,6 +17,10 @@ data class Property(
     val surface: Int,
     @ColumnInfo(name = "property_number_of_rooms")
     val numberOfRooms: Int,
+    @ColumnInfo(name = "property_number_of_bedrooms")
+    val numberOfBedrooms: Int,
+    @ColumnInfo(name = "property_number_of_bathrooms")
+    val numberOfBathrooms: Int,
     @ColumnInfo(name = "property_description")
     val description: String,
     @ColumnInfo(name = "property_photos")
