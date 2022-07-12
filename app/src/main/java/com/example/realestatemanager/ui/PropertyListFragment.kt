@@ -72,7 +72,8 @@ class PropertyListFragment : Fragment() {
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false)}
 
-        Row(
+        Row(horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
             .padding(12.dp)
             .animateContentSize(
@@ -85,15 +86,16 @@ class PropertyListFragment : Fragment() {
                 painter = painterResource(id = R.drawable.propertyplaceholder),
                 contentDescription = "Image of the property",
                 modifier = Modifier
-                    .size(100.dp)
+                    //.size(100.dp)
                     .weight(1f)
+                    .fillMaxSize(),
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Column(
                 modifier = Modifier.weight(2f),
-                verticalArrangement = Arrangement.Center) {
+                verticalArrangement = Arrangement.SpaceAround) {
                 TextPropertyType(propertyType = property.type)
                 TextNeighbourhoodAndCity(neighbourhood = property.neighbourhood, city = property.city)
                 TextPrice(price = property.price)
@@ -112,10 +114,7 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun TextNeighbourhoodAndCity(neighbourhood:String, city:String){
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(text = neighbourhood, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.secondary)
-            Text(text = city, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.secondary)
-        }
+        Text(text = "$neighbourhood, $city", style = MaterialTheme.typography.body1, color = MaterialTheme.colors.secondary)
     }
 
     @Composable
