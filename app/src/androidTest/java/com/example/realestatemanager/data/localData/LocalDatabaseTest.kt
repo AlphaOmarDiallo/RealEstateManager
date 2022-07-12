@@ -2,6 +2,7 @@ package com.example.realestatemanager.data.localData
 
 import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -43,10 +44,7 @@ class LocalDatabaseTest {
     }
 
     private var agent = Agent(0, "John Doe", "johnDoe@test.com", null)
-    private var property = Property(
-        0, "apartment", 3000000, 300, 10, "lorem ipsum....", null,
-        "somewhere", null, "In sale", Calendar.getInstance().timeInMillis, null, null
-    )
+    private var property = SampleProperties.samplePropertyList[0]
 
     @Test
     fun a_localDataBase_injected_with_success() {
