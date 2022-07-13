@@ -14,28 +14,27 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
+import com.example.realestatemanager.domain.SharedComposable
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 
 class PropertyListFragment : Fragment() {
@@ -46,13 +45,14 @@ class PropertyListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                MyApp()
+                PropertyList()
             }
         }
+
     }
 
     @Composable
-    fun MyApp() {
+    fun PropertyList() {
         RealEstateManagerTheme {
             Box(
                 modifier = Modifier
@@ -99,7 +99,11 @@ class PropertyListFragment : Fragment() {
                         stiffness = Spring.StiffnessLow
                     )
                 )
-                .clickable { Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show() }
+                .clickable {
+                    Toast
+                        .makeText(requireContext(), "clicked", Toast.LENGTH_SHORT)
+                        .show()
+                }
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -122,12 +126,12 @@ class PropertyListFragment : Fragment() {
                     modifier = Modifier.weight(2f),
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
-                    TextPropertyType(propertyType = property.type)
-                    TextNeighbourhoodAndCity(
+                    SharedComposable.TextPropertyType(propertyType = property.type)
+                    SharedComposable.TextNeighbourhoodAndCity(
                         neighbourhood = property.neighbourhood,
                         city = property.city
                     )
-                    TextPrice(price = property.price)
+                    SharedComposable.TextPrice(price = property.price)
                 }
 
                 IconButton(onClick = { expended = !expended }) {
@@ -148,8 +152,8 @@ class PropertyListFragment : Fragment() {
                         .padding(4.dp)
                         .fillMaxWidth(), horizontalAlignment = Alignment.Start
                 ) {
-                    TextAddress(address = property.address)
-                    PropertyAttributes(
+                    SharedComposable.TextAddress(address = property.address)
+                    SharedComposable.PropertyAttributes(
                         surface = property.surface,
                         rooms = property.numberOfRooms,
                         bedRooms = property.numberOfBedrooms,
@@ -157,71 +161,6 @@ class PropertyListFragment : Fragment() {
                     )
                 }
             }
-        }
-
-    }
-
-    @Composable
-    fun TextPropertyType(propertyType: String) {
-        Text(
-            text = propertyType,
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Bold
-        )
-    }
-
-    @Composable
-    fun TextNeighbourhoodAndCity(neighbourhood: String, city: String) {
-        Text(
-            text = "$neighbourhood, $city",
-            style = MaterialTheme.typography.body1,
-            color = MaterialTheme.colors.secondary
-        )
-    }
-
-    @Composable
-    fun TextPrice(price: Int) {
-        Text(
-            text = "$$price",
-            style = MaterialTheme.typography.h5,
-            color = MaterialTheme.colors.primary
-        )
-    }
-
-    @Composable
-    fun TextAddress(address: String) {
-        Row {
-            Icon(
-                imageVector = (Icons.Outlined.PinDrop),
-                contentDescription = null // decorative element
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Text(text = address, style = MaterialTheme.typography.body2)
-        }
-    }
-
-    @Composable
-    fun PropertyAttributes(surface: Int, rooms: Int, bedRooms: Int, bathRoom: Int) {
-        val attributeIndexList = listOf(0, 1, 2, 3)
-        val attributeList = listOf("$surface sq m", "$rooms rooms", "$bedRooms bedrooms", "$bathRoom bathrooms")
-        val attributeIconList = listOf(Icons.Outlined.Straighten, Icons.Outlined.Home, Icons.Outlined.Bed, Icons.Outlined.Bathroom)
-        val contentDescription = listOf("ruler icon", "home icon", "bed icon", "bathroom icon")
-        LazyRow(verticalAlignment = Alignment.CenterVertically) {
-            items(attributeIndexList) { attributeIndex ->
-                AttributeItem(icon = attributeIconList[attributeIndex], description = attributeList[attributeIndex], contentDescription = contentDescription[attributeIndex])
-            }
-        }
-    }
-
-    @Composable
-    fun AttributeItem(icon: ImageVector, description: String, contentDescription: String){
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = (icon),
-                contentDescription = contentDescription
-            )
-            Spacer(modifier = Modifier.padding(2.dp))
-            Text(text = description, fontSize = 11.sp)
         }
     }
 
@@ -235,7 +174,7 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun FragmentPreview() {
         RealEstateManagerTheme {
-            MyApp()
+            PropertyList()
         }
     }
 

@@ -9,5 +9,14 @@
         android:id="@+id/propertyListFragment"
         android:name="com.example.realestatemanager.ui.PropertyListFragment"
         android:label="fragment_property_list"
-        tools:layout="@layout/fragment_property_list" />
+        tools:layout="@layout/fragment_property_list" >
+        <action
+            android:id="@+id/action_propertyListFragment_to_propertyDetail"
+            app:destination="@id/propertyDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/propertyDetail"
+        android:name="com.example.realestatemanager.ui.PropertyDetailFragment"
+        android:label="fragment_property_detail"
+        tools:layout="@layout/fragment_property_detail" />
 </navigation>
