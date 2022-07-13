@@ -21,6 +21,8 @@ Tech stack used:
 * Coroutines
 * LiveData
 * Room persistence library
+* Compose
+* XML
 * Firebase
   * Firebase Auth
   * Firebase Cloud Firestore
