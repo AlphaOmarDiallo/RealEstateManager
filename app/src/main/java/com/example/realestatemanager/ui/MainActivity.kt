@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.viewmodels.MainViewModel
