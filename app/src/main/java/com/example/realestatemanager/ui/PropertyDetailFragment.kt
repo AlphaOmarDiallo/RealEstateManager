@@ -75,7 +75,7 @@ class PropertyDetailFragment : Fragment() {
                 bedRooms = property.numberOfBedrooms,
                 bathRoom = property.numberOfBathrooms)
             SharedComposable.TextAddress(address = property.address)
-
+            AddMap(address = property.address)
         }
     }
 
@@ -105,18 +105,20 @@ class PropertyDetailFragment : Fragment() {
         Text(text = propertyDescription)
     }
 
+
     @Composable
     fun AddMap(address: String){
-        val singapore = LatLng(1.35, 103.87)
+
+        val addressLatLng = LatLng(1.35, 103.87)
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(singapore, 10f)
+            position = CameraPosition.fromLatLngZoom(addressLatLng, 10f)
         }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState
         ) {
             Marker(
-                state = MarkerState(position = singapore),
+                state = MarkerState(position = addressLatLng),
                 title = "Singapore",
                 snippet = "Marker in Singapore"
             )

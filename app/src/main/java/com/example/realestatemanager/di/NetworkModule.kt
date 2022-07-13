@@ -1,6 +1,7 @@
 package com.example.realestatemanager.di
 
 import com.example.realestatemanager.data.remoteData.RetrofitAbstractAPI
+import com.example.realestatemanager.data.remoteData.RetrofitGoogleAPI
 import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepository
 import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepositoryImp
 import com.example.realestatemanager.domain.Constant
@@ -24,6 +25,13 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RetrofitAbstractAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGoogleServices(): RetrofitGoogleAPI {
+        return Retrofit.Builder()
+            .baseUrl()
     }
 
     @Singleton

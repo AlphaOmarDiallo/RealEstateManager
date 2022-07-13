@@ -20,4 +20,8 @@ object Constant {
     const val USD = "usd"
     const val EUR = "eur"
 
+    //GoogleServices
+    const val GOOGLE_API_KEY = BuildConfig.GOOGLE_CLOUD_API_KEY
+    const val BASE_URL_GOOGLE_API = "https://maps.googleapis.com/"
+
 }

@@ -33,6 +33,7 @@
         <meta-data
             android:name="googleAPI"
             android:value="${GOOGLE_CLOUD_API_KEY}" />
+
     </application>
 
 </manifest>
