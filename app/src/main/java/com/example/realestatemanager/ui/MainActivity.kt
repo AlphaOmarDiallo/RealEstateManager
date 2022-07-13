@@ -49,6 +49,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
      * Check connectivity
      */
 
+    private fun showInternetConnectionStatusMessage(){
+        if (!checkConnectivity()) {
+            binding.tvInternetSatutsMA.text = getText(R.string.not_connected_to_internet)
+            binding.tvInternetSatutsMA.setBackgroundColor(com.vmadalin.easypermissions.R.color.error_color_material_dark)
+        } else {
+            binding.tvInternetSatutsMA.text = ""
+            binding.tvInternetSatutsMA.setBackgroundColor(R.color.secondaryLightColor)
+        }
+    }
+
     private fun checkConnectivity(): Boolean {
         return Utils.isInternetAvailable(this)
     }

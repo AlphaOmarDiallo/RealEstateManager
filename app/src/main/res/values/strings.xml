@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">RealEstateManager</string>
+
+    <!-- Main activity -->
     <string name="connectivity_rational">Real Estate Manager needs to access the following permissions in order to provide the best experience depending on your current connectivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main2">MainActivity2</string>
+    <string name="not_connected_to_internet">You are not connected to internet</string>
+    <!-- Fragment propertyList -->
     <string name="show_less">Show less</string>
     <string name="show_more">Show more</string>
 </resources>
