@@ -1,12 +1,16 @@
 package com.example.realestatemanager.data.viewmodels
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepository
 import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepository
 import com.example.realestatemanager.domain.Constant
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -15,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val currencyAPIRepository: CurrencyAPIRepository
+    private val currencyAPIRepository: CurrencyAPIRepository,
+    private val connectivityRepository: ConnectivityRepository
 ) : ViewModel() {
 
     val usdRate: MutableLiveData<Double> = MutableLiveData()
@@ -77,5 +82,11 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun checkConnectivity(context: Context): LiveData<Boolean> {
+        return connectivityRepository.isInternetAvailable(context)
+    }
+
+
 
 }

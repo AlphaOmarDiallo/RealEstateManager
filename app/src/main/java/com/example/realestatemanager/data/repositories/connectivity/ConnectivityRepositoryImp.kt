@@ -9,12 +9,11 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.flow.Flow
 import java.io.IOException
 
 class ConnectivityRepositoryImp : ConnectivityRepository {
 
-    private lateinit var connected: MutableLiveData<Boolean>
+    private var connected: MutableLiveData<Boolean> = MutableLiveData()
 
     override fun isInternetAvailable(context: Context): LiveData<Boolean> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -1,6 +1,8 @@
 package com.example.realestatemanager.di
 
 import com.example.realestatemanager.data.remoteData.RetrofitAbstractAPI
+import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepository
+import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepositoryImp
 import com.example.realestatemanager.domain.Constant
 import dagger.Module
 import dagger.Provides
@@ -23,4 +25,8 @@ class NetworkModule {
             .build()
             .create(RetrofitAbstractAPI::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideConnectivityService(): ConnectivityRepository = ConnectivityRepositoryImp()
 }
