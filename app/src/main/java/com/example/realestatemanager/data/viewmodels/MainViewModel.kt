@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.realestatemanager.data.repositories.autocomplete.AutocompleteRepository
 import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepository
 import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepository
 import com.example.realestatemanager.data.repositories.geocoding.GeocodingRepository
@@ -24,7 +25,8 @@ class MainViewModel @Inject constructor(
     private val currencyAPIRepository: CurrencyAPIRepository,
     private val connectivityRepository: ConnectivityRepository,
     private val geocodingRepository: GeocodingRepository,
-    private val nearBySearchRepository: NearBySearchRepository
+    private val nearBySearchRepository: NearBySearchRepository,
+    private val autocompleteRepository: AutocompleteRepository
 ) : ViewModel() {
 
     val usdRate: MutableLiveData<Double> = MutableLiveData()
@@ -175,6 +177,30 @@ class MainViewModel @Inject constructor(
             } catch (e: HttpException) {
                 Log.e(TAG, "getInterestsAround: HttpException" + e.message(), null)
 
+            }
+        }
+    }
+
+    fun getAutocompleteSuggestions(input: String) {
+        viewModelScope.launch {
+            try {
+                val response = autocompleteRepository.autocompleteAddress(input)
+
+                if (!response.isSuccessful) {
+                    Log.w(TAG, "getAutocompleteSuggestions: no response from API", null)
+                    return@launch
+                }
+
+                if (response.body()?.predictions != null) {
+                    Log.i(TAG, "getAutocompleteSuggestions: " + response.raw().request.url)
+                } else {
+                    Log.e(TAG, "getAutocompleteSuggestions", null)
+                }
+
+            } catch (e: IOException) {
+                Log.e(TAG, "getAutocompleteSuggestions: IOException" + e.message, null)
+            } catch (e: HttpException) {
+                Log.e(TAG, "getAutocompleteSuggestions: HttpException" + e.message(), null)
             }
         }
     }

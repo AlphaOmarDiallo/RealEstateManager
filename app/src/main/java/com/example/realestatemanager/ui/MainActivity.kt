@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkConnectivity(this)
 
-        interstList()
+        auto("20 Cooper Square")
 
     }
 
@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
     }
 
-    private fun interstList() {
-        viewModel.getInterestsAround()
+    private fun auto(input: String){
+        viewModel.getAutocompleteSuggestions(input)
     }
 
     /**

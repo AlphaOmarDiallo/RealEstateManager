@@ -22,9 +22,16 @@ object Constant {
 
     //GoogleServices
     const val GOOGLE_API_KEY = BuildConfig.GOOGLE_CLOUD_API_KEY
-    const val BASE_URL_GOOGLE_API = "https://maps.googleapis.com/"
-    const val GEOCODING_URL = "maps/api/geocode/json?"
-    const val NEARBYSEARCH_URL = "maps/api/place/nearbysearch/json"
+    const val BASE_URL_GOOGLE_API = "https://maps.googleapis.com/maps/api/"
+
+    const val GEOCODING_URL = "geocode/json?"
+
+    const val NEARBYSEARCH_URL = "place/nearbysearch/json"
     const val RADIUS_NEARBYSEARCH = 5000
+
+    const val AUTOCOMPLETE_URL = "place/autocomplete/json"
+    const val AUTOCOMPLETE_COMPONENTS = "country:us"
+    const val AUTOCOMPLETE_OFFSET = 5
+    const val AUTOCOMPLETE_TYPES = "address"
 
 }
