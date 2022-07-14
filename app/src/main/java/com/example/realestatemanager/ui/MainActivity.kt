@@ -6,7 +6,9 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.realestatemanager.R
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,14 +33,49 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val view = binding.root
         setContentView(view)
 
+        setupUI()
+
         setupViewModel()
 
         checkLocationPermission()
 
         checkConnectivity(this)
 
-        auto("20 Cooper Square")
+    }
 
+    /**
+     * UI update methods
+     */
+
+    private fun setupUI() {
+        setupToolBar()
+        setupNavDrawer()
+    }
+
+    private fun setupToolBar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(true)
+    }
+
+    /**
+     * Navigation drawer setup
+     */
+    private fun setupNavDrawer() {
+        toggle = ActionBarDrawerToggle(
+            this,
+            binding.mainLayout,
+            R.string.Open_drawer_menu,
+            R.string.Close_drawer_menu
+        )
+        binding.mainLayout.addDrawerListener(toggle)
+        toggle.syncState()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (toggle.onOptionsItemSelected(item)) {
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
     /**
@@ -45,10 +83,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
      */
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
-
-    private fun auto(input: String){
-        viewModel.getAutocompleteSuggestions(input)
     }
 
     /**
@@ -62,9 +96,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun showInternetConnectionStatusMessage(connected: Boolean) {
         if (connected) {
-            binding.tvInternetSatutsMA.text = ""
+            binding.tvInternetStatusMA.text = ""
         } else {
-            binding.tvInternetSatutsMA.text = getText(R.string.not_connected_to_internet)
+            binding.tvInternetStatusMA.text = getText(R.string.not_connected_to_internet)
         }
     }
 
