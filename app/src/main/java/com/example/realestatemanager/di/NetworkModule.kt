@@ -29,9 +29,12 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideGoogleServices(): RetrofitGoogleAPI {
+    fun provideGoogleServices(): RetrofitGoogleAPI{
         return Retrofit.Builder()
-            .baseUrl()
+            .baseUrl(Constant.BASE_URL_GOOGLE_API)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(RetrofitGoogleAPI::class.java)
     }
 
     @Singleton

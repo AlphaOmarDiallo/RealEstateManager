@@ -23,5 +23,6 @@ object Constant {
     //GoogleServices
     const val GOOGLE_API_KEY = BuildConfig.GOOGLE_CLOUD_API_KEY
     const val BASE_URL_GOOGLE_API = "https://maps.googleapis.com/"
+    const val GEOCODING_URL = "maps/api/geocode/json?"
 
 }
