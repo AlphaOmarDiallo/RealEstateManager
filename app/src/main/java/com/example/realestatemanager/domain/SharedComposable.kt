@@ -22,18 +22,28 @@ object SharedComposable {
     @Composable
     fun PropertyAttributes(surface: Int, rooms: Int, bedRooms: Int, bathRoom: Int) {
         val attributeIndexList = listOf(0, 1, 2, 3)
-        val attributeList = listOf("$surface sq m", "$rooms rooms", "$bedRooms bedrooms", "$bathRoom bathrooms")
-        val attributeIconList = listOf(Icons.Outlined.Straighten, Icons.Outlined.Home, Icons.Outlined.Bed, Icons.Outlined.Bathroom)
+        val attributeList =
+            listOf("$surface sq m", "$rooms rooms", "$bedRooms bedrooms", "$bathRoom bathrooms")
+        val attributeIconList = listOf(
+            Icons.Outlined.Straighten,
+            Icons.Outlined.Home,
+            Icons.Outlined.Bed,
+            Icons.Outlined.Bathroom
+        )
         val contentDescription = listOf("ruler icon", "home icon", "bed icon", "bathroom icon")
         LazyRow(verticalAlignment = Alignment.CenterVertically) {
             items(attributeIndexList) { attributeIndex ->
-                AttributeItem(icon = attributeIconList[attributeIndex], description = attributeList[attributeIndex], contentDescription = contentDescription[attributeIndex])
+                AttributeItem(
+                    icon = attributeIconList[attributeIndex],
+                    description = attributeList[attributeIndex],
+                    contentDescription = contentDescription[attributeIndex]
+                )
             }
         }
     }
 
     @Composable
-    fun AttributeItem(icon: ImageVector, description: String, contentDescription: String){
+    fun AttributeItem(icon: ImageVector, description: String, contentDescription: String) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = (icon),

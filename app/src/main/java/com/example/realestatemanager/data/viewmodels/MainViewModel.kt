@@ -129,7 +129,7 @@ class MainViewModel @Inject constructor(
                 val response = nearBySearchRepository.getInterestList(location, null)
 
                 if (!response.isSuccessful) {
-                    Log.w(TAG, "getInterestsAround: no response from API", null )
+                    Log.w(TAG, "getInterestsAround: no response from API", null)
                     return@launch
                 }
 
@@ -151,20 +151,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getNextInterestAround(location: Location, token: String){
+    private fun getNextInterestAround(location: Location, token: String) {
         viewModelScope.launch {
             try {
                 val response = nearBySearchRepository.getInterestList(location, token)
 
                 if (!response.isSuccessful) {
-                    Log.w(TAG, "getInterestsAround: no response from API", null )
+                    Log.w(TAG, "getInterestsAround: no response from API", null)
                     return@launch
                 }
 
                 if (response.body()?.results != null) {
                     Log.i(TAG, "getInterestsAround: " + response.raw().request.url)
                     if (response.body()!!.next_page_token != null) {
-                            getNextInterestAround(location, response.body()!!.next_page_token)
+                        getNextInterestAround(location, response.body()!!.next_page_token)
                     }
                 } else {
                     Log.e(TAG, "getInterestsAround: null data", null)

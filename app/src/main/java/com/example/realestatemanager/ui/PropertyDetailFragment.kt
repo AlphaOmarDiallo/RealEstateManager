@@ -64,7 +64,10 @@ class PropertyDetailFragment : Fragment() {
         Column {
             SharedComposable.TextPropertyType(propertyType = property.type)
             Row {
-                SharedComposable.TextNeighbourhoodAndCity(neighbourhood = property.neighbourhood, city = property.city)
+                SharedComposable.TextNeighbourhoodAndCity(
+                    neighbourhood = property.neighbourhood,
+                    city = property.city
+                )
                 SharedComposable.TextPrice(price = property.price)
             }
             PropertyImageList(propertyPhoto = property.photo)
@@ -73,7 +76,8 @@ class PropertyDetailFragment : Fragment() {
                 surface = property.surface,
                 rooms = property.numberOfRooms,
                 bedRooms = property.numberOfBedrooms,
-                bathRoom = property.numberOfBathrooms)
+                bathRoom = property.numberOfBathrooms
+            )
             SharedComposable.TextAddress(address = property.address)
             AddMap(address = property.address)
         }
@@ -81,10 +85,10 @@ class PropertyDetailFragment : Fragment() {
 
     @Composable
     fun PropertyImageList(propertyPhoto: List<String>?) {
-        if (propertyPhoto != null){
-            LazyRow(verticalAlignment = Alignment.CenterVertically){
+        if (propertyPhoto != null) {
+            LazyRow(verticalAlignment = Alignment.CenterVertically) {
                 items(propertyPhoto) {
-                    for (photo in propertyPhoto){
+                    for (photo in propertyPhoto) {
                         DisplayPhoto(propertyPhoto = photo)
                     }
                 }
@@ -93,7 +97,7 @@ class PropertyDetailFragment : Fragment() {
     }
 
     @Composable
-    fun DisplayPhoto (propertyPhoto: String){
+    fun DisplayPhoto(propertyPhoto: String) {
         AsyncImage(
             model = propertyPhoto,
             contentDescription = "Property photo"
@@ -101,13 +105,13 @@ class PropertyDetailFragment : Fragment() {
     }
 
     @Composable
-    fun PropertyDescription(propertyDescription: String){
+    fun PropertyDescription(propertyDescription: String) {
         Text(text = propertyDescription)
     }
 
 
     @Composable
-    fun AddMap(address: String){
+    fun AddMap(address: String) {
 
         val addressLatLng = LatLng(1.35, 103.87)
         val cameraPositionState = rememberCameraPositionState {

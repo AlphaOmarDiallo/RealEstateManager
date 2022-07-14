@@ -9,9 +9,12 @@ import javax.inject.Inject
 
 class NearBySearchRepositoryImp @Inject constructor(
     private val retrofitGoogleAPI: RetrofitGoogleAPI
-) : NearBySearchRepository{
+) : NearBySearchRepository {
 
-    override suspend fun getInterestList(location: Location, pageToken: String?): Response<NearBySearch> {
+    override suspend fun getInterestList(
+        location: Location,
+        pageToken: String?
+    ): Response<NearBySearch> {
         return retrofitGoogleAPI.interestsAround(
             "${location.latitude},${location.longitude}",
             Constant.RADIUS_NEARBYSEARCH,

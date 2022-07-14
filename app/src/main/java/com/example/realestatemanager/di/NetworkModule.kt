@@ -29,7 +29,7 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideGoogleServices(): RetrofitGoogleAPI{
+    fun provideGoogleServices(): RetrofitGoogleAPI {
         return Retrofit.Builder()
             .baseUrl(Constant.BASE_URL_GOOGLE_API)
             .addConverterFactory(GsonConverterFactory.create())

@@ -11,7 +11,7 @@ object SampleAgent {
         Agent(0, "Nael", "nael@realestate.com", null)
     )
 
-    fun getSampleAgentList() : List<Agent> {
+    fun getSampleAgentList(): List<Agent> {
         return sampleListAgent
     }
 }

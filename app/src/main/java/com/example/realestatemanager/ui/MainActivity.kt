@@ -56,10 +56,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
      */
 
     private fun checkConnectivity(context: Context) {
-        viewModel.checkConnectivity(context).observe(this, this::showInternetConnectionStatusMessage)
+        viewModel.checkConnectivity(context)
+            .observe(this, this::showInternetConnectionStatusMessage)
     }
 
-    private fun showInternetConnectionStatusMessage(connected: Boolean){
+    private fun showInternetConnectionStatusMessage(connected: Boolean) {
         if (connected) {
             binding.tvInternetSatutsMA.text = ""
         } else {

@@ -23,7 +23,7 @@ class ConnectivityRepositoryImp : ConnectivityRepository {
         }
     }
 
-    private fun isInternetAvailableBuildVersionBelowM(): LiveData<Boolean>{
+    private fun isInternetAvailableBuildVersionBelowM(): LiveData<Boolean> {
         val ping = "/system/bin/ping -c 1 8.8.8.8"
         val runtime = Runtime.getRuntime()
         try {
