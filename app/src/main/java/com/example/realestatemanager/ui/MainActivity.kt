@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkConnectivity(this)
 
+        geocode()
+
     }
 
     /**
@@ -59,6 +61,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         } else {
             binding.tvInternetSatutsMA.text = getText(R.string.not_connected_to_internet)
         }
+    }
+
+    /**
+     * Geocoding
+     */
+    private fun geocode(){
+        viewModel.convertAddressToGeocode()
     }
 
     /**

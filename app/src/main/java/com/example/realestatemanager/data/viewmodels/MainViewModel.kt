@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepository
 import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepository
+import com.example.realestatemanager.data.repositories.geocoding.GeocodingRepository
 import com.example.realestatemanager.domain.Constant
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val currencyAPIRepository: CurrencyAPIRepository,
-    private val connectivityRepository: ConnectivityRepository
+    private val connectivityRepository: ConnectivityRepository,
+    private val geocodingRepository: GeocodingRepository
 ) : ViewModel() {
 
     val usdRate: MutableLiveData<Double> = MutableLiveData()
@@ -87,6 +89,29 @@ class MainViewModel @Inject constructor(
         return connectivityRepository.isInternetAvailable(context)
     }
 
+    fun convertAddressToGeocode(){
+        viewModelScope.launch {
+            try {
+                val response = geocodingRepository.convertAddressToGeocode("strada traian vuia 3  otopeni")
 
+                if (!response.isSuccessful){
+                    Log.w(TAG, "geocode: no response from API", null)
+                    return@launch
+                }
 
-}
+                if (response.body()?.results != null) {
+                    Log.i(TAG, "geocode " + response.body()?.results.toString())
+                } else {
+                    Log.e(TAG, "geocode: null data", null)
+                }
+
+            } catch (e: IOException) {
+                Log.e(TAG, "geocode: IOException" + e.message, null)
+
+            } catch (e: HttpException) {
+                Log.e(TAG, "geocode: HttpException" + e.message(), null)
+
+            }
+            }
+        }
+    }
