@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkConnectivity(this)
 
-        geocode()
+        interstList()
 
     }
 
@@ -45,6 +45,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
      */
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
+    private fun interstList() {
+        viewModel.getInterestsAround()
     }
 
     /**
@@ -61,13 +65,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         } else {
             binding.tvInternetSatutsMA.text = getText(R.string.not_connected_to_internet)
         }
-    }
-
-    /**
-     * Geocoding
-     */
-    private fun geocode(){
-        viewModel.convertAddressToGeocode()
     }
 
     /**

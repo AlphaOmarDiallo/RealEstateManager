@@ -15,6 +15,6 @@ class GeocodingModule {
 
     @Singleton
     @Provides
-    fun provideGeocodingRepository(retrofitGoogleAPI: RetrofitGoogleAPI) : GeocodingRepository =
+    fun provideGeocodingRepository(retrofitGoogleAPI: RetrofitGoogleAPI): GeocodingRepository =
         GeocodingRepositoryImp(retrofitGoogleAPI)
 }

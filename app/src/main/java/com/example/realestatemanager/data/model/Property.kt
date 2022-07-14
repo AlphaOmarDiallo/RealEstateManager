@@ -24,7 +24,7 @@ data class Property(
     @ColumnInfo(name = "property_description")
     val description: String,
     @ColumnInfo(name = "property_photos")
-    val mainPhoto: List<String>?,
+    val photo: List<String>?,
     @ColumnInfo(name = "property_address")
     val address: String,
     @ColumnInfo(name = "property_city")

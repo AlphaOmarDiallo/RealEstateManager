@@ -67,7 +67,7 @@ class PropertyDetailFragment : Fragment() {
                 SharedComposable.TextNeighbourhoodAndCity(neighbourhood = property.neighbourhood, city = property.city)
                 SharedComposable.TextPrice(price = property.price)
             }
-            PropertyImageList(propertyPhoto = property.mainPhoto)
+            PropertyImageList(propertyPhoto = property.photo)
             PropertyDescription(propertyDescription = property.description)
             SharedComposable.PropertyAttributes(
                 surface = property.surface,
