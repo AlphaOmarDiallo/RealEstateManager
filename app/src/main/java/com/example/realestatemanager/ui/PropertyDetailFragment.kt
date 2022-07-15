@@ -5,22 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import coil.compose.AsyncImage
+import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.domain.SharedComposable
@@ -52,7 +57,7 @@ class PropertyDetailFragment : Fragment() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = MaterialTheme.colors.primaryVariant)
+                    .background(color = MaterialTheme.colors.primary)
             ) {
                 PropertyInDetail(property = propertyList[0])
             }
@@ -61,9 +66,12 @@ class PropertyDetailFragment : Fragment() {
 
     @Composable
     fun PropertyInDetail(property: Property) {
-        Column {
-            SharedComposable.TextPropertyType(propertyType = property.type)
-            Row {
+        Column(modifier = Modifier.padding(20.dp)) {
+            SharedComposable.TextPropertyType(propertyType = property.type, style = MaterialTheme.typography.h4, color = MaterialTheme.colors.onPrimary, fontWeight = FontWeight.Bold)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 SharedComposable.TextNeighbourhoodAndCity(
                     neighbourhood = property.neighbourhood,
                     city = property.city
@@ -79,7 +87,7 @@ class PropertyDetailFragment : Fragment() {
                 bathRoom = property.numberOfBathrooms
             )
             SharedComposable.TextAddress(address = property.address)
-            AddMap(address = property.address)
+
         }
     }
 
@@ -88,9 +96,10 @@ class PropertyDetailFragment : Fragment() {
         if (propertyPhoto != null) {
             LazyRow(verticalAlignment = Alignment.CenterVertically) {
                 items(propertyPhoto) {
-                    for (photo in propertyPhoto) {
-                        DisplayPhoto(propertyPhoto = photo)
-                    }
+                    DisplayPhoto(propertyPhoto = it)
+                    /* for (photo in propertyPhoto) {
+
+                     }*/
                 }
             }
         }
@@ -98,10 +107,26 @@ class PropertyDetailFragment : Fragment() {
 
     @Composable
     fun DisplayPhoto(propertyPhoto: String) {
-        AsyncImage(
-            model = propertyPhoto,
-            contentDescription = "Property photo"
-        )
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            shape = RoundedCornerShape(15.dp),
+            elevation = 5.dp,
+            border = BorderStroke(2.dp, color = MaterialTheme.colors.error)
+        ) {
+            Box(modifier = Modifier.height(200.dp)) {
+                AsyncImage(
+                    model = propertyPhoto,
+                    contentDescription = "Property photo",
+                    modifier = Modifier.size(250.dp),
+                    contentScale = ContentScale.FillBounds,
+                    error = painterResource(id = R.drawable.house_placeholder)
+                )
+            }
+
+        }
+
     }
 
     @Composable
@@ -140,6 +165,14 @@ class PropertyDetailFragment : Fragment() {
     fun FragmentPreview() {
         RealEstateManagerTheme {
             PropertyDetail()
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun Function() {
+        RealEstateManagerTheme {
+            PropertyImageList(propertyPhoto = propertyList[0].photo)
         }
     }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -57,7 +58,7 @@ class PropertyListFragment : Fragment() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = MaterialTheme.colors.primaryVariant)
+                    .background(color = MaterialTheme.colors.primary)
             ) {
                 ListOfProperty(propertyList = SampleProperties.samplePropertyList)
             }
@@ -112,7 +113,7 @@ class PropertyListFragment : Fragment() {
                     .padding(12.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.propertyplaceholder),
+                    painter = painterResource(id = R.drawable.property_placeholder),
                     contentDescription = "Image of the property",
                     modifier = Modifier
                         //.size(100.dp)
@@ -126,7 +127,7 @@ class PropertyListFragment : Fragment() {
                     modifier = Modifier.weight(2f),
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
-                    SharedComposable.TextPropertyType(propertyType = property.type)
+                    SharedComposable.TextPropertyType(propertyType = property.type, style = MaterialTheme.typography.body1, fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onSecondary)
                     SharedComposable.TextNeighbourhoodAndCity(
                         neighbourhood = property.neighbourhood,
                         city = property.city

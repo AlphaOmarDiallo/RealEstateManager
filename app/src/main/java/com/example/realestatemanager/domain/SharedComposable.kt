@@ -1,10 +1,10 @@
 package com.example.realestatemanager.domain
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,7 +13,10 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,7 +50,7 @@ object SharedComposable {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = (icon),
-                contentDescription = contentDescription
+                contentDescription = contentDescription,
             )
             Spacer(modifier = Modifier.padding(2.dp))
             Text(text = description, fontSize = 11.sp)
@@ -55,20 +58,21 @@ object SharedComposable {
     }
 
     @Composable
-    fun TextPrice(price: Int) {
+    fun TextPrice(price: Int, style: TextStyle = MaterialTheme.typography.h5, color: Color = MaterialTheme.colors.primary) {
         Text(
             text = "$$price",
-            style = MaterialTheme.typography.h5,
-            color = MaterialTheme.colors.primary
+            style = style,
+            color = color
         )
     }
 
     @Composable
-    fun TextPropertyType(propertyType: String) {
+    fun TextPropertyType(propertyType: String, style: TextStyle, fontWeight: FontWeight, color: Color) {
         Text(
             text = propertyType,
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Bold
+            style = style,
+            fontWeight = fontWeight,
+            color = color
         )
     }
 
@@ -91,5 +95,25 @@ object SharedComposable {
             Spacer(modifier = Modifier.padding(4.dp))
             Text(text = address, style = MaterialTheme.typography.body2)
         }
+    }
+
+    @Composable
+    fun ImageCardSmall(
+        painter: Painter,
+        contentDescription: String,
+        title: String,
+        modifier: Modifier = Modifier
+    ) {
+        Card (
+            modifier = modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(15.dp),
+            elevation = 5.dp
+        ){
+            Box(modifier = Modifier.height(200.dp)){
+
+            }
+
+        }
+
     }
 }
