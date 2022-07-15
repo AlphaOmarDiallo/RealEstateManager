@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.repositories.connectivity
+package com.example.realestatemanager.data.repository.connectivity
 
 import android.annotation.SuppressLint
 import android.content.Context

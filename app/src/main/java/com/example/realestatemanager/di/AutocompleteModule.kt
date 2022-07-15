@@ -1,8 +1,8 @@
 package com.example.realestatemanager.di
 
 import com.example.realestatemanager.data.remoteData.RetrofitGoogleAPI
-import com.example.realestatemanager.data.repositories.autocomplete.AutocompleteRepository
-import com.example.realestatemanager.data.repositories.autocomplete.AutocompleteRepositoryImp
+import com.example.realestatemanager.data.repository.autocomplete.AutocompleteRepository
+import com.example.realestatemanager.data.repository.autocomplete.AutocompleteRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

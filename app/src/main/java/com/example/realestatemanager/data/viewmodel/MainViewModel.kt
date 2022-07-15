@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.viewmodels
+package com.example.realestatemanager.data.viewmodel
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -8,11 +8,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.realestatemanager.data.repositories.autocomplete.AutocompleteRepository
-import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepository
-import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepository
-import com.example.realestatemanager.data.repositories.geocoding.GeocodingRepository
-import com.example.realestatemanager.data.repositories.nearBySearch.NearBySearchRepository
+import com.example.realestatemanager.data.repository.autocomplete.AutocompleteRepository
+import com.example.realestatemanager.data.repository.connectivity.ConnectivityRepository
+import com.example.realestatemanager.data.repository.currencyAPI.CurrencyAPIRepository
+import com.example.realestatemanager.data.repository.geocoding.GeocodingRepository
+import com.example.realestatemanager.data.repository.nearBySearch.NearBySearchRepository
 import com.example.realestatemanager.domain.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.repositories.currencyAPI
+package com.example.realestatemanager.data.repository.currencyAPI
 
 import com.example.realestatemanager.data.model.eurToUsd.EurToUsdRate
 import com.example.realestatemanager.data.model.usdToEur.UsdToEurRate

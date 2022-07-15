@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.repositories.autocomplete
+package com.example.realestatemanager.data.repository.autocomplete
 
 import com.example.realestatemanager.data.model.autocomplete.Autocomplete
 import com.example.realestatemanager.data.remoteData.RetrofitGoogleAPI

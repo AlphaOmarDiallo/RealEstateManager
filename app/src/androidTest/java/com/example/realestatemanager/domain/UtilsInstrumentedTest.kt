@@ -3,7 +3,7 @@ package com.example.realestatemanager
 import androidx.test.espresso.internal.inject.InstrumentationContext
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepository
+import com.example.realestatemanager.data.repository.currencyAPI.CurrencyAPIRepository
 import com.example.realestatemanager.domain.Utils
 import com.example.realestatemanager.ui.MainActivity
 import com.google.common.truth.Truth.assertThat

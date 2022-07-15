@@ -1,8 +1,8 @@
 package com.example.realestatemanager.testDI
 
 import com.example.realestatemanager.data.remoteData.RetrofitAbstractAPI
-import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepository
-import com.example.realestatemanager.data.repositories.connectivity.ConnectivityRepositoryImp
+import com.example.realestatemanager.data.repository.connectivity.ConnectivityRepository
+import com.example.realestatemanager.data.repository.connectivity.ConnectivityRepositoryImp
 import com.example.realestatemanager.di.NetworkModule
 import com.example.realestatemanager.domain.Constant
 import dagger.Module

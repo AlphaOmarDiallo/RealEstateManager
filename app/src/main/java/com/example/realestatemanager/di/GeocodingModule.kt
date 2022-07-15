@@ -1,8 +1,8 @@
 package com.example.realestatemanager.di
 
 import com.example.realestatemanager.data.remoteData.RetrofitGoogleAPI
-import com.example.realestatemanager.data.repositories.geocoding.GeocodingRepository
-import com.example.realestatemanager.data.repositories.geocoding.GeocodingRepositoryImp
+import com.example.realestatemanager.data.repository.geocoding.GeocodingRepository
+import com.example.realestatemanager.data.repository.geocoding.GeocodingRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.repositories.connectivity
+package com.example.realestatemanager.data.repository.connectivity
 
 import android.content.Context
 import androidx.lifecycle.LiveData

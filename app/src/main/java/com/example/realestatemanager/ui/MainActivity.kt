@@ -12,7 +12,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.realestatemanager.R
-import com.example.realestatemanager.data.viewmodels.MainViewModel
+import com.example.realestatemanager.data.viewmodel.MainViewModel
 import com.example.realestatemanager.databinding.ActivityMainBinding
 import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
@@ -41,6 +41,12 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkConnectivity(this)
 
+        getCurrency()
+
+    }
+
+    private fun getCurrency(){
+        viewModel.getEurRate()
     }
 
     /**

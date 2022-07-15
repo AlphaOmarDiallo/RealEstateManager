@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.repositories.geocoding
+package com.example.realestatemanager.data.repository.geocoding
 
 import com.example.realestatemanager.data.model.geocoding.Geocoding
 import com.example.realestatemanager.data.remoteData.RetrofitGoogleAPI

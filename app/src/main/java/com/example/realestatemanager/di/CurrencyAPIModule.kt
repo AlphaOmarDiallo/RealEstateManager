@@ -1,8 +1,8 @@
 package com.example.realestatemanager.di
 
 import com.example.realestatemanager.data.remoteData.RetrofitAbstractAPI
-import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepository
-import com.example.realestatemanager.data.repositories.currencyAPI.CurrencyAPIRepositoryImp
+import com.example.realestatemanager.data.repository.currencyAPI.CurrencyAPIRepository
+import com.example.realestatemanager.data.repository.currencyAPI.CurrencyAPIRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

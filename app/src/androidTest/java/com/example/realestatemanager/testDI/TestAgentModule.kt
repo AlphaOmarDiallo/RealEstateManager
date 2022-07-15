@@ -1,8 +1,8 @@
 package com.example.realestatemanager.testDI
 
 import com.example.realestatemanager.data.localData.AgentDao
-import com.example.realestatemanager.data.repositories.agent.AgentRepository
-import com.example.realestatemanager.data.repositories.agent.AgentRepositoryImp
+import com.example.realestatemanager.data.repository.agent.AgentRepository
+import com.example.realestatemanager.data.repository.agent.AgentRepositoryImp
 import com.example.realestatemanager.di.AgentModule
 import dagger.Module
 import dagger.Provides

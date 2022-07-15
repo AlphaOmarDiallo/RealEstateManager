@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.repositories.nearBySearch
+package com.example.realestatemanager.data.repository.nearBySearch
 
 import android.location.Location
 import com.example.realestatemanager.data.model.nearBySearch.NearBySearch
