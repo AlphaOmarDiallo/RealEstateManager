@@ -17,5 +17,7 @@
     <string name="photo_by_andre_benz_unsplash">Photo by Andre Benz Unsplash</string>
     <string name="Open_drawer_menu">Open drawer menu</string>
     <string name="Close_drawer_menu">Close drawer menu</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

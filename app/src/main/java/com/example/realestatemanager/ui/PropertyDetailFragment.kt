@@ -67,7 +67,12 @@ class PropertyDetailFragment : Fragment() {
     @Composable
     fun PropertyInDetail(property: Property) {
         Column(modifier = Modifier.padding(20.dp)) {
-            SharedComposable.TextPropertyType(propertyType = property.type, style = MaterialTheme.typography.h4, color = MaterialTheme.colors.onPrimary, fontWeight = FontWeight.Bold)
+            SharedComposable.TextPropertyType(
+                propertyType = property.type,
+                style = MaterialTheme.typography.h4,
+                color = MaterialTheme.colors.onPrimary,
+                fontWeight = FontWeight.Bold
+            )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -87,7 +92,7 @@ class PropertyDetailFragment : Fragment() {
                 bathRoom = property.numberOfBathrooms
             )
             SharedComposable.TextAddress(address = property.address)
-
+            AddMap(address = property.address)
         }
     }
 
@@ -97,9 +102,6 @@ class PropertyDetailFragment : Fragment() {
             LazyRow(verticalAlignment = Alignment.CenterVertically) {
                 items(propertyPhoto) {
                     DisplayPhoto(propertyPhoto = it)
-                    /* for (photo in propertyPhoto) {
-
-                     }*/
                 }
             }
         }
@@ -137,20 +139,28 @@ class PropertyDetailFragment : Fragment() {
 
     @Composable
     fun AddMap(address: String) {
-
-        val addressLatLng = LatLng(1.35, 103.87)
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(addressLatLng, 10f)
-        }
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            shape = RoundedCornerShape(15.dp),
+            elevation = 5.dp,
+            border = BorderStroke(2.dp, color = MaterialTheme.colors.secondary)
         ) {
-            Marker(
-                state = MarkerState(position = addressLatLng),
-                title = "Singapore",
-                snippet = "Marker in Singapore"
-            )
+            val addressLatLng = LatLng(1.35, 103.87)
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(addressLatLng, 10f)
+            }
+            GoogleMap(
+                modifier = Modifier.size(200.dp),
+                cameraPositionState = cameraPositionState
+            ) {
+                Marker(
+                    state = MarkerState(position = addressLatLng),
+                    title = "Singapore",
+                    snippet = "Marker in Singapore"
+                )
+            }
         }
     }
 

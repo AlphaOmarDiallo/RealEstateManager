@@ -21,7 +21,7 @@ object Constant {
     const val EUR = "eur"
 
     //GoogleServices
-    const val GOOGLE_API_KEY = BuildConfig.GOOGLE_CLOUD_API_KEY
+    const val GOOGLE_API_KEY = BuildConfig.MAPS_API_KEY
     const val BASE_URL_GOOGLE_API = "https://maps.googleapis.com/maps/api/"
 
     const val GEOCODING_URL = "geocode/json?"

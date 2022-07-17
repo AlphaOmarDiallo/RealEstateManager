@@ -29,8 +29,8 @@ class MainViewModel @Inject constructor(
     private val autocompleteRepository: AutocompleteRepository
 ) : ViewModel() {
 
-    val usdRate: MutableLiveData<Double> = MutableLiveData()
-    val eurRate: MutableLiveData<Double> = MutableLiveData()
+    private val usdRate: MutableLiveData<Double> = MutableLiveData()
+    private val eurRate: MutableLiveData<Double> = MutableLiveData()
 
     @JvmName("getUsdRate1")
     fun getUsdRate() {
@@ -137,9 +137,7 @@ class MainViewModel @Inject constructor(
 
                 if (response.body()?.results != null) {
                     Log.i(TAG, "getInterestsAround: " + response.raw().request.url)
-                    if (response.body()!!.next_page_token != null) {
-                        getNextInterestAround(location, response.body()!!.next_page_token)
-                    }
+                     getNextInterestAround(location, response.body()!!.next_page_token)
                 } else {
                     Log.e(TAG, "getInterestsAround: null data", null)
                 }
@@ -165,9 +163,7 @@ class MainViewModel @Inject constructor(
 
                 if (response.body()?.results != null) {
                     Log.i(TAG, "getInterestsAround: " + response.raw().request.url)
-                    if (response.body()!!.next_page_token != null) {
-                        getNextInterestAround(location, response.body()!!.next_page_token)
-                    }
+                    getNextInterestAround(location, response.body()!!.next_page_token)
                 } else {
                     Log.e(TAG, "getInterestsAround: null data", null)
                 }

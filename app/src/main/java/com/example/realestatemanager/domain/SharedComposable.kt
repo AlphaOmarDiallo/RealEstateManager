@@ -1,6 +1,10 @@
 package com.example.realestatemanager.domain
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -98,22 +101,15 @@ object SharedComposable {
     }
 
     @Composable
-    fun ImageCardSmall(
-        painter: Painter,
-        contentDescription: String,
-        title: String,
-        modifier: Modifier = Modifier
-    ) {
-        Card (
-            modifier = modifier.fillMaxWidth(),
+    fun CardSmall() {
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
             shape = RoundedCornerShape(15.dp),
-            elevation = 5.dp
-        ){
-            Box(modifier = Modifier.height(200.dp)){
-
-            }
-
+            elevation = 5.dp,
+            border = BorderStroke(2.dp, color = MaterialTheme.colors.secondary)
+        ) {
+            
         }
-
     }
 }
