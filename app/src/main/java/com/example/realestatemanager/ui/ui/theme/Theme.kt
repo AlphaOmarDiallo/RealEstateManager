@@ -12,7 +12,8 @@ private val DarkColorPalette = darkColors(
     secondary = secondaryColor,
     secondaryVariant = secondaryDarkColor,
     onPrimary = darkTextColor,
-    onSecondary = secondaryTextColor
+    onSecondary = secondaryTextColor,
+    background = primaryColor
 )
 
 private val LightColorPalette = lightColors(
@@ -21,7 +22,8 @@ private val LightColorPalette = lightColors(
     secondary = primaryDarkColor,
     secondaryVariant = secondaryLightColor,
     onPrimary = primaryTextColor,
-    onSecondary = darkTextColor
+    onSecondary = darkTextColor,
+    background = lightBackground
 
     /*
     background = Color.White,

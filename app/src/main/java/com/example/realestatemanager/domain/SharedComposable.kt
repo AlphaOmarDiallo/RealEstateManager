@@ -101,7 +101,7 @@ object SharedComposable {
     }
 
     @Composable
-    fun CardSmall() {
+    fun Card() {
         Card(modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
@@ -109,7 +109,7 @@ object SharedComposable {
             elevation = 5.dp,
             border = BorderStroke(2.dp, color = MaterialTheme.colors.secondary)
         ) {
-            
+
         }
     }
 }

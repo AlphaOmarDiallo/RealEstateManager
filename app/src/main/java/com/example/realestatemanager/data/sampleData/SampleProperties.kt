@@ -18,7 +18,7 @@ object SampleProperties {
             photos,
             "50 avenue Hoche 75017 Paris",
             "Paris",
-            "17eme",
+            "17eme district",
             null,
             "On sale",
             1657490400000,
