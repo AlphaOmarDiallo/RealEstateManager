@@ -32,7 +32,10 @@ object SharedComposable {
     val xLargePadding = 24.dp
     val xxLargePadding = 32.dp
 
-
+    val colorGradient = listOf(
+        Color.Transparent,
+        Color.Black
+    )
     @Composable
     fun PropertyAttributes(surface: Int, rooms: Int, bedRooms: Int, bathRoom: Int) {
         val attributeIndexList = listOf(0, 1, 2, 3)
