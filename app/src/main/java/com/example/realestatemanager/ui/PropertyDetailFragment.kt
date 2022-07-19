@@ -10,6 +10,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,6 +20,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,12 +31,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import coil.compose.AsyncImage
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
+import com.example.realestatemanager.domain.MortgagePayment
 import com.example.realestatemanager.domain.SharedComposable
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import com.google.android.gms.maps.model.CameraPosition
@@ -55,44 +59,68 @@ class PropertyDetailFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 //getDataFromViewModel(propertyList[0])
-                PropertyDetail()
+                ScaffoldDemo(property = propertyList[0])
             }
         }
     }
 
     @Composable
-    fun PropertyDetail() {
-
-        RealEstateManagerTheme {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colors.background)
-            ) {
-                PropertyInDetail(property = propertyList[0])
+    fun ScaffoldDemo(property: Property) {
+        val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Open))
+        Scaffold(
+            bottomBar = { BottomBar(price = propertyList[0].price) },
+        ) {
+            Box(modifier = Modifier.padding(it)) {
+                PropertyInDetail(property = property)
             }
         }
     }
 
     @Composable
     fun PropertyInDetail(property: Property) {
-        LazyColumn(modifier = Modifier.padding(20.dp)) {
+        LazyColumn(modifier = Modifier.padding(SharedComposable.largePadding)) {
             item {
-                PropertyImageList(propertyPhoto = property.photo)
+                PropertyMainImage(propertyMainPhoto = property.photo!![0])
+            }
+            item {
+                Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
+                    PropertyTitle(
+                        type = property.type,
+                        neighbourhood = property.neighbourhood,
+                        city = property.city
+                    )
+                }
+            }
+            item {
+                Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
+                    SharedComposable.TextAddress(
+                        address = property.address,
+                        style = MaterialTheme.typography.body1,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            item {
+                Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
+                    SharedComposable.PropertyAttributes(
+                        surface = property.surface,
+                        rooms = property.numberOfRooms,
+                        bedRooms = property.numberOfBedrooms,
+                        bathRoom = property.numberOfBathrooms
+                    )
+                }
             }
             item {
                 CardDescription(property = property)
             }
             item {
-                SharedComposable.PropertyAttributes(
-                    surface = property.surface,
-                    rooms = property.numberOfRooms,
-                    bedRooms = property.numberOfBedrooms,
-                    bathRoom = property.numberOfBathrooms
-                )
-            }
-            item {
-                SharedComposable.TextAddress(address = property.address)
+                Column {
+                    Text(
+                        text = "Photo gallery",
+                        modifier = Modifier.padding(SharedComposable.mediumPadding)
+                    )
+                    PropertyImageList(propertyPhoto = property.photo)
+                }
             }
             item {
                 AddMap(address = property.address)
@@ -101,38 +129,12 @@ class PropertyDetailFragment : Fragment() {
     }
 
     @Composable
-    fun PropertyImageList(propertyPhoto: List<String>?) {
-        if (propertyPhoto != null) {
-            LazyRow(verticalAlignment = Alignment.CenterVertically) {
-                items(propertyPhoto) {
-                    DisplayPhoto(propertyPhoto = it)
-                }
-            }
-        }
+    fun PropertyMainImage(propertyMainPhoto: String) {
+        DisplayPhoto(propertyPhoto = propertyMainPhoto, 400.dp, 400.dp)
     }
 
     @Composable
-    fun DisplayPhoto(propertyPhoto: String) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            elevation = 5.dp
-        ) {
-            Box(modifier = Modifier.height(400.dp)) {
-                AsyncImage(
-                    model = propertyPhoto,
-                    contentDescription = "Property photo",
-                    modifier = Modifier.size(450.dp),
-                    contentScale = ContentScale.FillBounds,
-                    error = painterResource(id = R.drawable.house_placeholder)
-                )
-            }
-        }
-    }
-
-    @Composable
-    fun PropertyTitle(type: String, neighbourhood: String, city: String){
+    fun PropertyTitle(type: String, neighbourhood: String, city: String) {
         Text(
             text = "$type in $neighbourhood of $city",
             style = MaterialTheme.typography.body1,
@@ -140,6 +142,37 @@ class PropertyDetailFragment : Fragment() {
             modifier = Modifier.padding(8.dp),
             color = MaterialTheme.colors.secondary
         )
+    }
+
+    @Composable
+    fun PropertyImageList(propertyPhoto: List<String>?) {
+        if (propertyPhoto != null) {
+            LazyRow(verticalAlignment = Alignment.CenterVertically) {
+                items(propertyPhoto) {
+                    DisplayPhoto(propertyPhoto = it, 200.dp, 200.dp)
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun DisplayPhoto(propertyPhoto: String, boxHeight: Dp, imageHeight: Dp) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            elevation = 5.dp
+        ) {
+            Box(modifier = Modifier.height(boxHeight)) {
+                AsyncImage(
+                    model = propertyPhoto,
+                    contentDescription = "Property photo",
+                    modifier = Modifier.size(imageHeight),
+                    contentScale = ContentScale.FillBounds,
+                    error = painterResource(id = R.drawable.house_placeholder)
+                )
+            }
+        }
     }
 
     @Composable
@@ -170,7 +203,7 @@ class PropertyDetailFragment : Fragment() {
                         .padding(8.dp)
                 ) {
 
-                    PropertyTitle(type = property.type, neighbourhood = property.neighbourhood, city = property.city)
+                    Text(text = "Description")
 
                     IconButton(onClick = { expended = !expended }) {
                         Icon(
@@ -184,20 +217,23 @@ class PropertyDetailFragment : Fragment() {
                         )
                     }
                 }
-                if (expended) {
-                    PropertyDescription(propertyDescription = property.description)
+                if (!expended) {
+                    PropertyDescription(propertyDescription = property.description, maxLines = 100)
+                } else if (expended) {
+                    PropertyDescription(propertyDescription = property.description, maxLines = 3)
                 }
             }
         }
     }
 
     @Composable
-    fun PropertyDescription(propertyDescription: String) {
+    fun PropertyDescription(propertyDescription: String, maxLines: Int) {
         Text(
             text = propertyDescription,
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Justify,
             modifier = Modifier.padding(4.dp),
+            maxLines = maxLines
         )
     }
 
@@ -231,6 +267,55 @@ class PropertyDetailFragment : Fragment() {
         }
     }
 
+    @Composable
+    fun BottomBar(price: Int) {
+        Surface(
+            elevation = 5.dp,
+            modifier = Modifier
+                .background(MaterialTheme.colors.onPrimary)
+                .fillMaxWidth()
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Column {
+                    Text(
+                        text = "$ $price",
+                        style = MaterialTheme.typography.h5,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.primaryVariant
+                    )
+                    val rate = 2.54
+                    val years = 30
+                    val monthlyPayment =
+                        MortgagePayment.monthlyPaymentMortgage(price.toDouble(), rate, years)
+                    Text(text = "from $$monthlyPayment per month")
+                }
+                IconButton(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.padding(8.dp)
+                        .border(1.dp, color = MaterialTheme.colors.primary,shape = MaterialTheme.shapes.medium)
+                )
+                {
+                    Row(horizontalArrangement = Arrangement.Center) {
+                        Icon(
+                            imageVector = Icons.Outlined.Payments,
+                            contentDescription = "Bills for payment",
+                            modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
+                            tint = MaterialTheme.colors.primaryVariant
+                        )
+                        Text(
+                            text = "Found a buyer",
+                            modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
+                            color = MaterialTheme.colors.primary
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     @Preview(
         showBackground = true,
         widthDp = 320,
@@ -241,7 +326,7 @@ class PropertyDetailFragment : Fragment() {
     @Composable
     fun FragmentPreview() {
         RealEstateManagerTheme {
-            PropertyDetail()
+            ScaffoldDemo(property = propertyList[0])
         }
     }
 
@@ -249,7 +334,7 @@ class PropertyDetailFragment : Fragment() {
     @Composable
     fun Function() {
         RealEstateManagerTheme {
-            CardDescription(property = propertyList[0])
+            ScaffoldDemo(property = propertyList[0])
         }
     }
 
@@ -261,5 +346,4 @@ class PropertyDetailFragment : Fragment() {
     private fun getDataFromViewModel(property: Property) {
         //viewModel.addressToLocation(property.address)
     }
-
 }

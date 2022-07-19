@@ -25,6 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 object SharedComposable {
+
+    val smallPadding = 4.dp
+    val mediumPadding = 8.dp
+    val largePadding = 16.dp
+    val xLargePadding = 24.dp
+    val xxLargePadding = 32.dp
+
+
     @Composable
     fun PropertyAttributes(surface: Int, rooms: Int, bedRooms: Int, bathRoom: Int) {
         val attributeIndexList = listOf(0, 1, 2, 3)
@@ -89,14 +97,14 @@ object SharedComposable {
     }
 
     @Composable
-    fun TextAddress(address: String) {
+    fun TextAddress(address: String, style: TextStyle = MaterialTheme.typography.body2, fontWeight: FontWeight = FontWeight.Normal) {
         Row {
             Icon(
                 imageVector = (Icons.Outlined.PinDrop),
                 contentDescription = null // decorative element
             )
             Spacer(modifier = Modifier.padding(4.dp))
-            Text(text = address, style = MaterialTheme.typography.body2)
+            Text(text = address, style = style)
         }
     }
 
