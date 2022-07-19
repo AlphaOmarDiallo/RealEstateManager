@@ -123,4 +123,14 @@ object SharedComposable {
 
         }
     }
+
+    @Composable
+    fun SmallTitle(title: String, modifier: Modifier = Modifier){
+        Text(
+            text = title,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.primaryVariant,
+            modifier = Modifier
+        )
+    }
 }

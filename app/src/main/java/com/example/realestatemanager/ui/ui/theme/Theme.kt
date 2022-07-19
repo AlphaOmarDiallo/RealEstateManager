@@ -24,15 +24,6 @@ private val LightColorPalette = lightColors(
     onPrimary = primaryTextColor,
     onSecondary = darkTextColor,
     background = lightBackground
-
-    /*
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,*/
-
 )
 
 @Composable

@@ -114,12 +114,18 @@ class PropertyDetailFragment : Fragment() {
                 CardDescription(property = property)
             }
             item {
-                Column {
-                    Text(
-                        text = "Photo gallery",
-                        modifier = Modifier.padding(SharedComposable.mediumPadding)
-                    )
-                    PropertyImageList(propertyPhoto = property.photo)
+                Box(modifier = Modifier.padding(SharedComposable.mediumPadding)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = SharedComposable.mediumPadding,
+                            vertical = SharedComposable.largePadding
+                        )
+                    ) {
+                        SharedComposable.SmallTitle(
+                            title = "Photo gallery"
+                        )
+                        PropertyImageList(propertyPhoto = property.photo)
+                    }
                 }
             }
             item {
@@ -187,17 +193,160 @@ class PropertyDetailFragment : Fragment() {
                                     endY = 1000f
                                 ),
                             )
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(SharedComposable.mediumPadding),
-                        contentAlignment = Alignment.BottomCenter
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(SharedComposable.mediumPadding),
+                            contentAlignment = Alignment.BottomCenter
+                        ) {
+                            Text(
+                                text = photoDescription,
+                                color = MaterialTheme.colors.onPrimary,
+                                style = MaterialTheme.typography.body1
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun CardDescription(property: Property) {
+        var expended by remember { mutableStateOf(false) }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = SharedComposable.smallPadding)
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    )
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(vertical = SharedComposable.smallPadding)
+                ) {
+
+                    SharedComposable.SmallTitle("Description")
+
+                    IconButton(onClick = { expended = !expended }) {
+                        Icon(
+                            imageVector = if (expended) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                            contentDescription = if (expended) {
+                                stringResource(R.string.show_less)
+                            } else {
+                                stringResource(R.string.show_more)
+                            }
+
+                        )
+                    }
+                }
+                if (!expended) {
+                    PropertyDescription(propertyDescription = property.description, maxLines = 100)
+                } else if (expended) {
+                    PropertyDescription(propertyDescription = property.description, maxLines = 3)
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun PropertyDescription(propertyDescription: String, maxLines: Int) {
+        Text(
+            text = propertyDescription,
+            style = MaterialTheme.typography.body1,
+            textAlign = TextAlign.Justify,
+            modifier = Modifier.padding(4.dp),
+            maxLines = maxLines
+        )
+    }
+
+
+    @Composable
+    fun AddMap(address: String) {
+        //var addressToLocation: Location? = viewModel.location.value
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(SharedComposable.mediumPadding),
+            shape = RoundedCornerShape(15.dp),
+            elevation = 10.dp
+        ) {
+            val addressLatLng = LatLng(1.35, 103.87)
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(addressLatLng, 10f)
+            }
+            GoogleMap(
+                modifier = Modifier.size(300.dp),
+                cameraPositionState = cameraPositionState
+            ) {
+                Marker(
+                    state = MarkerState(position = addressLatLng),
+                    title = "Singapore",
+                    snippet = "Marker in Singapore"
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun BottomBar(price: Int) {
+        Surface(
+            elevation = 5.dp,
+            modifier = Modifier
+                .background(MaterialTheme.colors.onPrimary)
+                .fillMaxWidth()
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Column {
+                    Text(
+                        text = "$ $price",
+                        style = MaterialTheme.typography.h5,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.primaryVariant
+                    )
+                    val rate = 2.54
+                    val years = 30
+                    val monthlyPayment =
+                        MortgagePayment.monthlyPaymentMortgage(price.toDouble(), rate, years)
+                    Text(text = "from $$monthlyPayment per month")
+                }
+                IconButton(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .padding(SharedComposable.mediumPadding)
+                        .border(
+                            2.dp,
+                            color = MaterialTheme.colors.primary,
+                            shape = MaterialTheme.shapes.medium
+                        )
+                )
+                {
+                    Row(horizontalArrangement = Arrangement.Center) {
+                        Icon(
+                            imageVector = Icons.Outlined.Payments,
+                            contentDescription = "Bills for payment",
+                            modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
+                            tint = MaterialTheme.colors.primaryVariant
+                        )
                         Text(
-                            text = photoDescription,
-                            color = MaterialTheme.colors.onPrimary,
-                            style = MaterialTheme.typography.body1
+                            text = "Found a buyer",
+                            modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
+                            color = MaterialTheme.colors.primary
                         )
                     }
                 }
@@ -205,177 +354,34 @@ class PropertyDetailFragment : Fragment() {
         }
     }
 
-@Composable
-fun CardDescription(property: Property) {
-    var expended by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(),
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = SharedComposable.smallPadding)
-                .fillMaxWidth()
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(vertical = SharedComposable.smallPadding)
-            ) {
-
-                Text(text = "Description")
-
-                IconButton(onClick = { expended = !expended }) {
-                    Icon(
-                        imageVector = if (expended) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                        contentDescription = if (expended) {
-                            stringResource(R.string.show_less)
-                        } else {
-                            stringResource(R.string.show_more)
-                        }
-
-                    )
-                }
-            }
-            if (!expended) {
-                PropertyDescription(propertyDescription = property.description, maxLines = 100)
-            } else if (expended) {
-                PropertyDescription(propertyDescription = property.description, maxLines = 3)
-            }
-        }
-    }
-}
-
-@Composable
-fun PropertyDescription(propertyDescription: String, maxLines: Int) {
-    Text(
-        text = propertyDescription,
-        style = MaterialTheme.typography.body1,
-        textAlign = TextAlign.Justify,
-        modifier = Modifier.padding(4.dp),
-        maxLines = maxLines
+    @Preview(
+        showBackground = true,
+        widthDp = 320,
+        uiMode = Configuration.UI_MODE_NIGHT_YES,
+        name = "DefaultPreviewDark"
     )
-}
-
-
-@Composable
-fun AddMap(address: String) {
-    //var addressToLocation: Location? = viewModel.location.value
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(SharedComposable.mediumPadding),
-        shape = RoundedCornerShape(15.dp),
-        elevation = 10.dp
-    ) {
-        val addressLatLng = LatLng(1.35, 103.87)
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(addressLatLng, 10f)
-        }
-        GoogleMap(
-            modifier = Modifier.size(200.dp),
-            cameraPositionState = cameraPositionState
-        ) {
-            Marker(
-                state = MarkerState(position = addressLatLng),
-                title = "Singapore",
-                snippet = "Marker in Singapore"
-            )
+    @Preview(showBackground = true)
+    @Composable
+    fun FragmentPreview() {
+        RealEstateManagerTheme {
+            ScaffoldDemo(property = propertyList[0])
         }
     }
-}
 
-@Composable
-fun BottomBar(price: Int) {
-    Surface(
-        elevation = 5.dp,
-        modifier = Modifier
-            .background(MaterialTheme.colors.onPrimary)
-            .fillMaxWidth()
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Column {
-                Text(
-                    text = "$ $price",
-                    style = MaterialTheme.typography.h5,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.primaryVariant
-                )
-                val rate = 2.54
-                val years = 30
-                val monthlyPayment =
-                    MortgagePayment.monthlyPaymentMortgage(price.toDouble(), rate, years)
-                Text(text = "from $$monthlyPayment per month")
-            }
-            IconButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        1.dp,
-                        color = MaterialTheme.colors.primary,
-                        shape = MaterialTheme.shapes.medium
-                    )
-            )
-            {
-                Row(horizontalArrangement = Arrangement.Center) {
-                    Icon(
-                        imageVector = Icons.Outlined.Payments,
-                        contentDescription = "Bills for payment",
-                        modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
-                        tint = MaterialTheme.colors.primaryVariant
-                    )
-                    Text(
-                        text = "Found a buyer",
-                        modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
-                        color = MaterialTheme.colors.primary
-                    )
-                }
-            }
+    @Preview(showBackground = true)
+    @Composable
+    fun Function() {
+        RealEstateManagerTheme {
+            ScaffoldDemo(property = propertyList[0])
         }
     }
-}
 
-@Preview(
-    showBackground = true,
-    widthDp = 320,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(showBackground = true)
-@Composable
-fun FragmentPreview() {
-    RealEstateManagerTheme {
-        ScaffoldDemo(property = propertyList[0])
+    /**
+     * Getting data from viewModel
+     */
+
+
+    private fun getDataFromViewModel(property: Property) {
+        //viewModel.addressToLocation(property.address)
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Function() {
-    RealEstateManagerTheme {
-        ScaffoldDemo(property = propertyList[0])
-    }
-}
-
-/**
- * Getting data from viewModel
- */
-
-
-private fun getDataFromViewModel(property: Property) {
-    //viewModel.addressToLocation(property.address)
-}
 }
