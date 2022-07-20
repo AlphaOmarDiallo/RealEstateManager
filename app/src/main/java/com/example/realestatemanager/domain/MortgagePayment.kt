@@ -4,10 +4,10 @@ import kotlin.math.pow
 
 object MortgagePayment {
 
-    fun monthlyPaymentMortgage(amount: Double, preferredRate: Double, month: Int): Int {
+    fun monthlyPaymentMortgage(amount: Double, preferredRate: Double, years: Int): Int {
         val principal: Double = amount
         val rate: Double = (preferredRate / 100) / 12;
-        val time: Int = month * 12
+        val time: Int = years * 12
         return (principal * rate / (1 - (1 + rate).pow(-time.toDouble()))).toInt()
     }
 

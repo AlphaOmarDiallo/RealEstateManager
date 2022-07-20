@@ -58,7 +58,7 @@ class PropertyListFragment : Fragment() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = MaterialTheme.colors.primary)
+                    .background(color = MaterialTheme.colors.background)
             ) {
                 ListOfProperty(propertyList = SampleProperties.samplePropertyList)
             }
@@ -80,8 +80,9 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun PropertyItem(property: Property) {
         Card(
-            backgroundColor = MaterialTheme.colors.background,
-            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+            backgroundColor = MaterialTheme.colors.primaryVariant,
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+            elevation = 10.dp
         ) {
             CardContent(property)
         }

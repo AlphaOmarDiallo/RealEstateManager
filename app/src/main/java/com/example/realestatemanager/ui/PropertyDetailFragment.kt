@@ -59,14 +59,13 @@ class PropertyDetailFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 //getDataFromViewModel(propertyList[0])
-                ScaffoldDemo(property = propertyList[0])
+                Scaffold(property = propertyList[0])
             }
         }
     }
 
     @Composable
-    fun ScaffoldDemo(property: Property) {
-        val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Open))
+    fun Scaffold(property: Property) {
         Scaffold(
             bottomBar = { BottomBar(price = propertyList[0].price) },
         ) {
@@ -364,7 +363,7 @@ class PropertyDetailFragment : Fragment() {
     @Composable
     fun FragmentPreview() {
         RealEstateManagerTheme {
-            ScaffoldDemo(property = propertyList[0])
+            Scaffold(property = propertyList[0])
         }
     }
 
@@ -372,7 +371,7 @@ class PropertyDetailFragment : Fragment() {
     @Composable
     fun Function() {
         RealEstateManagerTheme {
-            ScaffoldDemo(property = propertyList[0])
+            Scaffold(property = propertyList[0])
         }
     }
 
