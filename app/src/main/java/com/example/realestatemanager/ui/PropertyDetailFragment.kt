@@ -38,7 +38,7 @@ import coil.compose.AsyncImage
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
-import com.example.realestatemanager.domain.MortgagePayment
+import com.example.realestatemanager.domain.MortgagePaymentUtil
 import com.example.realestatemanager.domain.SharedComposable
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import com.google.android.gms.maps.model.CameraPosition
@@ -321,7 +321,7 @@ class PropertyDetailFragment : Fragment() {
                     val rate = 2.54
                     val years = 30
                     val monthlyPayment =
-                        MortgagePayment.monthlyPaymentMortgage(price.toDouble(), rate, years)
+                        MortgagePaymentUtil.monthlyPaymentMortgage(price.toDouble(), rate, years)
                     Text(text = "from $$monthlyPayment per month")
                 }
                 IconButton(

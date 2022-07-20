@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.realestatemanager.R
 
-class CreditCalculator : Fragment() {
+class MortgageCalculatorFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +19,7 @@ class CreditCalculator : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_credit_calculator, container, false)
+        return inflater.inflate(R.layout.fragment_mortgage_calculator, container, false)
     }
 
 }

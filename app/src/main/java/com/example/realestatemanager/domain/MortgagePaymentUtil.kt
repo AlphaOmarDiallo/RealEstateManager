@@ -2,7 +2,7 @@ package com.example.realestatemanager.domain
 
 import kotlin.math.pow
 
-object MortgagePayment {
+object MortgagePaymentUtil {
 
     fun monthlyPaymentMortgage(amount: Double, preferredRate: Double, years: Int): Int {
         val principal: Double = amount

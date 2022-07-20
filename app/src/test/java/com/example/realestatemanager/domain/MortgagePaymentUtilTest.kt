@@ -3,7 +3,7 @@ package com.example.realestatemanager.domain
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class MortgagePaymentTest{
+class MortgagePaymentUtilTest{
 
     @Test
     fun calculate_monthly_payment_mortgage_is_successful() {
@@ -11,7 +11,7 @@ class MortgagePaymentTest{
         val rate = 2.54
         val time = 30
         val expectedResult = 1191
-        val actualResult = MortgagePayment.monthlyPaymentMortgage(principal, rate, time)
+        val actualResult = MortgagePaymentUtil.monthlyPaymentMortgage(principal, rate, time)
         assertThat(actualResult).isEqualTo(expectedResult)
     }
 
@@ -21,7 +21,7 @@ class MortgagePaymentTest{
         val rate = 2.54
         val time = 30
         val expectedResult = 1000
-        val actualResult = MortgagePayment.monthlyPaymentMortgage(principal, rate, time)
+        val actualResult = MortgagePaymentUtil.monthlyPaymentMortgage(principal, rate, time)
         assertThat(actualResult).isNotEqualTo(expectedResult)
     }
 }
