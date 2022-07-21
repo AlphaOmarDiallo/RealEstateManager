@@ -11,10 +11,44 @@
         android:label="fragment_property_list">
         <action
             android:id="@+id/action_propertyListFragment_to_propertyDetail"
-            app:destination="@id/propertyDetail" />
+            app:destination="@id/propertyDetail"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_propertyListFragment_to_mortgageCalculatorFragment"
+            app:destination="@id/mortgageCalculatorFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/propertyDetail"
         android:name="com.example.realestatemanager.ui.PropertyDetailFragment"
-        android:label="fragment_property_detail" />
+        android:label="fragment_property_detail" >
+        <action
+            android:id="@+id/action_propertyDetail_to_propertyListFragment"
+            app:destination="@id/propertyListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_propertyDetail_to_mortgageCalculatorFragment"
+            app:destination="@id/mortgageCalculatorFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/mortgageCalculatorFragment"
+        android:name="com.example.realestatemanager.ui.MortgageCalculatorFragment"
+        android:label="fragment_mortgage_calculator"
+        tools:layout="@layout/fragment_mortgage_calculator" >
+        <action
+            android:id="@+id/action_mortgageCalculatorFragment_to_propertyDetail"
+            app:destination="@id/propertyDetail"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_mortgageCalculatorFragment_to_propertyListFragment"
+            app:destination="@id/propertyListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
 </navigation>

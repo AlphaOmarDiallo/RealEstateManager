@@ -36,7 +36,7 @@ class MortgageCalculatorViewModel @Inject constructor(
     val monthlyFee: LiveData<Int> get() = _monthlyFee
 
     @JvmName("getUsdRate1")
-    fun getUsdRate() {
+    private fun getUsdRate() {
         viewModelScope.launch {
 
             try {
@@ -65,7 +65,7 @@ class MortgageCalculatorViewModel @Inject constructor(
         }
     }
 
-    fun getEurRate() {
+    private fun getEurRate() {
         viewModelScope.launch {
             try {
                 val response = currencyAPIRepository.convertUSDtoEUR()
