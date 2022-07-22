@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.viewmodel.MainViewModel
 import com.example.realestatemanager.databinding.ActivityMainBinding
@@ -20,14 +19,16 @@ import com.example.realestatemanager.domain.Utils
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
-    private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var toggle: ActionBarDrawerToggle
+    private var euroToDollar by Delegates.notNull<Double>()
+    private var dollarToEuro by Delegates.notNull<Double>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         checkLocationPermission()
 
         checkConnectivity(this)
+
+        observeRates()
 
     }
 
@@ -102,6 +105,29 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         } else {
             binding.tvInternetStatusMA.text = getText(R.string.not_connected_to_internet)
         }
+    }
+
+    /**
+     * Updating rates
+     */
+    private fun observeRates() {
+        viewModel.dollarToEuroRateFromDataStore.observe(this) {
+            updatingDollarToEuroRate(it)
+        }
+        viewModel.euroToDollarRateFromDataStore.observe(this) {
+            updatingEuroToDollarRate(it)
+        }
+    }
+
+    private fun updatingEuroToDollarRate(rate: Double){
+        Log.d(TAG, "updatingEuroToDollarRate: $rate")
+        viewModel.saveEuroToDollarRateToDataStore(rate)
+        euroToDollar = rate
+    }
+
+    private fun updatingDollarToEuroRate(rate: Double){
+        viewModel.saveDollarToEuroRateToDataStore(rate)
+        dollarToEuro = rate
     }
 
     /**
