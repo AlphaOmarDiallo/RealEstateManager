@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">RealEstateManager</string>
+
+    <!-- Main activity -->
+    <string name="connectivity_rational">Real Estate Manager needs to access the following permissions in order to provide the best experience depending on your current connectivity</string>
+    <string name="not_connected_to_internet">You are not connected to internet</string>
+
+    <!-- Fragment propertyList -->
+    <string name="show_less">Show less</string>
+    <string name="show_more">Show more</string>
+
+    <!-- nav menu items -->
+    <string name="mortgage_calculator">Mortgage calculator</string>
+    <string name="my_account">My account</string>
+
+    <!-- nav header -->
+    <string name="photo_by_andre_benz_unsplash">Photo by Andre Benz Unsplash</string>
+    <string name="Open_drawer_menu">Open drawer menu</string>
+    <string name="Close_drawer_menu">Close drawer menu</string>
+
+    <!-- Mortgage calculator fragment -->
+    <string name="currency_sign">Currency sign</string>
+    <string name="price">Property price</string>
+    <string name="years">Mortgage length</string>
+    <string name="rate">Mortgage rate</string>
+    <string name="down_payment">Down payment</string>
+    <string name="minus_vector_image_legend">Minus vector image legend</string>
+    <string name="add_vector_image_legend">Add vector image legend</string>
+    <string name="slider_to_modify_the_mortgage_rate_from_2_to_6">Slider to modify the mortgage rate from 2 to 6</string>
+    <string name="slider_to_modify_the_length_of_the_mortgage_from_5_to_30_years">Slider to modify the length of the mortgage from 5 to 30 years</string>
+    <string name="monthly_payment">Monthly payment</string>
+
+</resources>

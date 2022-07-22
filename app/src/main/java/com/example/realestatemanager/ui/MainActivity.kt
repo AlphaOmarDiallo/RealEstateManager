@@ -1,0 +1,156 @@
+package com.example.realestatemanager.ui
+
+import android.Manifest
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import com.example.realestatemanager.R
+import com.example.realestatemanager.data.viewmodel.MainViewModel
+import com.example.realestatemanager.databinding.ActivityMainBinding
+import com.example.realestatemanager.domain.Constant
+import com.example.realestatemanager.domain.Utils
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.dialogs.SettingsDialog
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+
+    private lateinit var navController: NavController
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
+    private lateinit var toggle: ActionBarDrawerToggle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        setupUI()
+
+        setupViewModel()
+
+        checkLocationPermission()
+
+        checkConnectivity(this)
+
+    }
+
+    /**
+     * UI update methods
+     */
+
+    private fun setupUI() {
+        setupToolBar()
+        setupNavDrawer()
+    }
+
+    private fun setupToolBar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(true)
+    }
+
+    /**
+     * Navigation drawer setup
+     */
+    private fun setupNavDrawer() {
+        toggle = ActionBarDrawerToggle(
+            this,
+            binding.mainLayout,
+            R.string.Open_drawer_menu,
+            R.string.Close_drawer_menu
+        )
+        binding.mainLayout.addDrawerListener(toggle)
+        toggle.syncState()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (toggle.onOptionsItemSelected(item)) {
+            true
+        } else super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * ViewModel setup
+     */
+    private fun setupViewModel() {
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
+    /**
+     * Check connectivity
+     */
+
+    private fun checkConnectivity(context: Context) {
+        viewModel.checkConnectivity(context)
+            .observe(this, this::showInternetConnectionStatusMessage)
+    }
+
+    private fun showInternetConnectionStatusMessage(connected: Boolean) {
+        if (connected) {
+            binding.tvInternetStatusMA.text = ""
+        } else {
+            binding.tvInternetStatusMA.text = getText(R.string.not_connected_to_internet)
+        }
+    }
+
+    /**
+     * Permission management
+     */
+
+    private fun checkLocationPermission() {
+        if (hasRequiredPermissionsToCheckLocation()) Log.i(
+            TAG,
+            "checkLocationPermission: location permission granted"
+        ) else requestPermissionsToCheckLocation()
+    }
+
+    private fun hasRequiredPermissionsToCheckLocation() =
+        EasyPermissions.hasPermissions(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+    private fun requestPermissionsToCheckLocation() =
+        EasyPermissions.requestPermissions(
+            this,
+            getString(R.string.connectivity_rational),
+            Constant.PERMISSION_CONNECTIVITY_REQUEST_CODE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            SettingsDialog.Builder(this).build().show()
+        } else {
+            requestPermissionsToCheckLocation()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        Utils.snackBarMaker(binding.root, "Location permissions granted")
+        Utils.isInternetAvailableBuildVersionCodAboveM(this)
+    }
+}

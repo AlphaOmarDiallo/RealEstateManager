@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/MorgageCalcNacDrawer"
+        android:icon="@drawable/ic_baseline_calculate_24"
+        android:title="@string/mortgage_calculator" />
+
+    <item
+        android:id="@+id/MyAccountNavDrawer"
+        android:icon="@drawable/ic_baseline_manage_accounts_24"
+        android:title="@string/my_account" />
+</menu>
