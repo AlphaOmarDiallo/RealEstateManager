@@ -32,7 +32,8 @@ class MainViewModel @Inject constructor(
     private val eurRate: MutableLiveData<Double> = MutableLiveData()
 
     init {
-
+        getEurRate()
+        getUsdRate()
     }
 
     /**
@@ -84,7 +85,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getEurRate() {
+    private fun getEurRate() {
         viewModelScope.launch {
             try {
                 val response = currencyAPIRepository.convertUSDtoEUR()

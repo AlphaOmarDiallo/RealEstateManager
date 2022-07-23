@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     /**
-     * Updating rates
+     * Updating rates qnd storing new values in data store to make it available in the all application
      */
     private fun observeRates() {
         viewModel.dollarToEuroRateFromDataStore.observe(this) {
