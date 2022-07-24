@@ -1,19 +1,23 @@
-package com.example.realestatemanager.di
+package com.example.realestatemanager.testDI
 
 import com.example.realestatemanager.data.repository.mortgageCalculator.MortgageCalculatorRepositoryImp
 import com.example.realestatemanager.data.repository.mortgageCalculator.MortgageCalculatorRepository
+import com.example.realestatemanager.di.MortgageModule
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
-class MortgageModule {
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [MortgageModule::class]
+)
+class TestMortgageModule {
 
     @Singleton
     @Provides
-    fun provideMortgageCalculatorRepository(): MortgageCalculatorRepository =
+    fun provideMortgageRepository(): MortgageCalculatorRepository =
         MortgageCalculatorRepositoryImp()
 }

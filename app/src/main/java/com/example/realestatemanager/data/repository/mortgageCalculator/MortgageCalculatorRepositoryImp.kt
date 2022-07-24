@@ -3,7 +3,7 @@ package com.example.realestatemanager.data.repository.mortgageCalculator
 import javax.inject.Inject
 import kotlin.math.pow
 
-class MortgageCalculatorImp @Inject constructor() : MortgageCalculatorRepository {
+class MortgageCalculatorRepositoryImp @Inject constructor() : MortgageCalculatorRepository {
 
     override fun monthlyPaymentMortgage(amount: Double, preferredRate: Double, years: Int): Int {
         val principal: Double = amount
