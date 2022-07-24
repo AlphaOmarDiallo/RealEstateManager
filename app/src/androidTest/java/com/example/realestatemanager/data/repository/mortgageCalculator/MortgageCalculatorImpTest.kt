@@ -40,17 +40,21 @@ class MortgageCalculatorImpTest{
         val rate = 2.54
         val time = 30
         val expectedResult = 1191
+        val unExpectedResult = 1000
         val actualResult = mortgageCalculatorRepository.monthlyPaymentMortgage(principal, rate, time)
         assertThat(actualResult).isEqualTo(expectedResult)
+        assertThat(actualResult).isNotEqualTo(unExpectedResult)
+
     }
 
     @Test
-    fun calculate_monthly_payment_mortgage_is_not_successful() {
-        val principal = 300000.0
-        val rate = 2.54
+    fun check_that_total_investment_in_calculated_correctly() {
+        val payment = 1191
         val time = 30
-        val expectedResult = 1000
-        val actualResult = mortgageCalculatorRepository.monthlyPaymentMortgage(principal, rate, time)
-        assertThat(actualResult).isNotEqualTo(expectedResult)
+        val expectedResult = (payment * (time * 12))
+        val unexpectedResult = (payment * time) -1
+        val actualResult = mortgageCalculatorRepository.totalInvestmentCost(payment, time)
+        assertThat(actualResult).isEqualTo(expectedResult)
+        assertThat(actualResult).isNotEqualTo(unexpectedResult)
     }
 }

@@ -27,10 +27,10 @@ class SettingsActivityTest {
     @Inject
     lateinit var currencyAPIRepository: CurrencyAPIRepository
 
-    @get:Rule(order = 1)
+    @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule(order = 2)
+    @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity> =
         ActivityScenarioRule(MainActivity::class.java)
 
