@@ -36,13 +36,12 @@ class MortgageCalculatorFragment : Fragment() {
     private var mortgageRate by Delegates.notNull<Double>()
     private var mortgageLength by Delegates.notNull<Int>()
     private var monthlyPrice by Delegates.notNull<Int>()
+    private var monthlyPriceEur by Delegates.notNull<Int>()
     private var euroToDollarRate by Delegates.notNull<Double>()
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private var priceList: MutableList<Int> = mutableListOf()
-
-    private var currencyDollar = true
     private var downPayment = 0
-
+    private var downPaymentEuro = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +71,6 @@ class MortgageCalculatorFragment : Fragment() {
         setPropertyPrice()
         setMortgageRate()
         setMortgageLength()
-        setDownPayment()
         setMonthlyPayment()
         setAutocompleteTextView()
     }
@@ -121,7 +119,7 @@ class MortgageCalculatorFragment : Fragment() {
 
     private fun setAutocompleteTextView() {
         if (args.propertyPrice != 0) {
-            binding.tvPropertyAmount.visibility = View.INVISIBLE
+            binding.tvPropertyAmount.visibility = View.GONE
         } else {
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, priceList)
             (binding.tvPropertyAmount.editText as? AutoCompleteTextView)?.setAdapter(adapter)
@@ -144,14 +142,14 @@ class MortgageCalculatorFragment : Fragment() {
     }
 
     private fun listenToSliderYearEvents() {
-        binding.sliderYears.addOnChangeListener { slider, value, fromUser ->
+        binding.sliderYears.addOnChangeListener { _, _, _ ->
             setMortgageLength()
             setMonthlyPayment()
         }
     }
 
     private fun listenToSliderRateEvents() {
-        binding.sliderRate.addOnChangeListener { slider, value, fromUser ->
+        binding.sliderRate.addOnChangeListener { _, _, _ ->
             setMortgageRate()
             setMonthlyPayment()
         }
@@ -159,13 +157,13 @@ class MortgageCalculatorFragment : Fragment() {
 
     private fun listenToDownPaymentChange() {
         binding.tiedDownPayment.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 try{
                     downPayment = if (p0 != null && p0.toString().toInt() != 0) p0.toString().toInt() else 0
+                    downPaymentEuro = (downPayment * dollarToEuroRate).toInt()
+                    downPaymentValueEur(downPaymentEuro)
                 } catch (e: Exception) {
                     Log.w(TAG, "onTextChanged: ${e.message}")
                 }
@@ -173,11 +171,10 @@ class MortgageCalculatorFragment : Fragment() {
                 setMonthlyPayment()
             }
 
-            override fun afterTextChanged(p0: Editable?) {
-                
-            }
+            override fun afterTextChanged(p0: Editable?) {}
         })
     }
+
 
     /**
      * Observing currency rates
@@ -203,22 +200,19 @@ class MortgageCalculatorFragment : Fragment() {
     private fun setMonthlyPayment() {
         val price = propertyPrice - downPayment
 
-        monthlyPrice = viewModel.getMortgageMonthlyPaymentFee(
-            price.toDouble(),
-            mortgageRate,
-            mortgageLength
-        )
+        monthlyPrice = viewModel.getMortgageMonthlyPaymentFee(price.toDouble(), mortgageRate, mortgageLength)
         binding.tvMonthlyPrice.text = "$$monthlyPrice"
+
+        monthlyPriceEur = (monthlyPrice * dollarToEuroRate).toInt()
+        binding.tvMonthlyPriceEuro.text = "€$monthlyPriceEur"
+
         totalInvestmentCost()
     }
 
     private fun totalInvestmentCost() {
         val totalCost = monthlyPrice * (mortgageLength * 12)
-        binding.tvTotalInvestmentCost.text = "Total investment cost is $$totalCost"
-    }
-
-    private fun setDownPayment() {
-        binding.tiedDownPayment.setText(downPayment.toString())
+        val totalCostEur = monthlyPriceEur * (mortgageLength * 12)
+        binding.tvTotalInvestmentCost.text = "Total investment cost is $$totalCost / €$totalCostEur"
     }
 
     private fun setupYearValue(years: Int) {
@@ -227,6 +221,22 @@ class MortgageCalculatorFragment : Fragment() {
 
     private fun setupRateValue(rate: Float) {
         binding.tvMortgageRateValue.text = "$rate %"
+    }
+
+    private fun downPaymentValue(value: Int?){
+        val valueToUpdate = when (value) {
+            null -> 0
+            else -> value
+        }
+        binding.tiedDownPayment.setText("$value")
+    }
+
+    private fun downPaymentValueEur(value: Int?){
+        val valueToUpdate = when (value) {
+            null -> 0
+            else -> value
+        }
+        binding.tiedDownPaymentEuro.setText("$value")
     }
 
 }

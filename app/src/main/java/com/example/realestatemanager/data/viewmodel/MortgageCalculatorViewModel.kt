@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.realestatemanager.data.repository.currencyAPI.CurrencyAPIRepository
 import com.example.realestatemanager.data.repository.dataStore.DataStoreRepository
 import com.example.realestatemanager.data.repository.mortgageCalculator.MortgageCalculatorRepository
 import com.example.realestatemanager.domain.Constant
@@ -17,7 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MortgageCalculatorViewModel @Inject constructor(
     private val mortgageCalculatorRepository: MortgageCalculatorRepository,
-    private val currencyAPIRepository: CurrencyAPIRepository,
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
