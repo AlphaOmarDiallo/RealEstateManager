@@ -13,17 +13,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.4" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardMonthlyFee"
-        android:layout_width="379dp"
-        android:layout_height="334dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:cardElevation="10dp"
         app:cardMaxElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -36,17 +38,37 @@
                 android:id="@+id/tvMonthlyPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="@color/secondaryDarkColor"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/tvTotalInvestmentCost"
+                app:layout_constraintEnd_toStartOf="@+id/tvMonthlyPriceEuro"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvMonthlyPayment"
+                tools:text="$ 1000 " />
+
+            <TextView
+                android:id="@+id/tvMonthlyPriceEuro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:textAlignment="center"
                 android:textColor="@color/primaryDarkColor"
                 android:textSize="48sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/tvTotalInvestmentCost"
+                app:layout_constraintBottom_toBottomOf="@+id/tvMonthlyPrice"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvMonthlyPayment"
-                tools:text="$ 1000 " />
+                app:layout_constraintStart_toEndOf="@+id/tvMonthlyPrice"
+                app:layout_constraintTop_toTopOf="@+id/tvMonthlyPrice"
+                tools:text="€ 1000 " />
 
             <TextView
                 android:id="@+id/tvMonthlyPayment"
@@ -62,19 +84,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:clickable="true"
-                android:contentDescription="@string/currency_sign"
-                android:focusable="true"
-                android:src="@drawable/ic_baseline_euro_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
             <TextView
                 android:id="@+id/tvTotalInvestmentCost"
                 android:layout_width="wrap_content"
@@ -82,7 +91,7 @@
                 android:textAlignment="center"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/tvMonthlyPrice"
+                app:layout_constraintEnd_toEndOf="@+id/tvMonthlyPriceEuro"
                 app:layout_constraintStart_toStartOf="@+id/tvMonthlyPrice"
                 app:layout_constraintTop_toBottomOf="@+id/tvMonthlyPrice"
                 tools:text="Total investment cost is $980033" />
@@ -94,6 +103,7 @@
         style="Widget.MaterialComponents.Slider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/slider_to_modify_the_length_of_the_mortgage_from_5_to_30_years"
         android:stepSize="5"
@@ -132,7 +142,7 @@
         android:id="@+id/tvMortgageLength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="8dp"
         android:text="@string/years"
@@ -142,13 +152,13 @@
         app:layout_constraintBottom_toTopOf="@+id/sliderYears"
         app:layout_constraintEnd_toStartOf="@+id/tvMortgageLengthValue"
         app:layout_constraintStart_toStartOf="@+id/sliderYears"
-        app:layout_constraintTop_toBottomOf="@+id/etDownPaymentAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/etDownPaymentAmountDollar" />
 
     <TextView
         android:id="@+id/tvPreferredMortgageRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="8dp"
         android:text="@string/rate"
@@ -161,28 +171,27 @@
         app:layout_constraintTop_toBottomOf="@+id/sliderYears" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etDownPaymentAmount"
+        android:id="@+id/etDownPaymentAmountEuro"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_horizontal|center_vertical"
         android:hint="@string/down_payment"
         android:textColor="@color/primaryDarkColor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:boxStrokeColor="@color/primaryColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvPropertyAmount"
-        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintBottom_toTopOf="@+id/etDownPaymentAmountDollar"
+        app:layout_constraintEnd_toEndOf="@+id/tvPropertyAmount"
+        app:layout_constraintStart_toStartOf="@+id/tvPropertyAmount"
+        app:layout_constraintTop_toBottomOf="@+id/tvPropertyAmount"
         app:startIconContentDescription="@string/currency_sign"
-        app:startIconDrawable="@drawable/ic_baseline_money_24"
+        app:startIconDrawable="@drawable/ic_baseline_euro_24"
         tools:text="10000">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tiedDownPayment"
+            android:id="@+id/tiedDownPaymentEuro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number" />
@@ -194,15 +203,16 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:hint="@string/price"
         android:textColor="@color/primaryDarkColor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:boxStrokeColor="@color/primaryColor"
-        app:layout_constraintEnd_toStartOf="@+id/etDownPaymentAmount"
+        app:layout_constraintBottom_toTopOf="@+id/etDownPaymentAmountEuro"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintVertical_chainStyle="packed"
@@ -243,6 +253,37 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/tvPreferredMortgageRate"
         app:layout_constraintStart_toEndOf="@+id/tvPreferredMortgageRate"
         tools:text="2.00%" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etDownPaymentAmountDollar"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="@string/down_payment"
+        android:textColor="@color/primaryDarkColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:boxStrokeColor="@color/primaryColor"
+        app:layout_constraintBottom_toTopOf="@+id/tvMortgageLength"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etDownPaymentAmountEuro"
+        app:startIconContentDescription="@string/currency_sign"
+        app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
+        tools:text="10000">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tiedDownPayment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/ivMinus1"

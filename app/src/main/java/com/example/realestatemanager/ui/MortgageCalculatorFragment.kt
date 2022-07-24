@@ -11,14 +11,15 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
+import com.example.realestatemanager.data.viewmodel.MortgageCalculatorViewModel
 import com.example.realestatemanager.databinding.FragmentMortgageCalculatorBinding
-import com.example.realestatemanager.domain.MortgagePaymentUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
 
@@ -27,6 +28,7 @@ class MortgageCalculatorFragment : Fragment() {
 
     private lateinit var binding: FragmentMortgageCalculatorBinding
     private lateinit var navController: NavController
+    private lateinit var viewModel: MortgageCalculatorViewModel
 
     private val args: MortgageCalculatorFragmentArgs by navArgs()
 
@@ -34,6 +36,8 @@ class MortgageCalculatorFragment : Fragment() {
     private var mortgageRate by Delegates.notNull<Double>()
     private var mortgageLength by Delegates.notNull<Int>()
     private var monthlyPrice by Delegates.notNull<Int>()
+    private var euroToDollarRate by Delegates.notNull<Double>()
+    private var dollarToEuroRate by Delegates.notNull<Double>()
     private var priceList: MutableList<Int> = mutableListOf()
 
     private var currencyDollar = true
@@ -46,6 +50,7 @@ class MortgageCalculatorFragment : Fragment() {
     ): View {
         binding = FragmentMortgageCalculatorBinding.inflate(inflater, container, false)
         val view = inflater.inflate(R.layout.fragment_mortgage_calculator, container, false)
+        viewModel = ViewModelProvider(requireActivity())[MortgageCalculatorViewModel::class.java]
         return binding.root
     }
 
@@ -60,6 +65,8 @@ class MortgageCalculatorFragment : Fragment() {
      * Sequences
      */
     private fun initialSetup() {
+        readCurrencies()
+        observingCurrencyRates()
         getArgsFromNav()
         getPriceOfAllListedProperty(SampleProperties.samplePropertyList)
         setPropertyPrice()
@@ -114,12 +121,16 @@ class MortgageCalculatorFragment : Fragment() {
 
     private fun setAutocompleteTextView() {
         if (args.propertyPrice != 0) {
-            binding.tvPropertyAmount.visibility = View.GONE
+            binding.tvPropertyAmount.visibility = View.INVISIBLE
         } else {
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, priceList)
             (binding.tvPropertyAmount.editText as? AutoCompleteTextView)?.setAdapter(adapter)
             Log.d(TAG, "setAutocompleteTextView: ${priceList.indexOf(propertyPrice)}")
         }
+    }
+
+    private fun readCurrencies(){
+        viewModel.readCurrencies()
     }
 
     /**
@@ -156,7 +167,7 @@ class MortgageCalculatorFragment : Fragment() {
                 try{
                     downPayment = if (p0 != null && p0.toString().toInt() != 0) p0.toString().toInt() else 0
                 } catch (e: Exception) {
-                    Log.w(TAG, "onTextChanged: ${e.message}", )
+                    Log.w(TAG, "onTextChanged: ${e.message}")
                 }
                 Log.d(TAG, "onTextChanged: $downPayment")
                 setMonthlyPayment()
@@ -169,17 +180,34 @@ class MortgageCalculatorFragment : Fragment() {
     }
 
     /**
+     * Observing currency rates
+     */
+
+    private fun observingCurrencyRates(){
+        viewModel.eurToDollarRate.observe(requireActivity(), this::updateEuroTODollarRate)
+        viewModel.usdToEurRate.observe(requireActivity(), this::updateDollarToEuroRate)
+    }
+
+    private fun updateEuroTODollarRate(rate: Double){
+        euroToDollarRate = rate
+    }
+
+    private fun updateDollarToEuroRate(rate: Double){
+        dollarToEuroRate = rate
+    }
+
+    /**
      * Reusable
      */
 
     private fun setMonthlyPayment() {
         val price = propertyPrice - downPayment
-        monthlyPrice = MortgagePaymentUtil.monthlyPaymentMortgage(
+
+        monthlyPrice = viewModel.getMortgageMonthlyPaymentFee(
             price.toDouble(),
             mortgageRate,
             mortgageLength
         )
-        //val monthlyPriceInEuro =
         binding.tvMonthlyPrice.text = "$$monthlyPrice"
         totalInvestmentCost()
     }

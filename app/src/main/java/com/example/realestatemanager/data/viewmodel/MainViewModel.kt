@@ -4,7 +4,10 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.location.Location
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.repository.autocomplete.AutocompleteRepository
 import com.example.realestatemanager.data.repository.connectivity.ConnectivityRepository
 import com.example.realestatemanager.data.repository.currencyAPI.CurrencyAPIRepository
@@ -28,8 +31,11 @@ class MainViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
-    private val usdRate: MutableLiveData<Double> = MutableLiveData()
-    private val eurRate: MutableLiveData<Double> = MutableLiveData()
+    private val _usdRate: MutableLiveData<Double> = MutableLiveData()
+    val usdRate: LiveData<Double> get() = _usdRate
+
+    private val _eurRate: MutableLiveData<Double> = MutableLiveData()
+    val eurRate: LiveData<Double> get() = _eurRate
 
     init {
         getEurRate()
@@ -39,9 +45,6 @@ class MainViewModel @Inject constructor(
     /**
      * DataStore Repository
      */
-    val euroToDollarRateFromDataStore = dataStoreRepository.readEuroToDollarRate().asLiveData()
-
-    val dollarToEuroRateFromDataStore = dataStoreRepository.readEuroToDollarRate().asLiveData()
 
     fun saveEuroToDollarRateToDataStore(rate: Double) =
         viewModelScope.launch {
@@ -64,23 +67,23 @@ class MainViewModel @Inject constructor(
 
                 if (!response.isSuccessful) {
                     Log.w(TAG, "getUsdRate: no response from API", null)
-                    usdRate.value = Constant.EURO_TO_DOLLARS
+                    _usdRate.value = Constant.EURO_TO_DOLLARS
                     return@launch
                 }
 
                 if (response.body()?.exchange_rates != null) {
                     Log.i(TAG, "exchange rate " + response.body()?.exchange_rates)
-                    usdRate.value = response.body()?.exchange_rates!!.USD
+                    _usdRate.value = response.body()?.exchange_rates!!.USD
                 } else {
                     Log.e(TAG, "getUsdRate: null data", null)
                 }
 
             } catch (e: IOException) {
                 Log.e(TAG, "getUsdRate: IOException" + e.message, null)
-                usdRate.value = Constant.EURO_TO_DOLLARS
+                _usdRate.value = Constant.EURO_TO_DOLLARS
             } catch (e: HttpException) {
                 Log.e(TAG, "getUsdRate: HttpException" + e.message(), null)
-                usdRate.value = Constant.EURO_TO_DOLLARS
+                _usdRate.value = Constant.EURO_TO_DOLLARS
             }
         }
     }
@@ -92,23 +95,23 @@ class MainViewModel @Inject constructor(
 
                 if (!response.isSuccessful) {
                     Log.w(TAG, "getEurRate: no response from API", null)
-                    eurRate.value = Constant.DOLLARS_TO_EURO
+                    _eurRate.value = Constant.DOLLARS_TO_EURO
                     return@launch
                 }
 
                 if (response.body()?.exchange_rates != null) {
                     Log.i(TAG, "exchange rate " + response.body()?.exchange_rates)
-                    eurRate.value = response.body()?.exchange_rates!!.EUR
+                    _eurRate.value = response.body()?.exchange_rates!!.EUR
                 } else {
                     Log.e(TAG, "getEurRate: null data", null)
                 }
 
             } catch (e: IOException) {
                 Log.e(TAG, "getEurRate: IOException" + e.message, null)
-                eurRate.value = Constant.DOLLARS_TO_EURO
+                _eurRate.value = Constant.DOLLARS_TO_EURO
             } catch (e: HttpException) {
                 Log.e(TAG, "getEurRate: HttpException" + e.message(), null)
-                eurRate.value = Constant.DOLLARS_TO_EURO
+                _eurRate.value = Constant.DOLLARS_TO_EURO
             }
         }
     }
@@ -161,7 +164,7 @@ class MainViewModel @Inject constructor(
 
                 if (response.body()?.results != null) {
                     Log.i(TAG, "getInterestsAround: " + response.raw().request.url)
-                     getNextInterestAround(location, response.body()!!.next_page_token)
+                    getNextInterestAround(location, response.body()!!.next_page_token)
                 } else {
                     Log.e(TAG, "getInterestsAround: null data", null)
                 }

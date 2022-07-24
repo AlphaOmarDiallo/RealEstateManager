@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         checkConnectivity(this)
 
         observeRates()
-
     }
 
     /**
@@ -111,16 +110,18 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
      * Updating rates qnd storing new values in data store to make it available in the all application
      */
     private fun observeRates() {
-        viewModel.dollarToEuroRateFromDataStore.observe(this) {
+        viewModel.usdRate.observe(this) {
             updatingDollarToEuroRate(it)
+            Log.e(TAG, "observeRates: $it")
         }
-        viewModel.euroToDollarRateFromDataStore.observe(this) {
+        viewModel.eurRate.observe(this) {
             updatingEuroToDollarRate(it)
+            Log.e(TAG, "observeRates: $it")
         }
     }
 
     private fun updatingEuroToDollarRate(rate: Double){
-        Log.d(TAG, "updatingEuroToDollarRate: $rate")
+        Log.e(TAG, "updatingEuroToDollarRate: $rate")
         viewModel.saveEuroToDollarRateToDataStore(rate)
         euroToDollar = rate
     }
@@ -128,6 +129,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun updatingDollarToEuroRate(rate: Double){
         viewModel.saveDollarToEuroRateToDataStore(rate)
         dollarToEuro = rate
+        Log.e(TAG, "updatingEuroToDollarRate: $rate")
     }
 
     /**
