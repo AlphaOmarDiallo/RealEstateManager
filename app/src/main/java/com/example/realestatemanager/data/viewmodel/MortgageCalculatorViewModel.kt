@@ -22,7 +22,8 @@ class MortgageCalculatorViewModel @Inject constructor(
     private val _usdToEurRate: MutableLiveData<Double> = MutableLiveData(Constant.DOLLARS_TO_EURO)
     val usdToEurRate: LiveData<Double> get() = _usdToEurRate
 
-    private val _eurToDollarRate: MutableLiveData<Double> = MutableLiveData(Constant.EURO_TO_DOLLARS)
+    private val _eurToDollarRate: MutableLiveData<Double> =
+        MutableLiveData(Constant.EURO_TO_DOLLARS)
     val eurToDollarRate: LiveData<Double> get() = _eurToDollarRate
 
     /**
@@ -57,6 +58,10 @@ class MortgageCalculatorViewModel @Inject constructor(
 
     fun getMortgageMonthlyPaymentFee(amount: Double, preferredRate: Double, years: Int): Int {
         return mortgageCalculatorRepository.monthlyPaymentMortgage(amount, preferredRate, years)
+    }
+
+    fun getTotalInvestmentCost(monthlyFee: Int, length: Int): Int {
+        return mortgageCalculatorRepository.totalInvestmentCost(monthlyFee, length)
     }
 
 }

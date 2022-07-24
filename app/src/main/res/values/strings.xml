@@ -29,5 +29,7 @@
     <string name="slider_to_modify_the_mortgage_rate_from_2_to_6">Slider to modify the mortgage rate from 2 to 6</string>
     <string name="slider_to_modify_the_length_of_the_mortgage_from_5_to_30_years">Slider to modify the length of the mortgage from 5 to 30 years</string>
     <string name="monthly_payment">Monthly payment</string>
+    <string name="total_investment_cost">The total investment cost is $%1d / €%2d</string>
+    <string name="mortgage_length_in_years">"%1d years"</string>
 
 </resources>

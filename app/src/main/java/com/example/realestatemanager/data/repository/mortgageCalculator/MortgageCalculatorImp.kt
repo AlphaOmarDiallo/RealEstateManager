@@ -12,5 +12,10 @@ class MortgageCalculatorImp @Inject constructor() : MortgageCalculatorRepository
         return (principal * rate / (1 - (1 + rate).pow(-time.toDouble()))).toInt()
     }
 
+    override fun totalInvestmentCost(monthlyFee: Int, mortgageLength: Int): Int {
+        return monthlyFee * (mortgageLength * 12)
+
+    }
+
 }
 

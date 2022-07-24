@@ -92,7 +92,6 @@ class MortgageCalculatorFragment : Fragment() {
         for (property in properties) {
             priceList.add(property.price)
         }
-        Log.d(TAG, "getPriceOfAllListedProperty: $priceList")
         return priceList.sortDescending()
     }
 
@@ -108,13 +107,11 @@ class MortgageCalculatorFragment : Fragment() {
     private fun setMortgageRate() {
         mortgageRate = (binding.sliderRate.value / 100).toDouble()
         setupRateValue(binding.sliderRate.value)
-        Log.d(TAG, "setMortgageRate: $mortgageRate")
     }
 
     private fun setMortgageLength() {
         mortgageLength = (binding.sliderYears.value).toInt()
         setupYearValue(mortgageLength)
-        Log.d(TAG, "setMortgageLength: $mortgageLength")
     }
 
     private fun setAutocompleteTextView() {
@@ -123,11 +120,10 @@ class MortgageCalculatorFragment : Fragment() {
         } else {
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, priceList)
             (binding.tvPropertyAmount.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-            Log.d(TAG, "setAutocompleteTextView: ${priceList.indexOf(propertyPrice)}")
         }
     }
 
-    private fun readCurrencies(){
+    private fun readCurrencies() {
         viewModel.readCurrencies()
     }
 
@@ -160,14 +156,14 @@ class MortgageCalculatorFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                try{
-                    downPayment = if (p0 != null && p0.toString().toInt() != 0) p0.toString().toInt() else 0
+                try {
+                    downPayment =
+                        if (p0 != null && p0.toString().toInt() != 0) p0.toString().toInt() else 0
                     downPaymentEuro = (downPayment * dollarToEuroRate).toInt()
                     downPaymentValueEur(downPaymentEuro)
                 } catch (e: Exception) {
                     Log.w(TAG, "onTextChanged: ${e.message}")
                 }
-                Log.d(TAG, "onTextChanged: $downPayment")
                 setMonthlyPayment()
             }
 
@@ -175,21 +171,20 @@ class MortgageCalculatorFragment : Fragment() {
         })
     }
 
-
     /**
      * Observing currency rates
      */
 
-    private fun observingCurrencyRates(){
+    private fun observingCurrencyRates() {
         viewModel.eurToDollarRate.observe(requireActivity(), this::updateEuroTODollarRate)
         viewModel.usdToEurRate.observe(requireActivity(), this::updateDollarToEuroRate)
     }
 
-    private fun updateEuroTODollarRate(rate: Double){
+    private fun updateEuroTODollarRate(rate: Double) {
         euroToDollarRate = rate
     }
 
-    private fun updateDollarToEuroRate(rate: Double){
+    private fun updateDollarToEuroRate(rate: Double) {
         dollarToEuroRate = rate
     }
 
@@ -200,42 +195,35 @@ class MortgageCalculatorFragment : Fragment() {
     private fun setMonthlyPayment() {
         val price = propertyPrice - downPayment
 
-        monthlyPrice = viewModel.getMortgageMonthlyPaymentFee(price.toDouble(), mortgageRate, mortgageLength)
-        binding.tvMonthlyPrice.text = "$$monthlyPrice"
+        monthlyPrice =
+            viewModel.getMortgageMonthlyPaymentFee(price.toDouble(), mortgageRate, mortgageLength)
+        binding.tvMonthlyPrice.text = "$ $monthlyPrice"
 
         monthlyPriceEur = (monthlyPrice * dollarToEuroRate).toInt()
-        binding.tvMonthlyPriceEuro.text = "€$monthlyPriceEur"
+        binding.tvMonthlyPriceEuro.text = "€ $monthlyPriceEur"
 
         totalInvestmentCost()
     }
 
     private fun totalInvestmentCost() {
-        val totalCost = monthlyPrice * (mortgageLength * 12)
-        val totalCostEur = monthlyPriceEur * (mortgageLength * 12)
-        binding.tvTotalInvestmentCost.text = "Total investment cost is $$totalCost / €$totalCostEur"
+        val totalCost = viewModel.getTotalInvestmentCost(monthlyPrice, mortgageLength)
+        val totalCostEur = (viewModel.getTotalInvestmentCost(
+            monthlyPrice,
+            mortgageLength
+        ) * dollarToEuroRate).toInt()
+        binding.tvTotalInvestmentCost.text =
+            getString(R.string.total_investment_cost, totalCost, totalCostEur)
     }
 
     private fun setupYearValue(years: Int) {
-        binding.tvMortgageLengthValue.text = ("$years years")
+        binding.tvMortgageLengthValue.text = getString(R.string.mortgage_length_in_years, years)
     }
 
     private fun setupRateValue(rate: Float) {
         binding.tvMortgageRateValue.text = "$rate %"
     }
 
-    private fun downPaymentValue(value: Int?){
-        val valueToUpdate = when (value) {
-            null -> 0
-            else -> value
-        }
-        binding.tiedDownPayment.setText("$value")
-    }
-
-    private fun downPaymentValueEur(value: Int?){
-        val valueToUpdate = when (value) {
-            null -> 0
-            else -> value
-        }
+    private fun downPaymentValueEur(value: Int?) {
         binding.tiedDownPaymentEuro.setText("$value")
     }
 
