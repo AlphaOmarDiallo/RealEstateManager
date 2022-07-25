@@ -44,7 +44,6 @@ class MortgageCalculatorImpTest{
         val actualResult = mortgageCalculatorRepository.monthlyPaymentMortgage(principal, rate, time)
         assertThat(actualResult).isEqualTo(expectedResult)
         assertThat(actualResult).isNotEqualTo(unExpectedResult)
-
     }
 
     @Test
