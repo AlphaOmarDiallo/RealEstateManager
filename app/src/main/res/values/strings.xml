@@ -32,4 +32,8 @@
     <string name="total_investment_cost">The total investment cost is $%1d / €%2d</string>
     <string name="mortgage_length_in_years">"%1d years"</string>
 
+    <!-- My account fragment -->
+    <string name="connect">Connect</string>
+    <string name="delete_account_forever">Delete account forever</string>
+
 </resources>
