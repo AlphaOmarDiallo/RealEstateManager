@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.*
 import org.junit.runners.MethodSorters
-import java.util.*
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -115,8 +114,5 @@ class LocalDatabaseTest {
         runBlocking { listProperty = flowList.first().toList() }
         assertThat(listProperty.last().price == 48326340 && listProperty.size == 1).isTrue()
     }
-
-
-
 
 }
