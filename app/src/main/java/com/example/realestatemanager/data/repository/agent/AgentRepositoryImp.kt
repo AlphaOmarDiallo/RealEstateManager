@@ -9,7 +9,6 @@ class AgentRepositoryImp @Inject constructor(
     private val agentDao: AgentDao
 ) : AgentRepository {
 
-
     override suspend fun insertAgent(agent: Agent) {
         agentDao.insertAgent(agent)
     }

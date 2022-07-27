@@ -7,15 +7,15 @@ import com.example.realestatemanager.data.model.Agent
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.*
 import org.junit.runners.MethodSorters
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltAndroidTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class AgentRepositoryImpTest {
@@ -57,16 +57,21 @@ class AgentRepositoryImpTest {
     }
 
     @Test
-    fun c_agent_are_added_correctly_in_database() = runTest(UnconfinedTestDispatcher()) {
-        launch { localDatabase.agentDao().insertAgent(agent1) }
-        launch { localDatabase.agentDao().insertAgent(agent2) }
-        launch { localDatabase.agentDao().insertAgent(agent3) }
-        launch { localDatabase.agentDao().insertAgent(agent4) }
-        advanceUntilIdle()
+    fun c_agent_are_added_correctly_in_database() = runTest {
+        //Given
+        var listAgentSize = agentDao.getListAllAgents().collect{it.size}
+        assertThat(listAgentSize).isEqualTo(0)
 
-        delay(5000)
+        //When
+        runBlocking { localDatabase.agentDao().insertAgent(agent1) }
+        runBlocking { localDatabase.agentDao().insertAgent(agent2) }
+        runBlocking { localDatabase.agentDao().insertAgent(agent3) }
+        runBlocking { localDatabase.agentDao().insertAgent(agent4) }
+
+        //Then
+        listAgentSize = agentDao.getListAllAgents().collect{it.size}
+        assertThat(listAgentSize).isNotEqualTo(0)
     }
-
 
     @Test
     fun d_getAllAgent() = runTest {
