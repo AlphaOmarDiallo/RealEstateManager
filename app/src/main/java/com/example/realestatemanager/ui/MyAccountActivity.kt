@@ -1,6 +1,8 @@
 package com.example.realestatemanager.ui
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.realestatemanager.R
 import com.firebase.ui.auth.AuthUI
@@ -38,10 +40,7 @@ class MyAccountActivity : AppCompatActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             // ...
         } else {
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
-            // response.getError().getErrorCode() and handle the error.
-            // ...
+            Log.e(TAG, "onSignInResult: ${response!!.error!!.message}")
         }
     }
 

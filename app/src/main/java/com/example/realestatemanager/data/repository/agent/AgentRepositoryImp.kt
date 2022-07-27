@@ -9,7 +9,6 @@ class AgentRepositoryImp @Inject constructor(
     private val agentDao: AgentDao
 ) : AgentRepository {
 
-    val allAgent: Flow<List<Agent>> = agentDao.getListAllAgents()
 
     override suspend fun insertAgent(agent: Agent) {
         agentDao.insertAgent(agent)
@@ -21,5 +20,9 @@ class AgentRepositoryImp @Inject constructor(
 
     override suspend fun deleteAgent(agent: Agent) {
         agentDao.deleteAgent(agent)
+    }
+
+    override fun getAllAgent(): Flow<List<Agent>> {
+        return agentDao.getListAllAgents()
     }
 }

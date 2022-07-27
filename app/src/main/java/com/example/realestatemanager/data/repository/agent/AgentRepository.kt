@@ -1,6 +1,7 @@
 package com.example.realestatemanager.data.repository.agent
 
 import com.example.realestatemanager.data.model.Agent
+import kotlinx.coroutines.flow.Flow
 
 interface AgentRepository {
 
@@ -9,4 +10,6 @@ interface AgentRepository {
     suspend fun updateAgent(agent: Agent)
 
     suspend fun deleteAgent(agent: Agent)
+
+    fun getAllAgent(): Flow<List<Agent>>
 }

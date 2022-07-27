@@ -7,12 +7,11 @@ import com.example.realestatemanager.data.model.Agent
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.*
 import org.junit.runners.MethodSorters
 import javax.inject.Inject
@@ -24,9 +23,6 @@ class AgentRepositoryImpTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    private val testDispatcher = UnconfinedTestDispatcher()
-    private val scope = TestScope(testDispatcher)
-
     @Inject
     lateinit var localDatabase: LocalDatabase
 
@@ -35,7 +31,7 @@ class AgentRepositoryImpTest {
 
     private val agent1 = Agent(0, "john", "john@doe.com", null)
     private val agent2 = Agent(0, "johnny", "johnny@doe.com", null)
-    private val agent3 = Agent(0, "johnas", "johnas@doe.com", null)
+    private val agent3 = Agent(0, "johns", "johns@doe.com", null)
     private val agent4 = Agent(0, "jon", "jon@doe.com", null)
 
 
@@ -43,14 +39,11 @@ class AgentRepositoryImpTest {
     fun init() {
         hiltRule.inject()
         localDatabase.agentDao().nukeTable()
-        Dispatchers.setMain(testDispatcher)
-        addAgentToDataBase()
     }
 
     @After
     fun tearDown() {
         localDatabase.agentDao().nukeTable()
-        Dispatchers.resetMain()
     }
 
     @Test
@@ -64,19 +57,24 @@ class AgentRepositoryImpTest {
     }
 
     @Test
-    fun c_agent_are_added_correctly_in_database() {
-        var listAgent: List<Agent>? = null
-        runBlocking { localDatabase.agentDao().getListAllAgents().collect{listAgent = it} }
-        assertThat(listAgent).isNotNull()
-        assertThat(listAgent!!.size).isEqualTo(4)
+    fun c_agent_are_added_correctly_in_database() = runTest(UnconfinedTestDispatcher()) {
+        launch { localDatabase.agentDao().insertAgent(agent1) }
+        launch { localDatabase.agentDao().insertAgent(agent2) }
+        launch { localDatabase.agentDao().insertAgent(agent3) }
+        launch { localDatabase.agentDao().insertAgent(agent4) }
+        advanceUntilIdle()
+
+        delay(5000)
     }
 
+
     @Test
-    fun d_getAllAgent() {
+    fun d_getAllAgent() = runTest {
         val referenceListAgent = listOf(agent1, agent2, agent3, agent4)
         var listAgent: List<Agent>? = null
 
-        runBlocking { listAgent = localDatabase.agentDao().getListAllAgents().asLiveData().value }
+        launch { listAgent = localDatabase.agentDao().getListAllAgents().asLiveData().value }
+
         assertThat(listAgent).isNotNull()
         assertThat(listAgent!!.size).isEqualTo(referenceListAgent.size)
 
@@ -86,11 +84,11 @@ class AgentRepositoryImpTest {
         assertThat(referenceListAgent[3].name).isEqualTo(listAgent!![3].name)
     }
 
-    fun addAgentToDataBase() {
-        runBlocking { localDatabase.agentDao().insertAgent(agent1) }
-        runBlocking { localDatabase.agentDao().insertAgent(agent2) }
-        runBlocking { localDatabase.agentDao().insertAgent(agent3) }
-        runBlocking { localDatabase.agentDao().insertAgent(agent4) }
+    private fun addAgentToDataBase() = runTest {
+        launch { localDatabase.agentDao().insertAgent(agent1) }
+        launch { localDatabase.agentDao().insertAgent(agent2) }
+        launch { localDatabase.agentDao().insertAgent(agent3) }
+        launch { localDatabase.agentDao().insertAgent(agent4) }
     }
 
 }

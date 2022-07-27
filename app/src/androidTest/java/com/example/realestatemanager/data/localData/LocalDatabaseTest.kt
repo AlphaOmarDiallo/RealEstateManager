@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.example.realestatemanager.data.localData
 
 import com.example.realestatemanager.data.model.Agent
@@ -6,13 +8,16 @@ import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.*
 import org.junit.runners.MethodSorters
 import javax.inject.Inject
 
+@Suppress("BlockingMethodInNonBlockingContext")
 @HiltAndroidTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class LocalDatabaseTest {
@@ -61,7 +66,7 @@ class LocalDatabaseTest {
     }
 
     @Test
-    fun d_create_update_delete_agent() {
+    fun d_create_update_delete_agent() = runTest {
         lateinit var listAgent: List<Agent>
         val flowList: Flow<List<Agent>> = localDatabase.agentDao().getListAllAgents()
 
@@ -76,7 +81,7 @@ class LocalDatabaseTest {
         assertThat(listAgent.last().name == agent.name && listAgent.last().email == agent.email).isTrue()
 
         //Updating agent
-        var agent2 = listAgent.last()
+        val agent2 = listAgent.last()
         agent2.name = "Jane Doe"
 
         //Updating agent in database
@@ -91,7 +96,7 @@ class LocalDatabaseTest {
     }
 
     @Test
-    fun e_create_update_property() {
+    fun e_create_update_property() = runTest {
         lateinit var listProperty: List<Property>
         val flowList: Flow<List<Property>> = localDatabase.propertyDao().getListOfProperties()
 
@@ -106,7 +111,7 @@ class LocalDatabaseTest {
         assertThat(listProperty.last().address == property.address && listProperty.last().price == property.price).isTrue()
 
         //Updating agent
-        var property1 = listProperty.last()
+        val property1 = listProperty.last()
         property1.price = 48326340
 
         //Updating agent in database
