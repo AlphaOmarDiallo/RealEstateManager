@@ -4,21 +4,9 @@ import android.content.Context
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-class FirebaseAuthRepositoryImp @Inject constructor(): FirebaseAuthRepository {
-
-    @Singleton
-    @Provides
-    fun provideFireBaseAuthRepository(): FirebaseAuthRepository =
-        FirebaseAuthRepositoryImp()
+class FirebaseAuthRepositoryImp @Inject constructor() : FirebaseAuthRepository {
 
     override fun getCurrentUser(): FirebaseUser? {
         return FirebaseAuth.getInstance().currentUser

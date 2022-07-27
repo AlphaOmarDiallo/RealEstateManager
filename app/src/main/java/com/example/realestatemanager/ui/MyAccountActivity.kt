@@ -4,13 +4,47 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.realestatemanager.R
+import androidx.lifecycle.ViewModelProvider
+import com.example.realestatemanager.data.viewmodel.MyAccountViewModel
+import com.example.realestatemanager.databinding.ActivityMyAccountBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 
 class MyAccountActivity : AppCompatActivity() {
+
+    lateinit var binding: ActivityMyAccountBinding
+    lateinit var viewModel: MyAccountViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMyAccountBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        setupViewModel()
+
+    }
+
+    /**
+     * ViewModel setup
+     */
+
+    private fun setupViewModel() {
+        viewModel = ViewModelProvider(this)[MyAccountViewModel::class.java]
+    }
+
+    /**
+     * Sign in or disconnect button click
+     */
+
+    private fun signInOrDisconnectButtonClicked() =
+        if (isUserConnected() != null) disconnectUser() else connectUser()
+
+    /**
+     * SignIn settings
+     */
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -26,13 +60,6 @@ class MyAccountActivity : AppCompatActivity() {
         .setAvailableProviders(providers)
         .build()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_account)
-
-        signInLauncher.launch(signInIntent)
-    }
-
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
@@ -44,4 +71,13 @@ class MyAccountActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Account management methods
+     */
+
+    private fun isUserConnected() = viewModel.getCurrentUser()
+
+    private fun connectUser() = signInLauncher.launch(signInIntent)
+
+    private fun disconnectUser() = viewModel.disconnectUser(this)
 }
