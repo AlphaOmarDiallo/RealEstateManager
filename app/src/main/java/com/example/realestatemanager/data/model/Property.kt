@@ -41,5 +41,5 @@ data class Property (
     @ColumnInfo(name = "property_off_market_since")
     val offTheMarketSince: Long?,
     @ColumnInfo(name = "property_managing_agent")
-    val agentManagingPropertyId: Int?
+    val agentManagingPropertyId: String?
 ) :Serializable

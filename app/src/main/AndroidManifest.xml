@@ -18,10 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RealEstateManager">
         <activity
-            android:name=".MyAccountActivity"
+            android:name=".ui.MyAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"

@@ -3,6 +3,7 @@ package com.example.realestatemanager.ui
 import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -74,12 +75,34 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         )
         binding.mainLayout.addDrawerListener(toggle)
         toggle.syncState()
+        handleClickOnNavDrawer()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (toggle.onOptionsItemSelected(item)) {
             true
         } else super.onOptionsItemSelected(item)
+    }
+
+    private fun handleClickOnNavDrawer() {
+        binding.navigationView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.MyAccountNavDrawer -> openMyAccountActivity()
+                R.id.MorgageCalcNacDrawer -> openMyMortgageCalculatorActivity()
+                else -> Log.w(TAG, "handleClickOnNavDrawer: error")
+            }
+            return@setNavigationItemSelectedListener true
+        }
+    }
+
+    private fun openMyAccountActivity() {
+        val intent = Intent(this, MyAccountActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openMyMortgageCalculatorActivity() {
+        //TODO
+        Log.d(TAG, "openMyMortgageCalculatorActivity: TODO")
     }
 
     /**
