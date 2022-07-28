@@ -30,7 +30,7 @@ class MyAccountViewModel @Inject constructor(
         _currentUser!!.value = agent
     }
 
-    fun createAgent(agent: FirebaseUser){
+    fun createAgent(agent: FirebaseUser) {
         val agent = Agent(
             agent.uid,
             agent.displayName.toString(),
@@ -70,6 +70,10 @@ class MyAccountViewModel @Inject constructor(
         }
     }
 
-    fun getAgentByIdInDatabase(agentID: String) = agentRepository.getUserById(agentID)
+    fun getAgentByIdInDatabase(agentID: String): Agent? {
+        var agent: Agent? = null
+        viewModelScope.launch { agentRepository.getUserById(agentID).collect { agent = it } }
+        return agent
+    }
 
 }

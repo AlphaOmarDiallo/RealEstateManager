@@ -13,5 +13,5 @@ interface AgentRepository {
 
     fun getAllAgent(): Flow<List<Agent>>
 
-    fun getUserById(id: String) : Agent?
+    fun getUserById(id: String) : Flow<Agent?>
 }

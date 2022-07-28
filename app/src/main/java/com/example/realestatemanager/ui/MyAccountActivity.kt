@@ -81,8 +81,8 @@ class MyAccountActivity : AppCompatActivity() {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             val agent = viewModel.getCurrentUser()
-            //val agentCheck = viewModel.getAgentByIdInDatabase(agent!!.uid)
-            //if (agentCheck != null) viewModel.setAgent(agentCheck) else viewModel.createAgent(agent)
+            val agentCheck = viewModel.getAgentByIdInDatabase(agent!!.uid)
+            if (agentCheck != null) viewModel.setAgent(agentCheck) else viewModel.createAgent(agent)
         } else {
             Log.e(TAG, "onSignInResult: ${response!!.error!!.message}")
         }
