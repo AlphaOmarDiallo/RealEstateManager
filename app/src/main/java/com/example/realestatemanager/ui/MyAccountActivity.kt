@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import coil.load
 import com.example.realestatemanager.R
+import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.viewmodel.MyAccountViewModel
 import com.example.realestatemanager.databinding.ActivityMyAccountBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
-import com.google.firebase.auth.FirebaseAuth
 
 class MyAccountActivity : AppCompatActivity() {
 
@@ -64,9 +65,9 @@ class MyAccountActivity : AppCompatActivity() {
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
-            // Successfully signed in
-            val user = FirebaseAuth.getInstance().currentUser
-            // ...
+            val agent = viewModel.getCurrentUser()
+            val agentCheck = viewModel.getAgentByIdInDatabase(agent!!.uid)
+            if (agentCheck != null) viewModel.setAgent(agentCheck) else viewModel.createAgent(agent)
         } else {
             Log.e(TAG, "onSignInResult: ${response!!.error!!.message}")
         }
@@ -88,4 +89,29 @@ class MyAccountActivity : AppCompatActivity() {
 
     private fun setupButtonDisconnectOrConnect() =
         if (viewModel.getCurrentUser() != null) binding.buttonConnect.text = getText(R.string.connect) else binding.buttonConnect.text = getText(R.string.disconnect)
+
+    private fun observeCurrentUser() =
+        viewModel.currentUser?.observe(this, this::updateViewsWithAgent)
+
+    private fun updateViewsWithAgent(agent: Agent){
+        updateAvatar(agent.picture)
+        updateName(agent.name)
+        updateEmail(agent.email)
+    }
+
+    private fun updateAvatar(photoURL: String?){
+        if (photoURL != null) {
+            binding.ivAgentAvatar.load(photoURL)
+        } else {
+            binding.ivAgentAvatar.load(R.drawable.agent_placeholder)
+        }
+    }
+
+    private fun updateName(agentName: String){
+        binding.tvNameAgent.text = agentName
+    }
+
+    private fun updateEmail(agentEmail: String){
+        binding.tvEmailAgent.text = agentEmail
+    }
 }
