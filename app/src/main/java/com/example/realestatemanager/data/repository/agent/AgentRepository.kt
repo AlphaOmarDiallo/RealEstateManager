@@ -12,4 +12,6 @@ interface AgentRepository {
     suspend fun deleteAgent(agent: Agent)
 
     fun getAllAgent(): Flow<List<Agent>>
+
+    fun getUserById(id: String) : Agent?
 }

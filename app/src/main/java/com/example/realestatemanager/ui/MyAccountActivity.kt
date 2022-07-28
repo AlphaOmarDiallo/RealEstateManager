@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.realestatemanager.R
 import com.example.realestatemanager.data.viewmodel.MyAccountViewModel
 import com.example.realestatemanager.databinding.ActivityMyAccountBinding
 import com.firebase.ui.auth.AuthUI
@@ -80,4 +81,11 @@ class MyAccountActivity : AppCompatActivity() {
     private fun connectUser() = signInLauncher.launch(signInIntent)
 
     private fun disconnectUser() = viewModel.disconnectUser(this)
+
+    /**
+     * Setup views
+     */
+
+    private fun setupButtonDisconnectOrConnect() =
+        if (viewModel.getCurrentUser() != null) binding.buttonConnect.text = getText(R.string.connect) else binding.buttonConnect.text = getText(R.string.disconnect)
 }

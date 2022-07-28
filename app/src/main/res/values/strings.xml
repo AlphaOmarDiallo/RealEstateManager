@@ -34,6 +34,7 @@
 
     <!-- My account fragment -->
     <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
     <string name="delete_account_forever">Delete account forever</string>
     <string name="agent_avatar">Agent avatar</string>
     <string name="update_account">Update account</string>
