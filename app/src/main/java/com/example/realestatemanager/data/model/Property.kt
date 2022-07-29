@@ -9,9 +9,9 @@ import java.io.Serializable
 data class Property (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "property_id")
-    val id: Int,
+    var id: Int,
     @ColumnInfo(name = "property_type")
-    val type: String,
+    var type: String,
     @ColumnInfo(name = "property_price")
     var price: Int,
     @ColumnInfo(name = "property_surface")

@@ -9,8 +9,6 @@ class PropertyRepositoryImp @Inject constructor(
     private val propertyDao: PropertyDao
 ) : PropertyRepository {
 
-    val allProperties: Flow<List<Property>> = propertyDao.getListOfProperties()
-
     override suspend fun insertProperty(property: Property) {
         propertyDao.insertProperty(property)
     }

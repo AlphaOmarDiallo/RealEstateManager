@@ -12,7 +12,7 @@ data class Agent(
     @ColumnInfo(name = "agent_name")
     var name: String,
     @ColumnInfo(name = "agent_email")
-    val email: String,
+    var email: String,
     @ColumnInfo(name = "agent_picture")
-    val picture: String?
+    var picture: String?
 )
