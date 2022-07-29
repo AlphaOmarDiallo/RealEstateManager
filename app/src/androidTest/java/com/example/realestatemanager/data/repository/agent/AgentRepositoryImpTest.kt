@@ -59,8 +59,8 @@ class AgentRepositoryImpTest {
         //Given
 
         var listAgentInDatabase: List<Agent>? = null
-        agentDao.getListAllAgents().take(1).collect{listAgentInDatabase = it}
-        var sizeListAgentInDatabase: Int = listAgentInDatabase!!.size
+        agentDao.getListAllAgents().take(1).collect { listAgentInDatabase = it }
+        val sizeListAgentInDatabase: Int = listAgentInDatabase!!.size
         assertThat(sizeListAgentInDatabase).isEqualTo(0)
 
         //When
@@ -71,8 +71,9 @@ class AgentRepositoryImpTest {
         //Then
 
         var listAgentInDatabaseAfterInsertingAgent: List<Agent>? = null
-        agentDao.getListAllAgents().take(1).collect{listAgentInDatabaseAfterInsertingAgent = it}
-        var sizeListAgentInDatabaseAfterInsertingAgent: Int = listAgentInDatabaseAfterInsertingAgent!!.size
+        agentDao.getListAllAgents().take(1).collect { listAgentInDatabaseAfterInsertingAgent = it }
+        val sizeListAgentInDatabaseAfterInsertingAgent: Int =
+            listAgentInDatabaseAfterInsertingAgent!!.size
 
         assertThat(sizeListAgentInDatabase).isNotEqualTo(sizeListAgentInDatabaseAfterInsertingAgent)
         assertThat(sizeListAgentInDatabaseAfterInsertingAgent).isEqualTo(4)
@@ -87,7 +88,7 @@ class AgentRepositoryImpTest {
 
         //When
         addAgentToDataBase()
-        agentDao.getListAllAgents().take(1).collect{listAgent = it}
+        agentDao.getListAllAgents().take(1).collect { listAgent = it }
         advanceUntilIdle()
 
         //Then
@@ -106,15 +107,15 @@ class AgentRepositoryImpTest {
         advanceUntilIdle()
 
         //When
-        var agentCheck1:Agent? = null
-        var agentCheck2:Agent? = null
-        var agentCheck3:Agent? = null
-        var agentCheck4:Agent? = null
+        var agentCheck1: Agent? = null
+        var agentCheck2: Agent? = null
+        var agentCheck3: Agent? = null
+        var agentCheck4: Agent? = null
 
-        agentDao.getUserById(agent1.id).take(1).collect{agentCheck1 = it}
-        agentDao.getUserById(agent2.id).take(1).collect{agentCheck2 = it}
-        agentDao.getUserById(agent3.id).take(1).collect{agentCheck3 = it}
-        agentDao.getUserById(agent4.id).take(1).collect{agentCheck4 = it}
+        agentDao.getUserById(agent1.id).take(1).collect { agentCheck1 = it }
+        agentDao.getUserById(agent2.id).take(1).collect { agentCheck2 = it }
+        agentDao.getUserById(agent3.id).take(1).collect { agentCheck3 = it }
+        agentDao.getUserById(agent4.id).take(1).collect { agentCheck4 = it }
         advanceUntilIdle()
 
         //Then
