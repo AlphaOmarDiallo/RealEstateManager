@@ -1,23 +1,24 @@
 package com.example.realestatemanager.data.repository.agent
 
-import androidx.lifecycle.asLiveData
 import com.example.realestatemanager.data.localData.AgentDao
 import com.example.realestatemanager.data.localData.LocalDatabase
 import com.example.realestatemanager.data.model.Agent
+import com.example.realestatemanager.data.sampleData.SampleAgent
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.*
-import org.junit.runners.MethodSorters
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltAndroidTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class AgentRepositoryImpTest {
 
     @get:Rule
@@ -29,16 +30,17 @@ class AgentRepositoryImpTest {
     @Inject
     lateinit var agentDao: AgentDao
 
-    private val agent1 = Agent(0, "john", "john@doe.com", null)
-    private val agent2 = Agent(0, "johnny", "johnny@doe.com", null)
-    private val agent3 = Agent(0, "johns", "johns@doe.com", null)
-    private val agent4 = Agent(0, "jon", "jon@doe.com", null)
+    private val agentList = SampleAgent.getSampleAgentList()
+
+    private val agent1 = agentList[0]
+    private val agent2 = agentList[1]
+    private val agent3 = agentList[2]
+    private val agent4 = agentList[3]
 
 
     @Before
     fun init() {
         hiltRule.inject()
-        localDatabase.agentDao().nukeTable()
     }
 
     @After
@@ -47,53 +49,85 @@ class AgentRepositoryImpTest {
     }
 
     @Test
-    fun a_assert_that_localDatabase_is_not_null() {
+    fun assert_that_classes_are_injected_correctly() {
         assertThat(localDatabase).isNotNull()
-    }
-
-    @Test
-    fun b_assert_that_agentDao_is_not_null() {
         assertThat(agentDao).isNotNull()
     }
 
     @Test
-    fun c_agent_are_added_correctly_in_database() = runTest {
+    fun agent_are_added_correctly_in_database() = runTest {
         //Given
-        var listAgentSize = agentDao.getListAllAgents().collect{it.size}
-        assertThat(listAgentSize).isEqualTo(0)
+
+        var listAgentInDatabase: List<Agent>? = null
+        agentDao.getListAllAgents().take(1).collect{listAgentInDatabase = it}
+        var sizeListAgentInDatabase: Int = listAgentInDatabase!!.size
+        assertThat(sizeListAgentInDatabase).isEqualTo(0)
 
         //When
-        runBlocking { localDatabase.agentDao().insertAgent(agent1) }
-        runBlocking { localDatabase.agentDao().insertAgent(agent2) }
-        runBlocking { localDatabase.agentDao().insertAgent(agent3) }
-        runBlocking { localDatabase.agentDao().insertAgent(agent4) }
+
+        addAgentToDataBase()
+        advanceUntilIdle()
 
         //Then
-        listAgentSize = agentDao.getListAllAgents().collect{it.size}
-        assertThat(listAgentSize).isNotEqualTo(0)
+
+        var listAgentInDatabaseAfterInsertingAgent: List<Agent>? = null
+        agentDao.getListAllAgents().take(1).collect{listAgentInDatabaseAfterInsertingAgent = it}
+        var sizeListAgentInDatabaseAfterInsertingAgent: Int = listAgentInDatabaseAfterInsertingAgent!!.size
+
+        assertThat(sizeListAgentInDatabase).isNotEqualTo(sizeListAgentInDatabaseAfterInsertingAgent)
+        assertThat(sizeListAgentInDatabaseAfterInsertingAgent).isEqualTo(4)
     }
 
     @Test
-    fun d_getAllAgent() = runTest {
+    fun get_all_agents_from_database() = runTest {
+        //Given
+
         val referenceListAgent = listOf(agent1, agent2, agent3, agent4)
         var listAgent: List<Agent>? = null
 
-        launch { listAgent = localDatabase.agentDao().getListAllAgents().asLiveData().value }
+        //When
+        addAgentToDataBase()
+        agentDao.getListAllAgents().take(1).collect{listAgent = it}
+        advanceUntilIdle()
 
-        assertThat(listAgent).isNotNull()
+        //Then
         assertThat(listAgent!!.size).isEqualTo(referenceListAgent.size)
 
-        assertThat(referenceListAgent[0].name).isEqualTo(listAgent!![0].name)
-        assertThat(referenceListAgent[1].name).isEqualTo(listAgent!![1].name)
-        assertThat(referenceListAgent[2].name).isEqualTo(listAgent!![2].name)
-        assertThat(referenceListAgent[3].name).isEqualTo(listAgent!![3].name)
+        assertThat(referenceListAgent[0]).isEqualTo(listAgent!![0])
+        assertThat(referenceListAgent[1]).isEqualTo(listAgent!![1])
+        assertThat(referenceListAgent[2]).isEqualTo(listAgent!![2])
+        assertThat(referenceListAgent[3]).isEqualTo(listAgent!![3])
     }
 
-    private fun addAgentToDataBase() = runTest {
-        launch { localDatabase.agentDao().insertAgent(agent1) }
-        launch { localDatabase.agentDao().insertAgent(agent2) }
-        launch { localDatabase.agentDao().insertAgent(agent3) }
-        launch { localDatabase.agentDao().insertAgent(agent4) }
+    @Test
+    fun get_specific_agent_from_database() = runTest {
+        // Given
+        addAgentToDataBase()
+        advanceUntilIdle()
+
+        //When
+        var agentCheck1:Agent? = null
+        var agentCheck2:Agent? = null
+        var agentCheck3:Agent? = null
+        var agentCheck4:Agent? = null
+
+        agentDao.getUserById(agent1.id).take(1).collect{agentCheck1 = it}
+        agentDao.getUserById(agent2.id).take(1).collect{agentCheck2 = it}
+        agentDao.getUserById(agent3.id).take(1).collect{agentCheck3 = it}
+        agentDao.getUserById(agent4.id).take(1).collect{agentCheck4 = it}
+        advanceUntilIdle()
+
+        //Then
+        assertThat(agent1).isEqualTo(agentCheck1)
+        assertThat(agent2).isEqualTo(agentCheck2)
+        assertThat(agent3).isEqualTo(agentCheck3)
+        assertThat(agent4).isEqualTo(agentCheck4)
     }
 
+    private suspend fun addAgentToDataBase() {
+        localDatabase.agentDao().insertAgent(agent1)
+        localDatabase.agentDao().insertAgent(agent2)
+        localDatabase.agentDao().insertAgent(agent3)
+        localDatabase.agentDao().insertAgent(agent4)
+    }
 }

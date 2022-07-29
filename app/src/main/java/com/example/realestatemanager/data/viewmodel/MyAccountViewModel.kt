@@ -72,7 +72,7 @@ class MyAccountViewModel @Inject constructor(
 
     fun getAgentByIdInDatabase(agentID: String): Agent? {
         var agent: Agent? = null
-        viewModelScope.launch { agentRepository.getUserById(agentID).collect { agent = it } }
+        viewModelScope.launch { agentRepository.getAgentById(agentID).collect { agent = it } }
         return agent
     }
 

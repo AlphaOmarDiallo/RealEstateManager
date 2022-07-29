@@ -25,7 +25,7 @@ class AgentRepositoryImp @Inject constructor(
         return agentDao.getListAllAgents()
     }
 
-    override fun getUserById(id: String): Flow<Agent?> {
+    override fun getAgentById(id: String): Flow<Agent?> {
         return agentDao.getUserById(id)
     }
 }

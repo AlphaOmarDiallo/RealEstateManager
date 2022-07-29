@@ -47,7 +47,7 @@ class LocalDatabaseTest {
         localDatabase.propertyDao().nukeTable()
     }
 
-    private var agent = Agent(0, "John Doe", "johnDoe@test.com", null)
+    private var agent = Agent("uhiuftdydi", "John Doe", "johnDoe@test.com", null)
     private var property = SampleProperties.samplePropertyList[0]
 
     @Test
