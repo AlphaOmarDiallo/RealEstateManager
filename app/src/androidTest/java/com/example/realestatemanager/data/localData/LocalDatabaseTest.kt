@@ -88,7 +88,7 @@ class LocalDatabaseTest {
         advanceUntilIdle()
 
         assertThat(listAgent.last().name == newName).isTrue()
-        assertThat(listAgent.size == 1)
+        assertThat(listAgent.size == 1).isTrue()
 
         //Deleting agent
         localDatabase.agentDao().deleteAgent(listAgent.last())
