@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.viewmodel.MyAccountViewModel
@@ -13,6 +14,7 @@ import com.example.realestatemanager.databinding.ActivityMyAccountBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,13 +50,16 @@ class MyAccountActivity : AppCompatActivity() {
      */
 
     private fun setupButtons() {
+        setupTextButtonDisconnectOrConnect()
         binding.buttonConnect.setOnClickListener { signInOrDisconnectButtonClicked() }
         binding.buttonUpdate.setOnClickListener { }
         binding.buttonDeleteAccount.setOnClickListener { viewModel.deleteAccountForever(this) }
     }
 
-    private fun signInOrDisconnectButtonClicked() =
+    private fun signInOrDisconnectButtonClicked() {
         if (isUserConnected() != null) disconnectUser() else connectUser()
+        setupTextButtonDisconnectOrConnect()
+    }
 
     /**
      * SignIn settings
@@ -79,10 +84,34 @@ class MyAccountActivity : AppCompatActivity() {
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
+        Log.d(TAG, "onSignInResult: idpResponse ${result.resultCode}")
         if (result.resultCode == RESULT_OK) {
-            val agent = viewModel.getCurrentUser()
-            val agentCheck = viewModel.getAgentByIdInDatabase(agent!!.uid)
-            if (agentCheck != null) viewModel.setAgent(agentCheck) else viewModel.createAgent(agent)
+            setupTextButtonDisconnectOrConnect()
+            val agent: FirebaseUser? = viewModel.getCurrentUser()
+            Log.d(TAG, "onSignInResult: ${agent!!.displayName}")
+
+            val agentCheck: Agent? = viewModel.getAgentByIdInDatabase(agent.uid)
+            Log.d(TAG, "onSignInResult: $agentCheck")
+
+
+            if (agentCheck != null) {
+                viewModel.setAgent(agentCheck)
+            } else {
+                viewModel.insertAgentToDatabase(
+                    Agent(
+                        agent.uid,
+                        agent.displayName.toString(),
+                        agent.email.toString(),
+                        agent.photoUrl.toString()
+                    )
+                )
+                viewModel.getAgentByIdInDatabase(agent.uid)?.let { viewModel.setAgent(it) }
+            }
+            Log.d(TAG, "onSignInResult: $agentCheck")
+
+            if (agentCheck != null) {
+                updateViewsWithAgent(agentCheck)
+            }
         } else {
             Log.e(TAG, "onSignInResult: ${response!!.error!!.message}")
         }
@@ -103,16 +132,22 @@ class MyAccountActivity : AppCompatActivity() {
      */
 
     private fun setupViews() {
+        updateViews()
         observeCurrentUser()
-        setupButtonDisconnectOrConnect()
     }
 
-    private fun setupButtonDisconnectOrConnect() =
-        if (viewModel.getCurrentUser() != null) binding.buttonConnect.text =
+    private fun setupTextButtonDisconnectOrConnect() =
+        if (viewModel.getCurrentUser() == null) binding.buttonConnect.text =
             getText(R.string.connect) else binding.buttonConnect.text = getText(R.string.disconnect)
 
     private fun observeCurrentUser() =
         viewModel.currentUser?.observe(this, this::updateViewsWithAgent)
+
+    private fun updateViews() {
+        updateAvatar(null)
+        updateName("You are not connected")
+        updateEmail("connect")
+    }
 
     private fun updateViewsWithAgent(agent: Agent) {
         updateAvatar(agent.picture)
@@ -121,10 +156,11 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     private fun updateAvatar(photoURL: String?) {
-        if (photoURL != null) {
-            binding.ivAgentAvatar.load(photoURL)
-        } else {
-            binding.ivAgentAvatar.load(R.drawable.agent_placeholder)
+        binding.ivAgentAvatar.load(photoURL) {
+            crossfade(true)
+            placeholder(R.drawable.agent_placeholder)
+            error(R.drawable.agent_placeholder)
+            transformations(CircleCropTransformation())
         }
     }
 

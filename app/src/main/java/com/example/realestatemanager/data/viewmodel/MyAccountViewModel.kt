@@ -10,6 +10,7 @@ import com.example.realestatemanager.data.repository.agent.AgentRepository
 import com.example.realestatemanager.data.repository.firebaseAuth.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -72,7 +73,7 @@ class MyAccountViewModel @Inject constructor(
 
     fun getAgentByIdInDatabase(agentID: String): Agent? {
         var agent: Agent? = null
-        viewModelScope.launch { agentRepository.getAgentById(agentID).collect { agent = it } }
+        viewModelScope.launch { agent = agentRepository.getAgentById(agentID).first() }
         return agent
     }
 
