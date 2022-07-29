@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mortgage_calculator_navigation"
+    app:startDestination="@id/mortgageCalculatorFragment">
+
+    <fragment
+        android:id="@+id/mortgageCalculatorFragment"
+        android:name="com.example.realestatemanager.ui.MortgageCalculatorFragment"
+        android:label="fragment_mortgage_calculator"
+        tools:layout="@layout/fragment_mortgage_calculator" />
+</navigation>

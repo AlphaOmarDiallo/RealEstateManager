@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun openMyMortgageCalculatorActivity() {
-        //TODO
-        Log.d(TAG, "openMyMortgageCalculatorActivity: TODO")
+        val intent = Intent(this, MortgageCalculatorActivity::class.java)
+        startActivity(intent)
     }
 
     /**
@@ -143,13 +143,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    private fun updatingEuroToDollarRate(rate: Double){
+    private fun updatingEuroToDollarRate(rate: Double) {
         Log.e(TAG, "updatingEuroToDollarRate: $rate")
         viewModel.saveEuroToDollarRateToDataStore(rate)
         euroToDollar = rate
     }
 
-    private fun updatingDollarToEuroRate(rate: Double){
+    private fun updatingDollarToEuroRate(rate: Double) {
         viewModel.saveDollarToEuroRateToDataStore(rate)
         dollarToEuro = rate
         Log.e(TAG, "updatingEuroToDollarRate: $rate")

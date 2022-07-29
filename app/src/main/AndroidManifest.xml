@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RealEstateManager">
         <activity
+            android:name=".ui.MortgageCalculatorActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.MyAccountActivity"
             android:exported="false" />
         <activity
