@@ -4,6 +4,7 @@ package com.example.realestatemanager.data.localData
 
 import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.data.sampleData.SampleAgent
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -11,15 +12,16 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.*
-import org.junit.runners.MethodSorters
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import javax.inject.Inject
 
 @Suppress("BlockingMethodInNonBlockingContext")
 @HiltAndroidTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class LocalDatabaseTest {
 
     @get:Rule
@@ -47,66 +49,70 @@ class LocalDatabaseTest {
         localDatabase.propertyDao().nukeTable()
     }
 
-    private var agent = Agent("uhiuftdydi", "John Doe", "johnDoe@test.com", null)
+    private var agent = SampleAgent.getSampleAgentList()[0]
     private var property = SampleProperties.samplePropertyList[0]
 
     @Test
-    fun a_localDataBase_injected_with_success() {
+    fun classes_injected_with_success() {
         assertThat(localDatabase).isNotNull()
-    }
-
-    @Test
-    fun b_agentDao_injected_with_success() {
         assertThat(agentDao).isNotNull()
-    }
-
-    @Test
-    fun c_propertyDao_injected_with_success() {
         assertThat(propertyDao).isNotNull()
     }
 
     @Test
-    fun d_create_update_delete_agent() = runTest {
+    fun create_update_delete_agent() = runTest {
         lateinit var listAgent: List<Agent>
         val flowList: Flow<List<Agent>> = localDatabase.agentDao().getListAllAgents()
+        val newName = "Jane Doe"
 
         //Check list is empty before starting test
-        runBlocking { listAgent = flowList.first().toList() }
+        listAgent = flowList.first().toList()
+        advanceUntilIdle()
+
         assertThat(listAgent.isEmpty()).isTrue()
 
         //Adding agent to database
-        runBlocking { localDatabase.agentDao().insertAgent(agent) }
-        runBlocking { listAgent = flowList.first().toList() }
+        localDatabase.agentDao().insertAgent(agent)
+        listAgent = flowList.first().toList()
+        advanceUntilIdle()
+
         assertThat(listAgent.isNotEmpty()).isTrue()
-        assertThat(listAgent.last().name == agent.name && listAgent.last().email == agent.email).isTrue()
+        assertThat(listAgent).contains(agent)
 
         //Updating agent
-        val agent2 = listAgent.last()
-        agent2.name = "Jane Doe"
+        agent.name = newName
 
         //Updating agent in database
-        runBlocking { localDatabase.agentDao().updateAgent(agent2) }
-        runBlocking { listAgent = flowList.first().toList() }
-        assertThat(listAgent.last().name == "Jane Doe" && listAgent.size == 1).isTrue()
+        localDatabase.agentDao().updateAgent(agent)
+        listAgent = flowList.first().toList()
+        advanceUntilIdle()
+
+        assertThat(listAgent.last().name == newName).isTrue()
+        assertThat(listAgent.size == 1)
 
         //Deleting agent
-        runBlocking { localDatabase.agentDao().deleteAgent(listAgent.last()) }
-        runBlocking { listAgent = flowList.first().toList() }
-        assertThat(listAgent.contains(agent2)).isFalse()
+        localDatabase.agentDao().deleteAgent(listAgent.last())
+        listAgent = flowList.first().toList()
+        advanceUntilIdle()
+
+        assertThat(listAgent.contains(agent)).isFalse()
     }
 
     @Test
-    fun e_create_update_property() = runTest {
+    fun create_update_property() = runTest {
         lateinit var listProperty: List<Property>
         val flowList: Flow<List<Property>> = localDatabase.propertyDao().getListOfProperties()
 
         //Check list is empty before starting test
-        runBlocking { listProperty = flowList.first().toList() }
+        listProperty = flowList.first().toList()
+        advanceUntilIdle()
         assertThat(listProperty.isEmpty()).isTrue()
 
         //Adding agent to database
-        runBlocking { localDatabase.propertyDao().insertProperty(property) }
-        runBlocking { listProperty = flowList.first().toList() }
+        localDatabase.propertyDao().insertProperty(property)
+        listProperty = flowList.first().toList()
+        advanceUntilIdle()
+
         assertThat(listProperty.isNotEmpty()).isTrue()
         assertThat(listProperty.last().address == property.address && listProperty.last().price == property.price).isTrue()
 
@@ -115,8 +121,10 @@ class LocalDatabaseTest {
         property1.price = 48326340
 
         //Updating agent in database
-        runBlocking { localDatabase.propertyDao().updateProperty(property1) }
-        runBlocking { listProperty = flowList.first().toList() }
+        localDatabase.propertyDao().updateProperty(property1)
+        listProperty = flowList.first().toList()
+        advanceUntilIdle()
+
         assertThat(listProperty.last().price == 48326340 && listProperty.size == 1).isTrue()
     }
 

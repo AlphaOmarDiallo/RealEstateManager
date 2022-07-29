@@ -19,8 +19,8 @@ interface AgentDao {
     @Query("SELECT * FROM agent_table")
     fun getListAllAgents(): Flow<List<Agent>>
 
-    @Query("select * from agent_table where agent_id= :id")
-    fun getUserById(id: String) : Flow<Agent?>
+    @Query("SELECT * FROM agent_table WHERE agent_id= :id")
+    fun getUserById(id: String): Flow<Agent?>
 
     /**
      * Only for test purpose

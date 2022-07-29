@@ -16,6 +16,9 @@ interface PropertyDao {
     @Query("SELECT * FROM property_table")
     fun getListOfProperties(): Flow<List<Property>>
 
+    @Query("SELECT * FROM property_table WHERE property_id= :id")
+    fun getProperty(id: Int): Flow<Property>
+
     /**
      * Only for test purpose, app does not allow to delete properties
      */

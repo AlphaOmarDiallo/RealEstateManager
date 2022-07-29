@@ -19,5 +19,8 @@ class PropertyRepositoryImp @Inject constructor(
         propertyDao.updateProperty(property)
     }
 
+    override fun getListOfProperties(): Flow<List<Property>> = propertyDao.getListOfProperties()
+
+    override fun getProperty(propertyID: Int): Flow<Property> = propertyDao.getProperty(propertyID)
 
 }
