@@ -71,4 +71,10 @@ class DataStoreRepositoryImp @Inject constructor(
         return readFromDataStore
     }
 
+    /**
+     * Testing only
+     */
+
+    override fun getDataStore(): DataStore<Preferences> = dataStore
+
 }

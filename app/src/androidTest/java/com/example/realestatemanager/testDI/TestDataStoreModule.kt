@@ -27,8 +27,8 @@ import javax.inject.Singleton
 )
 class TestDataStoreModule {
 
-    @Singleton
     @Provides
+    @Singleton
     fun providePreferencesDataStoreTest(@ApplicationContext appContext: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
@@ -39,8 +39,8 @@ class TestDataStoreModule {
         )
     }
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideDataStoreRepository(dataStore: DataStore<Preferences>): DataStoreRepository =
         DataStoreRepositoryImp(dataStore)
 }
