@@ -3,6 +3,7 @@ package com.example.realestatemanager.data.repository.dataStore
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.example.realestatemanager.data.sampleData.SampleAgent
 import com.example.realestatemanager.domain.Constant
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -99,6 +100,20 @@ class DataStoreRepositoryImpTest {
 
         //Then
         assertThat(readRate).isEqualTo(Constant.DOLLARS_TO_EURO)
+    }
+
+    @Test
+    fun check_that_saving_and_reading_user_id_from_datastore_works_as_expected() = runTest{
+        //Given
+        val agent = SampleAgent.getSampleAgentList()[0]
+
+        //When
+        dataStoreRepository.saveAgentID(agent.id)
+        val agentCheck = dataStoreRepository.readAgentID().first()
+        advanceUntilIdle()
+
+        //Then
+        assertThat(agentCheck).isEqualTo(agent.id)
     }
 
 }
