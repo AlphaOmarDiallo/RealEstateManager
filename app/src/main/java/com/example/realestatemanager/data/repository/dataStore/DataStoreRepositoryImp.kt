@@ -3,10 +3,7 @@ package com.example.realestatemanager.data.repository.dataStore
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.doublePreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.*
 import com.example.realestatemanager.domain.Constant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -21,7 +18,12 @@ class DataStoreRepositoryImp @Inject constructor(
     private object PreferenceKeys {
         val euroToDollarRate = doublePreferencesKey("euroToDollarRate")
         val dollarToEuroRate = doublePreferencesKey("dollarToEuroRate")
+        val agentID = stringPreferencesKey("agentID")
     }
+
+    /**
+     * Currency
+     */
 
     override suspend fun saveDollarToEuroRate(rate: Double) {
         dataStore.edit { preference ->
@@ -67,6 +69,34 @@ class DataStoreRepositoryImp @Inject constructor(
                 val savedRate: Double =
                     preference[PreferenceKeys.euroToDollarRate] ?: Constant.EURO_TO_DOLLARS
                 savedRate
+            }
+        return readFromDataStore
+    }
+
+    /**
+     * Agent
+     */
+
+    override suspend fun saveAgentID(agentID: String) {
+        dataStore.edit { preference ->
+            preference[PreferenceKeys.agentID] = agentID
+        }
+    }
+
+    override fun readAgentID(): Flow<String> {
+        val readFromDataStore: Flow<String> = dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    Log.w(TAG, "readAgentID: DataStore ", exception)
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preference ->
+                val id: String =
+                    preference[PreferenceKeys.agentID] ?: ""
+                id
             }
         return readFromDataStore
     }

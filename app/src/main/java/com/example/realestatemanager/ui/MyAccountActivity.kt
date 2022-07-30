@@ -31,9 +31,9 @@ class MyAccountActivity : AppCompatActivity() {
 
         setupViewModel()
 
-        setupViews()
-
         setupButtons()
+
+        observeCurrentUser()
 
     }
 
@@ -46,14 +46,33 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     /**
+     * Observe agent
+     */
+
+    private fun observeCurrentUser() {
+        viewModel.currentUser.observe(this, this::updateViewsWithAgent)
+    }
+
+
+    /**
      * Setup buttons
      */
 
     private fun setupButtons() {
         setupTextButtonDisconnectOrConnect()
-        binding.buttonConnect.setOnClickListener { signInOrDisconnectButtonClicked() }
+
+        binding.buttonConnect.setOnClickListener {
+            signInOrDisconnectButtonClicked()
+            if (binding.buttonConnect.text == getString(R.string.connect)) binding.buttonConnect.text =
+                getString(R.string.disconnect) else binding.buttonConnect.text =
+                getString(R.string.connect)
+        }
+
         binding.buttonUpdate.setOnClickListener { }
-        binding.buttonDeleteAccount.setOnClickListener { viewModel.deleteAccountForever(this) }
+
+        binding.buttonDeleteAccount.setOnClickListener {
+            viewModel.deleteAgent(this)
+        }
     }
 
     private fun signInOrDisconnectButtonClicked() {
@@ -89,29 +108,13 @@ class MyAccountActivity : AppCompatActivity() {
             setupTextButtonDisconnectOrConnect()
             val agent: FirebaseUser? = viewModel.getCurrentUser()
             Log.d(TAG, "onSignInResult: ${agent!!.displayName}")
-
-            val agentCheck: Agent? = viewModel.getAgentByIdInDatabase(agent.uid)
-            Log.d(TAG, "onSignInResult: $agentCheck")
-
-
-            if (agentCheck != null) {
-                viewModel.setAgent(agentCheck)
-            } else {
-                viewModel.insertAgentToDatabase(
-                    Agent(
-                        agent.uid,
-                        agent.displayName.toString(),
-                        agent.email.toString(),
-                        agent.photoUrl.toString()
-                    )
-                )
-                viewModel.getAgentByIdInDatabase(agent.uid)?.let { viewModel.setAgent(it) }
-            }
-            Log.d(TAG, "onSignInResult: $agentCheck")
-
-            if (agentCheck != null) {
-                updateViewsWithAgent(agentCheck)
-            }
+            val newAgent = Agent(
+                agent.uid,
+                agent.displayName.toString(),
+                agent.email.toString(),
+                agent.photoUrl.toString()
+            )
+            viewModel.createAgent(newAgent)
         } else {
             Log.e(TAG, "onSignInResult: ${response!!.error!!.message}")
         }
@@ -133,15 +136,11 @@ class MyAccountActivity : AppCompatActivity() {
 
     private fun setupViews() {
         updateViews()
-        observeCurrentUser()
     }
 
     private fun setupTextButtonDisconnectOrConnect() =
         if (viewModel.getCurrentUser() == null) binding.buttonConnect.text =
             getText(R.string.connect) else binding.buttonConnect.text = getText(R.string.disconnect)
-
-    private fun observeCurrentUser() =
-        viewModel.currentUser?.observe(this, this::updateViewsWithAgent)
 
     private fun updateViews() {
         updateAvatar(null)
@@ -149,10 +148,14 @@ class MyAccountActivity : AppCompatActivity() {
         updateEmail("connect")
     }
 
-    private fun updateViewsWithAgent(agent: Agent) {
-        updateAvatar(agent.picture)
-        updateName(agent.name)
-        updateEmail(agent.email)
+    private fun updateViewsWithAgent(agent: Agent?) {
+        if (agent != null) {
+            updateAvatar(agent.picture)
+            updateName(agent.name)
+            updateEmail(agent.email)
+        } else {
+            setupViews()
+        }
     }
 
     private fun updateAvatar(photoURL: String?) {
