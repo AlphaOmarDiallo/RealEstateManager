@@ -25,6 +25,18 @@ interface DataStoreRepository {
     fun readAgentID(): Flow<String>
 
     /**
+     * User preferences
+     */
+
+    suspend fun saveCurrencyPreference(currency: Boolean)
+
+    fun readCurrencyPreference(): Flow<Boolean>
+
+    suspend fun saveNotificationPreference(notification: Boolean)
+
+    fun readNotificationPreference(): Flow<Boolean>
+
+    /**
      * Testing only
      */
     fun getDataStore(): DataStore<Preferences>

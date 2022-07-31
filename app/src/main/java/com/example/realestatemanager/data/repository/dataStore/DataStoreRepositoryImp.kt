@@ -19,6 +19,8 @@ class DataStoreRepositoryImp @Inject constructor(
         val euroToDollarRate = doublePreferencesKey("euroToDollarRate")
         val dollarToEuroRate = doublePreferencesKey("dollarToEuroRate")
         val agentID = stringPreferencesKey("agentID")
+        val currency = booleanPreferencesKey("currencyPreferenceSwitch")
+        val notification = booleanPreferencesKey("notificationPreferences")
     }
 
     /**
@@ -97,6 +99,58 @@ class DataStoreRepositoryImp @Inject constructor(
                 val id: String =
                     preference[PreferenceKeys.agentID] ?: ""
                 id
+            }
+        return readFromDataStore
+    }
+
+    /**
+     * User preferences
+     */
+
+    override suspend fun saveCurrencyPreference(currency: Boolean) {
+        dataStore.edit { preference ->
+            preference[PreferenceKeys.currency] = currency
+        }
+    }
+
+    override fun readCurrencyPreference(): Flow<Boolean> {
+        val readFromDataStore: Flow<Boolean> = dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    Log.w(TAG, "readCurrencyPreference: DataStore ", exception)
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preference ->
+                val currency: Boolean =
+                    preference[PreferenceKeys.currency] ?: false
+                currency
+            }
+        return readFromDataStore
+    }
+
+    override suspend fun saveNotificationPreference(notification: Boolean) {
+        dataStore.edit { preference ->
+            preference[PreferenceKeys.notification] = notification
+        }
+    }
+
+    override fun readNotificationPreference(): Flow<Boolean> {
+        val readFromDataStore: Flow<Boolean> = dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    Log.w(TAG, "readNotificationPreference: DataStore ", exception)
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preference ->
+                val notification: Boolean =
+                    preference[PreferenceKeys.notification] ?: false
+                notification
             }
         return readFromDataStore
     }

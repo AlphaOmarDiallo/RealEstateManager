@@ -209,11 +209,15 @@ class MyAccountActivity : AppCompatActivity() {
      */
 
     class SettingsFragment : PreferenceFragmentCompat() {
+
+        lateinit var currencySwitch: SwitchPreferenceCompat
+        lateinit var notificationSwitch: SwitchPreferenceCompat
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
-            val currencySwitch: SwitchPreferenceCompat? = findPreference("currency_preference")
-            val notificationSwitch: SwitchPreferenceCompat? = findPreference("notification_preference")
+            currencySwitch = findPreference("currency_preference")!!
+            notificationSwitch = findPreference("notification_preference")!!
 
         }
 
