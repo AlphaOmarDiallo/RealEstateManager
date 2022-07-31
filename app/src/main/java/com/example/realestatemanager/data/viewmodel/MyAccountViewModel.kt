@@ -89,4 +89,28 @@ class MyAccountViewModel @Inject constructor(
         viewModelScope.launch { dataStoreRepository.saveAgentID(id) }
     }
 
+    private fun readCurrencyPreferenceFromDataStore(): Boolean {
+        var pref = false
+        viewModelScope.launch {
+            pref = dataStoreRepository.readCurrencyPreference().first()
+        }
+        return pref
+    }
+
+    private fun saveCurrencyPreferenceToDataStore(preference: Boolean) {
+        viewModelScope.launch { dataStoreRepository.saveCurrencyPreference(preference) }
+    }
+
+    private fun readNotificationPreferenceFromDataStore(): Boolean {
+        var pref = false
+        viewModelScope.launch {
+            pref = dataStoreRepository.readNotificationPreference().first()
+        }
+        return pref
+    }
+
+    private fun saveNotificationPreferenceToDataStore(preference: Boolean) {
+        viewModelScope.launch { dataStoreRepository.saveNotificationPreference(preference) }
+    }
+
 }
