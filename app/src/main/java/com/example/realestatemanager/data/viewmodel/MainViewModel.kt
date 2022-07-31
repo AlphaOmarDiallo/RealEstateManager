@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.realestatemanager.data.repository.agent.AgentRepository
 import com.example.realestatemanager.data.repository.autocomplete.AutocompleteRepository
 import com.example.realestatemanager.data.repository.connectivity.ConnectivityRepository
 import com.example.realestatemanager.data.repository.currencyAPI.CurrencyAPIRepository
@@ -28,7 +29,8 @@ class MainViewModel @Inject constructor(
     private val geocodingRepository: GeocodingRepository,
     private val nearBySearchRepository: NearBySearchRepository,
     private val autocompleteRepository: AutocompleteRepository,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val agentRepository: AgentRepository
 ) : ViewModel() {
 
     private val _usdRate: MutableLiveData<Double> = MutableLiveData()

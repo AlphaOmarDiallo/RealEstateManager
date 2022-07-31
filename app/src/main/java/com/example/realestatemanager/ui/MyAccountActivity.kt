@@ -100,9 +100,11 @@ class MyAccountActivity : AppCompatActivity() {
 
                 dialogBuilder.setMessage(getString(R.string.alert_delete_account_message))
                     .setCancelable(false)
-                    .setPositiveButton(getString(R.string.alert_positive_message)
+                    .setPositiveButton(
+                        getString(R.string.alert_positive_message)
                     ) { _, _ -> viewModel.deleteAgent(this) }
-                    .setNegativeButton(getString(R.string.alert_negative_message)
+                    .setNegativeButton(
+                        getString(R.string.alert_negative_message)
                     ) { dialogInterface, _ -> dialogInterface.cancel() }
 
                 val alert = dialogBuilder.create()

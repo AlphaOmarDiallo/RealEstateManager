@@ -21,7 +21,8 @@ class LocalDataBaseModule {
             app,
             LocalDatabase::class.java,
             "LocalDatabase"
-        ).build()
+        )
+            .build()
 
     @Singleton
     @Provides
