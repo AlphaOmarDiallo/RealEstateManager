@@ -31,17 +31,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
-import com.example.realestatemanager.data.sampleData.SampleProperties
+import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
 import com.example.realestatemanager.domain.SharedComposable
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PropertyListFragment : Fragment() {
 
     private lateinit var navController: NavController
+    private val viewModel: PropertyListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,12 +63,13 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun PropertyList() {
+        val propertyList = viewModel.propertyList.value
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.background)
         ) {
-            ListOfProperty(propertyList = SampleProperties.samplePropertyList)
+            ListOfProperty(propertyList = propertyList) //SampleProperties.samplePropertyList)
         }
     }
 
