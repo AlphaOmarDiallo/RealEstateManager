@@ -3,10 +3,11 @@ package com.example.realestatemanager.ui
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
+import androidx.preference.SwitchPreference
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.realestatemanager.R
@@ -89,10 +90,27 @@ class MyAccountActivity : AppCompatActivity() {
         }
 
         binding.buttonDeleteAccount.setOnClickListener {
-            if (viewModel.getCurrentUser() == null) Utils.snackBarMaker(
-                binding.myAccountActivity,
-                getString(R.string.unable_to_proceed)
-            ) else viewModel.deleteAgent(this)
+            if (viewModel.getCurrentUser() == null) {
+                Utils.snackBarMaker(
+                    binding.myAccountActivity,
+                    getString(R.string.unable_to_proceed)
+                )
+            } else {
+                val dialogBuilder = AlertDialog.Builder(this)
+
+                dialogBuilder.setMessage(getString(R.string.alert_delete_account_message))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.alert_positive_message)
+                    ) { _, _ -> viewModel.deleteAgent(this) }
+                    .setNegativeButton(getString(R.string.alert_negative_message)
+                    ) { dialogInterface, _ -> dialogInterface.cancel() }
+
+                val alert = dialogBuilder.create()
+
+                alert.setTitle(getString(R.string.alert_title))
+
+                alert.show()
+            }
         }
     }
 
@@ -208,22 +226,47 @@ class MyAccountActivity : AppCompatActivity() {
      * Settings fragment
      */
 
+    @AndroidEntryPoint
     class SettingsFragment : PreferenceFragmentCompat() {
 
-        lateinit var currencySwitch: SwitchPreferenceCompat
-        lateinit var notificationSwitch: SwitchPreferenceCompat
+        lateinit var viewModel: MyAccountViewModel
+        private lateinit var currencySwitch: SwitchPreference
+        private lateinit var notificationSwitch: SwitchPreference
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
+            viewModel = ViewModelProvider(this)[MyAccountViewModel::class.java]
+
             currencySwitch = findPreference("currency_preference")!!
             notificationSwitch = findPreference("notification_preference")!!
 
+            setCurrencySwitch()
+            setNotificationSwitch()
+
+            currencySwitch.setOnPreferenceChangeListener { _, newValue ->
+                if (newValue == true) viewModel.saveCurrencyPreferenceToDataStore(true) else viewModel.saveCurrencyPreferenceToDataStore(
+                    false
+                )
+                return@setOnPreferenceChangeListener true
+            }
+
+            notificationSwitch.setOnPreferenceChangeListener { _, newValue ->
+                if (newValue == true) viewModel.saveNotificationPreferenceToDataStore(true) else viewModel.saveNotificationPreferenceToDataStore(
+                    false
+                )
+                return@setOnPreferenceChangeListener true
+            }
+
         }
 
-        private fun setCurrencySwitch() {}
+        private fun setCurrencySwitch() {
+            currencySwitch.isChecked = viewModel.readCurrencyPreferenceFromDataStore()
+        }
 
-        private fun setNotificationSwitch() {}
+        private fun setNotificationSwitch() {
+            notificationSwitch.isChecked = viewModel.readNotificationPreferenceFromDataStore()
+        }
 
     }
 }

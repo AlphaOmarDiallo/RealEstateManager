@@ -43,5 +43,9 @@
     <string name="update_account">Update account</string>
     <string name="update_button_warning">Feature is not ready yet</string>
     <string name="unable_to_proceed">Unable to proceed, you are disconnected</string>
+    <string name="alert_delete_account_message">Do you really want to delete your account?</string>
+    <string name="alert_positive_message">Delete my account</string>
+    <string name="alert_negative_message">Cancel</string>
+    <string name="alert_title">Delete account</string>
 
 </resources>

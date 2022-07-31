@@ -59,13 +59,13 @@ class MyAccountViewModel @Inject constructor(
      * Agent repository
      */
 
-    private fun insertAgentToDatabase(agent: Agent) {
+    fun insertAgentToDatabase(agent: Agent) {
         viewModelScope.launch {
             agentRepository.insertAgent(agent)
         }
     }
 
-    private fun deleteAgentInDatabase(agent: Agent) {
+    fun deleteAgentInDatabase(agent: Agent) {
         viewModelScope.launch {
             agentRepository.deleteAgent(agent)
         }
@@ -89,7 +89,7 @@ class MyAccountViewModel @Inject constructor(
         viewModelScope.launch { dataStoreRepository.saveAgentID(id) }
     }
 
-    private fun readCurrencyPreferenceFromDataStore(): Boolean {
+    fun readCurrencyPreferenceFromDataStore(): Boolean {
         var pref = false
         viewModelScope.launch {
             pref = dataStoreRepository.readCurrencyPreference().first()
@@ -97,11 +97,11 @@ class MyAccountViewModel @Inject constructor(
         return pref
     }
 
-    private fun saveCurrencyPreferenceToDataStore(preference: Boolean) {
+    fun saveCurrencyPreferenceToDataStore(preference: Boolean) {
         viewModelScope.launch { dataStoreRepository.saveCurrencyPreference(preference) }
     }
 
-    private fun readNotificationPreferenceFromDataStore(): Boolean {
+    fun readNotificationPreferenceFromDataStore(): Boolean {
         var pref = false
         viewModelScope.launch {
             pref = dataStoreRepository.readNotificationPreference().first()
@@ -109,7 +109,7 @@ class MyAccountViewModel @Inject constructor(
         return pref
     }
 
-    private fun saveNotificationPreferenceToDataStore(preference: Boolean) {
+    fun saveNotificationPreferenceToDataStore(preference: Boolean) {
         viewModelScope.launch { dataStoreRepository.saveNotificationPreference(preference) }
     }
 
