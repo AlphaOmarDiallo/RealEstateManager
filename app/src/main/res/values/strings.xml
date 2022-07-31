@@ -36,7 +36,12 @@
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
     <string name="delete_account_forever">Delete account forever</string>
+    <string name="you_are_connected">You are connected</string>
+    <string name="you_are_disconnected">you are disconnected</string>
+    <string name="connection_error">Connection error: %1s</string>
     <string name="agent_avatar">Agent avatar</string>
     <string name="update_account">Update account</string>
+    <string name="update_button_warning">Feature is not ready yet</string>
+    <string name="unable_to_proceed">Unable to proceed, you are disconnected</string>
 
 </resources>

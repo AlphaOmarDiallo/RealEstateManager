@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.viewmodel.MyAccountViewModel
 import com.example.realestatemanager.databinding.ActivityMyAccountBinding
+import com.example.realestatemanager.domain.Utils
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
@@ -34,6 +37,11 @@ class MyAccountActivity : AppCompatActivity() {
         setupButtons()
 
         observeCurrentUser()
+
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.flSettings, SettingsFragment())
+            .commit()
 
     }
 
@@ -63,15 +71,28 @@ class MyAccountActivity : AppCompatActivity() {
 
         binding.buttonConnect.setOnClickListener {
             signInOrDisconnectButtonClicked()
-            if (binding.buttonConnect.text == getString(R.string.connect)) binding.buttonConnect.text =
-                getString(R.string.disconnect) else binding.buttonConnect.text =
-                getString(R.string.connect)
+            if (binding.buttonConnect.text == getString(R.string.connect)) {
+                binding.buttonConnect.text = getString(R.string.disconnect)
+            } else {
+                binding.buttonConnect.text = getString(R.string.connect)
+            }
         }
 
-        binding.buttonUpdate.setOnClickListener { }
+        binding.buttonUpdate.setOnClickListener {
+            if (viewModel.getCurrentUser() == null) Utils.snackBarMaker(
+                binding.myAccountActivity,
+                getString(R.string.unable_to_proceed)
+            ) else Utils.snackBarMaker(
+                binding.myAccountActivity,
+                getString(R.string.update_button_warning)
+            )
+        }
 
         binding.buttonDeleteAccount.setOnClickListener {
-            viewModel.deleteAgent(this)
+            if (viewModel.getCurrentUser() == null) Utils.snackBarMaker(
+                binding.myAccountActivity,
+                getString(R.string.unable_to_proceed)
+            ) else viewModel.deleteAgent(this)
         }
     }
 
@@ -115,8 +136,13 @@ class MyAccountActivity : AppCompatActivity() {
                 agent.photoUrl.toString()
             )
             viewModel.createAgent(newAgent)
+            Utils.snackBarMaker(binding.myAccountActivity, getString(R.string.you_are_connected))
         } else {
             Log.e(TAG, "onSignInResult: ${response!!.error!!.message}")
+            Utils.snackBarMaker(
+                binding.myAccountActivity,
+                String.format(getString(R.string.connection_error), response.error?.message)
+            )
         }
     }
 
@@ -139,8 +165,11 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     private fun setupTextButtonDisconnectOrConnect() =
-        if (viewModel.getCurrentUser() == null) binding.buttonConnect.text =
-            getText(R.string.connect) else binding.buttonConnect.text = getText(R.string.disconnect)
+        if (viewModel.getCurrentUser() == null) {
+            binding.buttonConnect.text = getText(R.string.connect)
+        } else {
+            binding.buttonConnect.text = getText(R.string.disconnect)
+        }
 
     private fun updateViews() {
         updateAvatar(null)
@@ -173,5 +202,24 @@ class MyAccountActivity : AppCompatActivity() {
 
     private fun updateEmail(agentEmail: String) {
         binding.tvEmailAgent.text = agentEmail
+    }
+
+    /**
+     * Settings fragment
+     */
+
+    class SettingsFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+            val currencySwitch: SwitchPreferenceCompat? = findPreference("currency_preference")
+            val notificationSwitch: SwitchPreferenceCompat? = findPreference("notification_preference")
+
+        }
+
+        private fun setCurrencySwitch() {}
+
+        private fun setNotificationSwitch() {}
+
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Currency">
+        <SwitchPreference
+            android:icon="@drawable/ic_baseline_money_24"
+            android:defaultValue="false"
+            android:key="currency_preference"
+            android:summaryOff="You will see all prices in dollar"
+            android:summaryOn="You will see all prices in euro"
+            android:title="Preferred currency" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Notification">
+        <SwitchPreference
+            android:icon="@drawable/ic_baseline_notifications_24"
+            android:defaultValue="false"
+            android:key="notification_preference"
+            android:summaryOff="You will receive notification on new events"
+            android:summaryOn="You will not receive notification on new events"
+            android:title="Receive notifications" />
+    </PreferenceCategory>
+</PreferenceScreen>

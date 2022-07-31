@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/myAccountActivity"
     android:background="@color/background"
     tools:context=".ui.MyAccountActivity">
 
@@ -12,48 +13,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <ImageView
         android:id="@+id/ivAgentAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/agent_avatar"
+        android:maxWidth="100dp"
+        android:maxHeight="100dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/tvNameAgent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/tvNameAgent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/agent_avatar" />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvNameAgent"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textColor="@color/primaryDarkColor"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvEmailAgent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivAgentAvatar"
+        app:layout_constraintStart_toEndOf="@+id/ivAgentAvatar"
+        app:layout_constraintTop_toTopOf="@+id/ivAgentAvatar"
         tools:text="John Doe" />
 
     <TextView
         android:id="@+id/tvEmailAgent"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textColor="@color/primaryColor"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivAgentAvatar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivAgentAvatar"
         app:layout_constraintTop_toBottomOf="@+id/tvNameAgent"
         tools:text="john.@doe.com" />
 
@@ -71,12 +75,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/flSettings"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
 
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.Guideline
