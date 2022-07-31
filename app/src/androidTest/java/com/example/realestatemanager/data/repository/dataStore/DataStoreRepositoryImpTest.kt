@@ -137,7 +137,7 @@ class DataStoreRepositoryImpTest {
 
         //When
         dataStoreRepository.saveNotificationPreference(notificationPref)
-        val notificationPrefCheck = dataStoreRepository.readNotificationPreference()
+        val notificationPrefCheck = dataStoreRepository.readNotificationPreference().first()
         advanceUntilIdle()
 
         //Then
