@@ -116,4 +116,32 @@ class DataStoreRepositoryImpTest {
         assertThat(agentCheck).isEqualTo(agent.id)
     }
 
+    @Test
+    fun check_that_currency_preference_is_saved_and_read_as_expected() = runTest {
+        //Given
+        val currencyPref = true
+
+        //When
+        dataStoreRepository.saveCurrencyPreference(currencyPref)
+        val currencyPrefCheck = dataStoreRepository.readCurrencyPreference().first()
+        advanceUntilIdle()
+
+        //Then
+        assertThat(currencyPrefCheck).isEqualTo(currencyPref)
+    }
+
+    @Test
+    fun check_that_notification_preference_is_saved_and_read_as_expected() = runTest {
+        //Given
+        val notificationPref = true
+
+        //When
+        dataStoreRepository.saveNotificationPreference(notificationPref)
+        val notificationPrefCheck = dataStoreRepository.readNotificationPreference()
+        advanceUntilIdle()
+
+        //Then
+        assertThat(notificationPrefCheck).isEqualTo(notificationPref)
+    }
+
 }
