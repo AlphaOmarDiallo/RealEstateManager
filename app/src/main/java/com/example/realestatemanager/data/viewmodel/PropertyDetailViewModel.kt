@@ -7,8 +7,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.repository.geocoding.GeocodingRepository
+import com.example.realestatemanager.data.repository.property.PropertyRepository
+import com.example.realestatemanager.data.sampleData.SampleProperties
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -16,10 +20,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PropertyDetailViewModel @Inject constructor(
-    private val geocodingRepository: GeocodingRepository
+    private val geocodingRepository: GeocodingRepository,
+    private val propertyRepository: PropertyRepository
 ) : ViewModel() {
 
     val location: MutableState<Location?> = mutableStateOf(Location("location"))
+    val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
+
+    fun getProperty(id: Int) {
+        viewModelScope.launch {
+            property.value = propertyRepository.getProperty(id).first()
+        }
+    }
 
     fun addressToLocation(address: String) {
         viewModelScope.launch {

@@ -1,11 +1,5 @@
-package com.example.realestatemanager.ui
+package com.example.realestatemanager.domain
 
-import android.content.res.Configuration
-import android.location.Location
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -27,61 +21,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
-import com.example.realestatemanager.data.sampleData.SampleProperties
-import com.example.realestatemanager.data.viewmodel.PropertyDetailViewModel
-import com.example.realestatemanager.domain.MortgagePaymentUtil
-import com.example.realestatemanager.domain.SharedComposable
-import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
+import com.example.realestatemanager.ui.PropertyDetailFragmentDirections
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class PropertyDetailFragment : Fragment() {
-    private val propertyList = SampleProperties.samplePropertyList
-    private val viewModel: PropertyDetailViewModel by viewModels()
-    private lateinit var navController: NavController
-    private val args: PropertyDetailFragmentArgs by navArgs()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                navController = findNavController()
-                val propertyID = args.propertyID
-                fetchPropertyData(propertyID)
-                val property: Property? = getDataFromViewModel()
-                Scaffold(property = SampleProperties.samplePropertyList[0])
-            }
-        }
-    }
+object PropertyDetailSharedComposable {
 
     @Composable
     fun Scaffold(property: Property) {
         Scaffold(
-            bottomBar = { BottomBar(price = propertyList[0].price) },
+            bottomBar = { BottomBar(price = property.price) },
         ) {
             Box(modifier = Modifier.padding(it)) {
                 PropertyInDetail(property = property)
@@ -287,7 +249,8 @@ class PropertyDetailFragment : Fragment() {
 
     @Composable
     fun AddMap(address: String) {
-        var addressToLocation: Location? = viewModel.location.value
+        //var addressToLocation: Location? = viewModel.location.value
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -295,7 +258,7 @@ class PropertyDetailFragment : Fragment() {
             shape = RoundedCornerShape(15.dp),
             elevation = 10.dp
         ) {
-            val addressLatLng = LatLng(addressToLocation!!.latitude, addressToLocation!!.longitude)
+            val addressLatLng = LatLng(1.35, 103.87)
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(addressLatLng, 10f)
             }
@@ -332,7 +295,7 @@ class PropertyDetailFragment : Fragment() {
                         color = MaterialTheme.colors.primaryVariant,
                         modifier = Modifier.clickable {
                             val action = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(price)
-                            navController.navigate(action)
+                            //navController.navigate(action)
                         }
                     )
                     val rate = 2.54
@@ -368,43 +331,5 @@ class PropertyDetailFragment : Fragment() {
                 }
             }
         }
-    }
-
-    @Preview(
-        showBackground = true,
-        widthDp = 320,
-        uiMode = Configuration.UI_MODE_NIGHT_YES,
-        name = "DefaultPreviewDark"
-    )
-    @Preview(showBackground = true)
-    @Composable
-    fun FragmentPreview() {
-        RealEstateManagerTheme {
-            Scaffold(property = propertyList[0])
-        }
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun Function() {
-        RealEstateManagerTheme {
-            Scaffold(property = propertyList[0])
-        }
-    }
-
-    /**
-     * Getting data from viewModel
-     */
-
-    private fun getDataFromViewModel(): Property {
-        return viewModel.property.value
-    }
-
-    /**
-     * Retrieving property
-     */
-
-    private fun fetchPropertyData(id: Int){
-        viewModel.getProperty(id)
     }
 }
