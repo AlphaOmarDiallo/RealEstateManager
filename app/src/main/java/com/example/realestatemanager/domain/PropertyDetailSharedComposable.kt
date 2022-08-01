@@ -53,7 +53,10 @@ object PropertyDetailSharedComposable {
 
     @Composable
     fun PropertyInDetail(property: Property) {
-        LazyColumn(modifier = Modifier.padding(SharedComposable.largePadding)) {
+        LazyColumn(
+            modifier = Modifier.padding(SharedComposable.largePadding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             item {
                 PropertyMainImage(propertyMainPhoto = property.photo!![0])
             }
@@ -145,7 +148,6 @@ object PropertyDetailSharedComposable {
     ) {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(8.dp),
             elevation = 5.dp
         ) {

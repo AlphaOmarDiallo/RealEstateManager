@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.repository.property.PropertyRepository
+import com.example.realestatemanager.data.sampleData.SampleProperties
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ class PropertyListViewModel @Inject constructor(
 ): ViewModel(){
 
     val propertyList: MutableState<List<Property>> = mutableStateOf(listOf())
+    val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
 
     init {
         getPropertyList()
@@ -25,6 +27,12 @@ class PropertyListViewModel @Inject constructor(
     fun getPropertyList() {
         viewModelScope.launch{
             propertyList.value = propertyRepository.getListOfProperties().first()
+        }
+    }
+
+    fun updateSelectedProperty(propertyToUpdate: Property) {
+        viewModelScope.launch {
+            property.value = propertyToUpdate
         }
     }
 

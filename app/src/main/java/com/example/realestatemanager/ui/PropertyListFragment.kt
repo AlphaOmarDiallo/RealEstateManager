@@ -1,7 +1,9 @@
 package com.example.realestatemanager.ui
 
+import android.content.ContentValues.TAG
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +40,7 @@ import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
+import com.example.realestatemanager.domain.PropertyDetailSharedComposable
 import com.example.realestatemanager.domain.SharedComposable
 import com.example.realestatemanager.domain.WindowInfo
 import com.example.realestatemanager.domain.rememberWindowInfo
@@ -48,6 +51,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class PropertyListFragment : Fragment() {
 
     private lateinit var navController: NavController
+    private lateinit var selectedProperty: Property
+    private lateinit var windowInfo: WindowInfo
     private val viewModel: PropertyListViewModel by viewModels()
 
     override fun onCreateView(
@@ -57,14 +62,12 @@ class PropertyListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 navController = findNavController()
-                val windowInfo = rememberWindowInfo()
-                if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
+                windowInfo = rememberWindowInfo()
+                Log.i(TAG, "onCreateView: ${rememberWindowInfo().screenWidthInfo}")
+                if (windowInfo.screenWidthInfo  is WindowInfo.WindowType.Expended) {
+                    selectedProperty = viewModel.property.value
                     RealEstateManagerTheme {
-                        Row(){
-                            PropertyList()
-
-                        }
-
+                        ExpendedScreen()
                     }
                 } else {
                     RealEstateManagerTheme {
@@ -75,7 +78,18 @@ class PropertyListFragment : Fragment() {
         }
     }
 
-
+    @Composable
+    fun ExpendedScreen() {
+        Row(){
+            Box(modifier = Modifier.fillMaxWidth(0.4f)){
+                PropertyList()
+            }
+            Box(modifier = Modifier.fillMaxWidth()){
+                PropertyDetailSharedComposable.Scaffold(property = selectedProperty)
+            }
+        }
+    }
+    
     @Composable
     fun PropertyList() {
         //val propertyList = viewModel.propertyList.value
@@ -124,11 +138,15 @@ class PropertyListFragment : Fragment() {
                     )
                 )
                 .clickable {
-                    val action =
-                        PropertyListFragmentDirections.actionPropertyListFragmentToPropertyDetail(
-                            property.id
-                        )
-                    navController.navigate(action)
+                    if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
+                        viewModel.updateSelectedProperty(property)
+                    } else {
+                        val action =
+                            PropertyListFragmentDirections.actionPropertyListFragmentToPropertyDetail(
+                                property.id
+                            )
+                        navController.navigate(action)
+                    }
                 }
         ) {
             Row(
