@@ -30,14 +30,11 @@ class ConnectivityRepositoryImp : ConnectivityRepository {
             val ipProcess = runtime.exec(ping)
             val exitValue = ipProcess.waitFor()
             connected.value = exitValue == 0
-            return (connected)
         } catch (exception: IOException) {
             exception.printStackTrace()
             connected.value = false
         }
         return connected
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

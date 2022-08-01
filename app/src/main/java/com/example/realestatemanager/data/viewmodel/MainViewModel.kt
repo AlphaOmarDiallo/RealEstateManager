@@ -39,6 +39,9 @@ class MainViewModel @Inject constructor(
     private val _eurRate: MutableLiveData<Double> = MutableLiveData()
     val eurRate: LiveData<Double> get() = _eurRate
 
+    private val _connected: MutableLiveData<Boolean> = MutableLiveData()
+    val connected: LiveData<Boolean> get() = _connected
+
     init {
         getEurRate()
         getUsdRate()
@@ -118,8 +121,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun checkConnectivity(context: Context): LiveData<Boolean> {
-        return connectivityRepository.isInternetAvailable(context)
+    fun checkConnectivity(context: Context) {
+        viewModelScope.launch {
+            _connected.value = connectivityRepository.isInternetAvailable(context).value
+        }
     }
 
     fun convertAddressToGeocode() {

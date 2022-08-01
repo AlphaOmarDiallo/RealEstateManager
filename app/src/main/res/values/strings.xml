@@ -3,7 +3,8 @@
 
     <!-- Main activity -->
     <string name="connectivity_rational">Real Estate Manager needs to access the following permissions in order to provide the best experience depending on your current connectivity</string>
-    <string name="not_connected_to_internet">You are not connected to internet</string>
+    <string name="not_connected_to_internet">Internet connection status: offline</string>
+    <string name="connected_to_internet">Internet connection status: online</string>
 
     <!-- Fragment propertyList -->
     <string name="show_less">Show less</string>
