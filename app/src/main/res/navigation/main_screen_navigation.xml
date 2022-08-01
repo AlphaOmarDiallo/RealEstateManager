@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/propertyDetail"
         android:name="com.example.realestatemanager.ui.PropertyDetailFragment"
-        android:label="fragment_property_detail" >
+        android:label="fragment_property_detail">
         <action
             android:id="@+id/action_propertyDetail_to_propertyListFragment"
             app:destination="@id/propertyListFragment"
@@ -57,7 +57,7 @@
         android:id="@+id/mortgageCalculatorFragment"
         android:name="com.example.realestatemanager.ui.MortgageCalculatorFragment"
         android:label="fragment_mortgage_calculator"
-        tools:layout="@layout/fragment_mortgage_calculator" >
+        tools:layout="@layout/fragment_mortgage_calculator">
         <action
             android:id="@+id/action_mortgageCalculatorFragment_to_propertyDetail"
             app:destination="@id/propertyDetail"
@@ -76,7 +76,7 @@
         android:id="@+id/createModifyFragment"
         android:name="com.example.realestatemanager.ui.CreateModifyFragment"
         android:label="fragment_create_modify"
-        tools:layout="@layout/fragment_create_modify" >
+        tools:layout="@layout/fragment_create_modify">
         <action
             android:id="@+id/action_createModifyFragment_to_propertyDetail"
             app:destination="@id/propertyDetail"
@@ -87,7 +87,7 @@
         android:id="@+id/mapsFragment"
         android:name="com.example.realestatemanager.ui.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" >
+        tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_propertyListFragment"
             app:destination="@id/propertyListFragment"

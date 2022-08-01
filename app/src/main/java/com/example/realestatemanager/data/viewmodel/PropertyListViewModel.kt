@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PropertyListViewModel @Inject constructor(
     private val propertyRepository: PropertyRepository
-): ViewModel(){
+) : ViewModel() {
 
     val propertyList: MutableState<List<Property>> = mutableStateOf(listOf())
     val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
@@ -24,8 +24,8 @@ class PropertyListViewModel @Inject constructor(
         getPropertyList()
     }
 
-    fun getPropertyList() {
-        viewModelScope.launch{
+    private fun getPropertyList() {
+        viewModelScope.launch {
             propertyList.value = propertyRepository.getListOfProperties().first()
         }
     }

@@ -27,10 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import coil.compose.AsyncImage
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
-import com.example.realestatemanager.ui.PropertyDetailFragmentDirections
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -41,9 +42,15 @@ import com.google.maps.android.compose.rememberCameraPositionState
 object PropertyDetailSharedComposable {
 
     @Composable
-    fun Scaffold(property: Property) {
+    fun Scaffold(property: Property, navController: NavController, navDirections: NavDirections) {
         Scaffold(
-            bottomBar = { BottomBar(price = property.price) },
+            bottomBar = {
+                BottomBar(
+                    price = property.price,
+                    navController = navController,
+                    navDirections = navDirections
+                )
+            },
         ) {
             Box(modifier = Modifier.padding(it)) {
                 PropertyInDetail(property = property)
@@ -248,7 +255,6 @@ object PropertyDetailSharedComposable {
         )
     }
 
-
     @Composable
     fun AddMap(address: String) {
         //var addressToLocation: Location? = viewModel.location.value
@@ -278,7 +284,7 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun BottomBar(price: Int) {
+    fun BottomBar(price: Int, navController: NavController, navDirections: NavDirections) {
         Surface(
             elevation = 5.dp,
             modifier = Modifier
@@ -296,11 +302,10 @@ object PropertyDetailSharedComposable {
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primaryVariant,
                         modifier = Modifier.clickable {
-                            val action = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(price)
-                            //navController.navigate(action)
+                            navController.navigate(navDirections)
                         }
                     )
-                    val rate = 2.54
+                    val rate = 2.00
                     val years = 30
                     val monthlyPayment =
                         MortgagePaymentUtil.monthlyPaymentMortgage(price.toDouble(), rate, years)

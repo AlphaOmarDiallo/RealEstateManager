@@ -16,10 +16,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -81,11 +78,12 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun ExpendedScreen() {
         Row(){
-            Box(modifier = Modifier.fillMaxWidth(0.4f)){
+            Surface(modifier = Modifier.fillMaxWidth(0.4f)){
                 PropertyList()
             }
-            Box(modifier = Modifier.fillMaxWidth()){
-                PropertyDetailSharedComposable.Scaffold(property = selectedProperty)
+            Surface(modifier = Modifier.fillMaxWidth()){
+                val action = PropertyListFragmentDirections.actionPropertyListFragmentToMortgageCalculatorFragment(selectedProperty.price)
+                PropertyDetailSharedComposable.Scaffold(property = selectedProperty, navController = navController, navDirections = action)
             }
         }
     }
