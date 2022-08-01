@@ -109,7 +109,10 @@ class PropertyListFragment : Fragment() {
                     )
                 )
                 .clickable {
-                    val action = PropertyListFragmentDirections.actionPropertyListFragmentToPropertyDetail(property.id)
+                    val action =
+                        PropertyListFragmentDirections.actionPropertyListFragmentToPropertyDetail(
+                            property.id
+                        )
                     navController.navigate(action)
                 }
         ) {
