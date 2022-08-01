@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainer
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -38,6 +39,8 @@ import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
 import com.example.realestatemanager.domain.SharedComposable
+import com.example.realestatemanager.domain.WindowInfo
+import com.example.realestatemanager.domain.rememberWindowInfo
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,12 +57,24 @@ class PropertyListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 navController = findNavController()
-                RealEstateManagerTheme {
-                    PropertyList()
+                val windowInfo = rememberWindowInfo()
+                if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
+                    RealEstateManagerTheme {
+                        Row(){
+                            PropertyList()
+
+                        }
+
+                    }
+                } else {
+                    RealEstateManagerTheme {
+                        PropertyList()
+                    }
                 }
             }
         }
     }
+
 
     @Composable
     fun PropertyList() {

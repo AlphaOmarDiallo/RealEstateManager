@@ -75,7 +75,7 @@ class PropertyDetailFragment : Fragment() {
     @Composable
     fun Scaffold(property: Property) {
         Scaffold(
-            bottomBar = { BottomBar(price = propertyList[0].price) },
+            bottomBar = { BottomBar(price = property.price) },
         ) {
             Box(modifier = Modifier.padding(it)) {
                 PropertyInDetail(property = property)
