@@ -8,9 +8,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.data.repository.dataStore.DataStoreRepository
 import com.example.realestatemanager.data.repository.geocoding.GeocodingRepository
 import com.example.realestatemanager.data.repository.property.PropertyRepository
 import com.example.realestatemanager.data.sampleData.SampleProperties
+import com.example.realestatemanager.domain.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,15 +23,31 @@ import javax.inject.Inject
 @HiltViewModel
 class PropertyDetailViewModel @Inject constructor(
     private val geocodingRepository: GeocodingRepository,
-    private val propertyRepository: PropertyRepository
+    private val propertyRepository: PropertyRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     val location: MutableState<Location?> = mutableStateOf(Location("location"))
     val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
+    val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
+    val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
+
 
     fun getProperty(id: Int) {
         viewModelScope.launch {
             property.value = propertyRepository.getProperty(id).first()
+        }
+    }
+
+    private fun checkCurrencyPreference(){
+        viewModelScope.launch {
+            currencyEuro.value = dataStoreRepository.readCurrencyPreference().first()
+        }
+    }
+
+    private fun getDollarToEuroRate(){
+        viewModelScope.launch{
+            dollarToEuroRate.value = dataStoreRepository.readDollarToEuroRate().first()
         }
     }
 
