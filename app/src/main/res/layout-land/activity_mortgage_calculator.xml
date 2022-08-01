@@ -11,20 +11,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4" />
+            app:layout_constraintGuide_percent="0.5" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardMonthlyFee"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             app:cardElevation="10dp"
             app:cardMaxElevation="10dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cardView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -97,17 +96,16 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/tvMortgageLength"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline2">
+            app:layout_constraintStart_toEndOf="@+id/cardMonthlyFee"
+            app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -199,6 +197,7 @@
             android:id="@+id/tvMortgageLength"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="8dp"
             android:text="@string/years"
@@ -207,15 +206,14 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/sliderYears"
             app:layout_constraintEnd_toStartOf="@+id/tvMortgageLengthValue"
-            app:layout_constraintStart_toStartOf="@+id/sliderYears" />
+            app:layout_constraintStart_toStartOf="@+id/sliderYears"
+            app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
         <TextView
             android:id="@+id/tvPreferredMortgageRate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="8dp"
             android:text="@string/rate"
             android:textColor="@color/secondaryDarkColor"
             android:textSize="20sp"
@@ -230,8 +228,6 @@
             style="Widget.MaterialComponents.Slider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:contentDescription="@string/slider_to_modify_the_length_of_the_mortgage_from_5_to_30_years"
             android:stepSize="5"
             android:value="30"
@@ -277,7 +273,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:contentDescription="@string/slider_to_modify_the_mortgage_rate_from_2_to_6"
             android:stepSize="0.5"
             android:value="2"

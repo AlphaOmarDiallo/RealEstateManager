@@ -14,7 +14,7 @@ import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.data.viewmodel.MortgageCalculatorViewModel
-import com.example.realestatemanager.databinding.ActivityFragmentHolderBinding
+import com.example.realestatemanager.databinding.ActivityMortgageCalculatorBinding
 import com.example.realestatemanager.domain.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -22,7 +22,7 @@ import kotlin.properties.Delegates
 @AndroidEntryPoint
 class MortgageCalculatorActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityFragmentHolderBinding
+    private lateinit var binding: ActivityMortgageCalculatorBinding
     private lateinit var viewModel: MortgageCalculatorViewModel
 
     private var propertyPrice by Delegates.notNull<Int>()
@@ -38,7 +38,7 @@ class MortgageCalculatorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFragmentHolderBinding.inflate(layoutInflater)
+        binding = ActivityMortgageCalculatorBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
