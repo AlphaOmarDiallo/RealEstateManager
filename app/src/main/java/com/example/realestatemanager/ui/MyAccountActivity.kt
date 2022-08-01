@@ -247,14 +247,15 @@ class MyAccountActivity : AppCompatActivity() {
             setNotificationSwitch()
 
             currencySwitch.setOnPreferenceChangeListener { _, newValue ->
-                if (newValue == true) viewModel.saveCurrencyPreferenceToDataStore(true) else viewModel.saveCurrencyPreferenceToDataStore(
+                if (newValue == false) viewModel.saveCurrencyPreferenceToDataStore(true) else viewModel.saveCurrencyPreferenceToDataStore(
                     false
                 )
+                Log.e(TAG, "onCreatePreferences: ${viewModel.readCurrencyPreferenceFromDataStore()}", )
                 return@setOnPreferenceChangeListener true
             }
 
             notificationSwitch.setOnPreferenceChangeListener { _, newValue ->
-                if (newValue == true) viewModel.saveNotificationPreferenceToDataStore(true) else viewModel.saveNotificationPreferenceToDataStore(
+                if (newValue == false) viewModel.saveNotificationPreferenceToDataStore(true) else viewModel.saveNotificationPreferenceToDataStore(
                     false
                 )
                 return@setOnPreferenceChangeListener true

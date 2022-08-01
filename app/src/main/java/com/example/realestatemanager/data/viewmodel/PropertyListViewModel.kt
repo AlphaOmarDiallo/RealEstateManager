@@ -43,14 +43,14 @@ class PropertyListViewModel @Inject constructor(
         }
     }
 
-    private fun checkCurrencyPreference(){
+    private fun checkCurrencyPreference() {
         viewModelScope.launch {
             currencyEuro.value = dataStoreRepository.readCurrencyPreference().first()
         }
     }
 
-    private fun getDollarToEuroRate(){
-        viewModelScope.launch{
+    private fun getDollarToEuroRate() {
+        viewModelScope.launch {
             dollarToEuroRate.value = dataStoreRepository.readDollarToEuroRate().first()
         }
     }

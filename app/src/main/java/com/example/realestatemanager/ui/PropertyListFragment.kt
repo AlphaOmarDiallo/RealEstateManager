@@ -43,6 +43,7 @@ import com.example.realestatemanager.domain.WindowInfo
 import com.example.realestatemanager.domain.rememberWindowInfo
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class PropertyListFragment : Fragment() {
@@ -50,6 +51,8 @@ class PropertyListFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var selectedProperty: Property
     private lateinit var windowInfo: WindowInfo
+    private var currencyEuro by Delegates.notNull<Boolean>()
+    private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
 
     override fun onCreateView(
@@ -60,8 +63,12 @@ class PropertyListFragment : Fragment() {
             setContent {
                 navController = findNavController()
                 windowInfo = rememberWindowInfo()
-                Log.i(TAG, "onCreateView: ${rememberWindowInfo().screenWidthInfo}")
-                if (windowInfo.screenWidthInfo  is WindowInfo.WindowType.Expended) {
+
+                currencyEuro = viewModel.currencyEuro.value
+                Log.e(TAG, "onCreateView: $currencyEuro")
+                dollarToEuroRate = viewModel.dollarToEuroRate.value
+
+                if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
                     selectedProperty = viewModel.property.value
                     RealEstateManagerTheme {
                         ExpendedScreen()
@@ -77,17 +84,26 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun ExpendedScreen() {
-        Row(){
-            Surface(modifier = Modifier.fillMaxWidth(0.4f)){
+        Row() {
+            Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
                 PropertyList()
             }
-            Surface(modifier = Modifier.fillMaxWidth()){
-                val action = PropertyListFragmentDirections.actionPropertyListFragmentToMortgageCalculatorFragment(selectedProperty.price)
-                PropertyDetailSharedComposable.Scaffold(property = selectedProperty, navController = navController, navDirections = action)
+            Surface(modifier = Modifier.fillMaxWidth()) {
+                val action =
+                    PropertyListFragmentDirections.actionPropertyListFragmentToMortgageCalculatorFragment(
+                        selectedProperty.price
+                    )
+                PropertyDetailSharedComposable.Scaffold(
+                    property = selectedProperty,
+                    navController = navController,
+                    navDirections = action,
+                    euro = currencyEuro,
+                    dollarToEuroRate = dollarToEuroRate
+                )
             }
         }
     }
-    
+
     @Composable
     fun PropertyList() {
         //val propertyList = viewModel.propertyList.value
@@ -178,7 +194,7 @@ class PropertyListFragment : Fragment() {
                         neighbourhood = property.neighbourhood,
                         city = property.city
                     )
-                    SharedComposable.TextPrice(price = property.price)
+                    SharedComposable.TextPrice(price = property.price, euro = currencyEuro, dollarToEuroRate = dollarToEuroRate)
                 }
 
                 IconButton(onClick = { expended = !expended }) {

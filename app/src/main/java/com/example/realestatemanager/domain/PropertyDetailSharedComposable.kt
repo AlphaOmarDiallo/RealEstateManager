@@ -1,5 +1,7 @@
 package com.example.realestatemanager.domain
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -42,13 +44,21 @@ import com.google.maps.android.compose.rememberCameraPositionState
 object PropertyDetailSharedComposable {
 
     @Composable
-    fun Scaffold(property: Property, navController: NavController, navDirections: NavDirections) {
+    fun Scaffold(
+        property: Property,
+        navController: NavController,
+        navDirections: NavDirections,
+        euro: Boolean,
+        dollarToEuroRate: Double
+    ) {
         Scaffold(
             bottomBar = {
                 BottomBar(
                     price = property.price,
                     navController = navController,
-                    navDirections = navDirections
+                    navDirections = navDirections,
+                    euro = euro,
+                    dollarToEuroRate = dollarToEuroRate
                 )
             },
         ) {
@@ -284,7 +294,13 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun BottomBar(price: Int, navController: NavController, navDirections: NavDirections) {
+    fun BottomBar(
+        price: Int,
+        navController: NavController,
+        navDirections: NavDirections,
+        euro: Boolean,
+        dollarToEuroRate: Double
+    ) {
         Surface(
             elevation = 5.dp,
             modifier = Modifier
@@ -297,7 +313,7 @@ object PropertyDetailSharedComposable {
             ) {
                 Column {
                     Text(
-                        text = "$ $price",
+                        text = if (euro) "€ ${(price * dollarToEuroRate).toInt()}" else "$ $price",
                         style = MaterialTheme.typography.h5,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primaryVariant,
@@ -307,9 +323,13 @@ object PropertyDetailSharedComposable {
                     )
                     val rate = 2.00
                     val years = 30
-                    val monthlyPayment =
-                        MortgagePaymentUtil.monthlyPaymentMortgage(price.toDouble(), rate, years)
-                    Text(text = "from $$monthlyPayment per month")
+                    val monthlyPayment = if (euro) MortgagePaymentUtil.monthlyPaymentMortgage(
+                        (price.toDouble() * dollarToEuroRate),
+                        rate,
+                        years
+                    ) else MortgagePaymentUtil.monthlyPaymentMortgage(price.toDouble(), rate, years)
+                    Log.e(TAG, "BottomBar: ${euro}", )
+                    if (euro) Text(text = "from €$monthlyPayment per month") else Text(text = "from $$monthlyPayment per month")
                 }
                 IconButton(
                     onClick = { /*TODO*/ },
@@ -320,8 +340,7 @@ object PropertyDetailSharedComposable {
                             color = MaterialTheme.colors.primary,
                             shape = MaterialTheme.shapes.medium
                         )
-                )
-                {
+                ) {
                     Row(horizontalArrangement = Arrangement.Center) {
                         Icon(
                             imageVector = Icons.Outlined.Payments,

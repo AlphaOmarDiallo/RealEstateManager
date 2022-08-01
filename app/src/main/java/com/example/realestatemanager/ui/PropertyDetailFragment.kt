@@ -1,7 +1,9 @@
 package com.example.realestatemanager.ui
 
+import android.content.ContentValues.TAG
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +21,15 @@ import com.example.realestatemanager.data.viewmodel.PropertyDetailViewModel
 import com.example.realestatemanager.domain.PropertyDetailSharedComposable
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class PropertyDetailFragment : Fragment() {
 
-    private val viewModel: PropertyDetailViewModel by viewModels()
     private lateinit var navController: NavController
+    private var currencyEuro by Delegates.notNull<Boolean>()
+    private var dollarToEuroRate by Delegates.notNull<Double>()
+    private val viewModel: PropertyDetailViewModel by viewModels()
     private val args: PropertyDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -34,6 +39,10 @@ class PropertyDetailFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 navController = findNavController()
+                currencyEuro = viewModel.currencyEuro.value
+                Log.e(TAG, "onCreateView: $currencyEuro")
+                dollarToEuroRate = viewModel.dollarToEuroRate.value
+
                 val propertyID = args.propertyID
                 fetchPropertyData(propertyID)
                 val property: Property = getDataFromViewModel()
@@ -42,7 +51,9 @@ class PropertyDetailFragment : Fragment() {
                     navController = navController,
                     navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
                         SampleProperties.samplePropertyList[0].price
-                    )
+                    ),
+                    euro = currencyEuro,
+                    dollarToEuroRate = dollarToEuroRate
                 )
             }
         }
@@ -63,7 +74,9 @@ class PropertyDetailFragment : Fragment() {
                 navController = navController,
                 navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
                     SampleProperties.samplePropertyList[0].price
-                )
+                ),
+                euro = currencyEuro,
+                dollarToEuroRate = dollarToEuroRate
             )
         }
     }

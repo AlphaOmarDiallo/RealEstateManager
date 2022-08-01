@@ -32,6 +32,10 @@ class PropertyDetailViewModel @Inject constructor(
     val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
     val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
 
+    init {
+        checkCurrencyPreference()
+        getDollarToEuroRate()
+    }
 
     fun getProperty(id: Int) {
         viewModelScope.launch {
@@ -39,14 +43,14 @@ class PropertyDetailViewModel @Inject constructor(
         }
     }
 
-    private fun checkCurrencyPreference(){
+    private fun checkCurrencyPreference() {
         viewModelScope.launch {
             currencyEuro.value = dataStoreRepository.readCurrencyPreference().first()
         }
     }
 
-    private fun getDollarToEuroRate(){
-        viewModelScope.launch{
+    private fun getDollarToEuroRate() {
+        viewModelScope.launch {
             dollarToEuroRate.value = dataStoreRepository.readDollarToEuroRate().first()
         }
     }
