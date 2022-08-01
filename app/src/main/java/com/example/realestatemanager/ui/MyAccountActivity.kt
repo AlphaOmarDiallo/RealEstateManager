@@ -62,7 +62,6 @@ class MyAccountActivity : AppCompatActivity() {
         viewModel.currentUser.observe(this, this::updateViewsWithAgent)
     }
 
-
     /**
      * Setup buttons
      */
@@ -247,24 +246,22 @@ class MyAccountActivity : AppCompatActivity() {
             setNotificationSwitch()
 
             currencySwitch.setOnPreferenceChangeListener { _, newValue ->
-                if (newValue == false) viewModel.saveCurrencyPreferenceToDataStore(true) else viewModel.saveCurrencyPreferenceToDataStore(
-                    false
-                )
-                Log.e(TAG, "onCreatePreferences: ${viewModel.readCurrencyPreferenceFromDataStore()}", )
+                Log.e(TAG, "onCreatePreferences: new value $newValue")
+                val value: Boolean = newValue.toString() == "true"
+                viewModel.saveCurrencyPreferenceToDataStore(value)
+                Log.e(TAG, "onCreatePreferences: is euro: ${viewModel.readCurrencyPreferenceFromDataStore()}", )
                 return@setOnPreferenceChangeListener true
             }
 
             notificationSwitch.setOnPreferenceChangeListener { _, newValue ->
-                if (newValue == false) viewModel.saveNotificationPreferenceToDataStore(true) else viewModel.saveNotificationPreferenceToDataStore(
-                    false
-                )
+                if (notificationSwitch.isChecked) viewModel.saveNotificationPreferenceToDataStore(true) else viewModel.saveNotificationPreferenceToDataStore(false)
                 return@setOnPreferenceChangeListener true
             }
 
         }
 
         private fun setCurrencySwitch() {
-            currencySwitch.isChecked = viewModel.readCurrencyPreferenceFromDataStore()
+            currencySwitch.isChecked = viewModel.readCurrencyPreferenceFromDataStore() == true
         }
 
         private fun setNotificationSwitch() {

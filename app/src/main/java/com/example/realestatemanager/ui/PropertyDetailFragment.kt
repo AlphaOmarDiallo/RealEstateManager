@@ -40,21 +40,34 @@ class PropertyDetailFragment : Fragment() {
             setContent {
                 navController = findNavController()
                 currencyEuro = viewModel.currencyEuro.value
-                Log.e(TAG, "onCreateView: $currencyEuro")
+                Log.e(TAG, "onCreateView: euro: $currencyEuro")
                 dollarToEuroRate = viewModel.dollarToEuroRate.value
 
                 val propertyID = args.propertyID
                 fetchPropertyData(propertyID)
                 val property: Property = getDataFromViewModel()
-                PropertyDetailSharedComposable.Scaffold(
-                    property = SampleProperties.samplePropertyList[0],
-                    navController = navController,
-                    navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
-                        SampleProperties.samplePropertyList[0].price
-                    ),
-                    euro = currencyEuro,
-                    dollarToEuroRate = dollarToEuroRate
-                )
+                if (currencyEuro){
+                    PropertyDetailSharedComposable.Scaffold(
+                        property = SampleProperties.samplePropertyList[0],
+                        navController = navController,
+                        navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
+                            SampleProperties.samplePropertyList[0].price
+                        ),
+                        euro = currencyEuro,
+                        dollarToEuroRate = dollarToEuroRate
+                    )
+                } else {
+                    PropertyDetailSharedComposable.Scaffold(
+                        property = SampleProperties.samplePropertyList[0],
+                        navController = navController,
+                        navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
+                            SampleProperties.samplePropertyList[0].price
+                        ),
+                        euro = false,
+                        dollarToEuroRate = dollarToEuroRate
+                    )
+                }
+
             }
         }
     }

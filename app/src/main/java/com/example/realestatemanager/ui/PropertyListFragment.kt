@@ -51,7 +51,9 @@ class PropertyListFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var selectedProperty: Property
     private lateinit var windowInfo: WindowInfo
-    private var currencyEuro by Delegates.notNull<Boolean>()
+    /*private var currencyEuro by remember {
+        mutableStateOf(viewModel.currencyEuro.value)
+    }*/
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
 
@@ -63,9 +65,11 @@ class PropertyListFragment : Fragment() {
             setContent {
                 navController = findNavController()
                 windowInfo = rememberWindowInfo()
-
-                currencyEuro = viewModel.currencyEuro.value
-                Log.e(TAG, "onCreateView: $currencyEuro")
+                var currencyEuro by remember {
+                    mutableStateOf(viewModel.currencyEuro.value)
+                }
+                //currencyEuro = viewModel.currencyEuro.value
+                Log.e(TAG, "onCreateView: euro: $currencyEuro")
                 dollarToEuroRate = viewModel.dollarToEuroRate.value
 
                 if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
@@ -84,6 +88,7 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun ExpendedScreen() {
+        val currencyEuro = viewModel.currencyEuro.value
         Row() {
             Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
                 PropertyList()
@@ -107,6 +112,8 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun PropertyList() {
         //val propertyList = viewModel.propertyList.value
+        val currencyEuro = viewModel.currencyEuro.value
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -141,6 +148,7 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false) }
+        val currencyEuro = viewModel.currencyEuro.value
         Column(
             modifier = Modifier
                 .padding(4.dp)

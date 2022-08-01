@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @HiltViewModel
 class MyAccountViewModel @Inject constructor(
@@ -90,7 +91,7 @@ class MyAccountViewModel @Inject constructor(
     }
 
     fun readCurrencyPreferenceFromDataStore(): Boolean {
-        var pref = false
+        var pref: Boolean by Delegates.notNull()
         viewModelScope.launch {
             pref = dataStoreRepository.readCurrencyPreference().first()
         }
@@ -102,7 +103,7 @@ class MyAccountViewModel @Inject constructor(
     }
 
     fun readNotificationPreferenceFromDataStore(): Boolean {
-        var pref = false
+        var pref: Boolean by Delegates.notNull()
         viewModelScope.launch {
             pref = dataStoreRepository.readNotificationPreference().first()
         }
