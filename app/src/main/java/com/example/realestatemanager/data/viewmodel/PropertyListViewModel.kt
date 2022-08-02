@@ -2,6 +2,8 @@ package com.example.realestatemanager.data.viewmodel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.model.Property
@@ -25,6 +27,9 @@ class PropertyListViewModel @Inject constructor(
     val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
     val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
 
+    private val _currencyEuro: MutableLiveData<Boolean> = MutableLiveData(false)
+    val currencyEuroL: LiveData<Boolean> get() = _currencyEuro
+
     init {
         getPropertyList()
         checkCurrencyPreference()
@@ -40,6 +45,7 @@ class PropertyListViewModel @Inject constructor(
     fun updateCurrencyPreference(pref: Boolean){
         viewModelScope.launch {
             dataStoreRepository.saveCurrencyPreference(pref)
+            _currencyEuro.value = pref
         }
     }
 
@@ -52,6 +58,7 @@ class PropertyListViewModel @Inject constructor(
     private fun checkCurrencyPreference() {
         viewModelScope.launch {
             currencyEuro.value = dataStoreRepository.readCurrencyPreference().first()
+            _currencyEuro.value = dataStoreRepository.readCurrencyPreference().first()
         }
     }
 

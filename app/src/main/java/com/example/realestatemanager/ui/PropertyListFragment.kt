@@ -20,6 +20,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Money
 import androidx.compose.runtime.*
@@ -68,6 +69,7 @@ class PropertyListFragment : Fragment() {
                 windowInfo = rememberWindowInfo()
                 currencyEuro = viewModel.currencyEuro.value
                 Log.e(TAG, "onCreateView: euro: $currencyEuro")
+                observeCurrencyPref()
                 dollarToEuroRate = viewModel.dollarToEuroRate.value
 
                 if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
@@ -86,7 +88,6 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun ExpendedScreen() {
-        currencyEuro = viewModel.currencyEuro.value
         Row() {
             Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
                 PropertyList()
@@ -117,7 +118,7 @@ class PropertyListFragment : Fragment() {
                 .fillMaxSize(0.08f)
         ) {
             Row(horizontalArrangement = Arrangement.SpaceAround) {
-                IconButton(onClick = { navController.navigate(action)}) {
+                IconButton(onClick = { navController.navigate(action) }) {
                     Icon(
                         imageVector = Icons.Outlined.Map,
                         contentDescription = ""
@@ -138,7 +139,6 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun PropertyList() {
         //val propertyList = viewModel.propertyList.value
-        currencyEuro = viewModel.currencyEuro.value
 
         Box(
             modifier = Modifier
@@ -178,7 +178,7 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false) }
-        var isEuro by remember { mutableStateOf(currencyEuro) }
+        var euro by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .padding(4.dp)
@@ -232,10 +232,34 @@ class PropertyListFragment : Fragment() {
                         neighbourhood = property.neighbourhood,
                         city = property.city
                     )
-                    SharedComposable.TextPrice(
-                        price = property.price,
-                        euro = isEuro,
-                        dollarToEuroRate = dollarToEuroRate
+                    if (euro) {
+                        SharedComposable.TextPrice(
+                            price = priceToEuro(property.price),
+                            euro = currencyEuro,
+                            dollarToEuroRate = dollarToEuroRate
+                        )
+                    } else {
+                        SharedComposable.TextPrice(
+                            price = property.price,
+                            euro = currencyEuro,
+                            dollarToEuroRate = dollarToEuroRate
+                        )
+                    }
+
+                }
+
+                IconButton(onClick = {
+                    euro = !euro
+                    currencyEuro = euro
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Money,
+                        contentDescription = if (expended) {
+                            stringResource(R.string.show_less)
+                        } else {
+                            stringResource(R.string.show_more)
+                        }
+
                     )
                 }
 
@@ -270,7 +294,7 @@ class PropertyListFragment : Fragment() {
     }
 
     @Composable
-    fun recompose(){
+    fun recompose() {
         currentComposer.composition.recompose()
     }
 
@@ -288,16 +312,24 @@ class PropertyListFragment : Fragment() {
         }
     }
 
-    private fun fromListToMap() {
-        listView = !listView
-    }
-
     private fun updateCurrencyPref() {
         if (viewModel.currencyEuro.value) {
             viewModel.updateCurrencyPreference(false)
         } else {
             viewModel.updateCurrencyPreference(true)
         }
+    }
+
+    private fun observeCurrencyPref() {
+        viewModel.currencyEuroL.observe(viewLifecycleOwner, this::updateCurrencyL)
+    }
+
+    private fun updateCurrencyL(pref: Boolean) {
+        currencyEuro = pref
+    }
+
+    private fun priceToEuro(price: Int): Int {
+        return (price * dollarToEuroRate).toInt()
     }
 
 }
