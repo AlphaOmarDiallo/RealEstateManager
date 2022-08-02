@@ -109,6 +109,7 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun TopButtons() {
+        val action = PropertyListFragmentDirections.actionPropertyListFragmentToGoogleMapsFragment()
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,7 +117,7 @@ class PropertyListFragment : Fragment() {
                 .fillMaxSize(0.08f)
         ) {
             Row(horizontalArrangement = Arrangement.SpaceAround) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.navigate(action)}) {
                     Icon(
                         imageVector = Icons.Outlined.Map,
                         contentDescription = ""

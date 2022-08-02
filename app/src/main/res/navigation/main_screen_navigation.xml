@@ -20,15 +20,13 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
-            android:id="@+id/action_propertyListFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
-        <action
             android:id="@+id/action_propertyListFragment_to_createModifyFragment"
             app:destination="@id/createModifyFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_propertyListFragment_to_googleMapsFragment"
+            app:destination="@id/googleMapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/propertyDetail"
@@ -84,29 +82,8 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/mapsFragment"
-        android:name="com.example.realestatemanager.ui.MapsFragment"
-        android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps">
-        <action
-            android:id="@+id/action_mapsFragment_to_propertyListFragment"
-            app:destination="@id/propertyListFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
-        <action
-            android:id="@+id/action_mapsFragment_to_mortgageCalculatorFragment"
-            app:destination="@id/mortgageCalculatorFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
-        <action
-            android:id="@+id/action_mapsFragment_to_propertyDetail"
-            app:destination="@id/propertyDetail"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
-        <action
-            android:id="@+id/action_mapsFragment_to_createModifyFragment"
-            app:destination="@id/createModifyFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
-    </fragment>
+        android:id="@+id/googleMapsFragment"
+        android:name="com.example.realestatemanager.ui.GoogleMapsFragment"
+        android:label="fragment_google_maps"
+        tools:layout="@layout/fragment_google_maps" />
 </navigation>
