@@ -17,6 +17,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,6 +49,7 @@ object PropertyDetailSharedComposable {
         property: Property,
         navController: NavController,
         navDirections: NavDirections,
+        navDirections2: NavDirections,
         euro: Boolean,
         dollarToEuroRate: Double
     ) {
@@ -56,7 +58,8 @@ object PropertyDetailSharedComposable {
                 BottomBar(
                     price = property.price,
                     navController = navController,
-                    navDirections = navDirections,
+                    navDirections1 = navDirections,
+                    navDirections2 = navDirections2,
                     euro = euro,
                     dollarToEuroRate = dollarToEuroRate
                 )
@@ -297,7 +300,8 @@ object PropertyDetailSharedComposable {
     fun BottomBar(
         price: Int,
         navController: NavController,
-        navDirections: NavDirections,
+        navDirections1: NavDirections,
+        navDirections2: NavDirections,
         euro: Boolean,
         dollarToEuroRate: Double
     ) {
@@ -318,7 +322,7 @@ object PropertyDetailSharedComposable {
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primaryVariant,
                         modifier = Modifier.clickable {
-                            navController.navigate(navDirections)
+                            navController.navigate(navDirections1)
                         }
                     )
                     val rate = 2.00
@@ -355,7 +359,19 @@ object PropertyDetailSharedComposable {
                         )
                     }
                 }
+                IconButton(onClick = {
+                    navigateToEditFragment(navDirections2, navController)
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit,
+                        contentDescription = ""
+                    )
+                }
             }
         }
+    }
+
+    private fun navigateToEditFragment(navDirections: NavDirections, navController: NavController){
+        navController.navigate(navDirections)
     }
 }

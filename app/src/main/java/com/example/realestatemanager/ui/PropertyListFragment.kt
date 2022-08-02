@@ -21,8 +21,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Money
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Map
-import androidx.compose.material.icons.outlined.Money
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +58,6 @@ class PropertyListFragment : Fragment() {
     private var currencyEuro by Delegates.notNull<Boolean>()
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
-    private var listView = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,7 +88,7 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun ExpendedScreen() {
-        Row() {
+        Row {
             Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
                 PropertyList()
             }
@@ -97,10 +97,13 @@ class PropertyListFragment : Fragment() {
                     PropertyListFragmentDirections.actionPropertyListFragmentToMortgageCalculatorFragment(
                         selectedProperty.price
                     )
+                val action2 =
+                    PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(selectedProperty)
                 PropertyDetailSharedComposable.Scaffold(
                     property = selectedProperty,
                     navController = navController,
                     navDirections = action,
+                    navDirections2 = action2,
                     euro = currencyEuro,
                     dollarToEuroRate = dollarToEuroRate
                 )
@@ -125,10 +128,19 @@ class PropertyListFragment : Fragment() {
                     )
                 }
                 IconButton(onClick = {
-                    updateCurrencyPref()
+                    navigateToSearchFragment()
                 }) {
                     Icon(
-                        imageVector = Icons.Outlined.Money,
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = ""
+                    )
+                }
+
+                IconButton(onClick = {
+                    navigateToCreateFragment()
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Add,
                         contentDescription = ""
                     )
                 }
@@ -144,7 +156,7 @@ class PropertyListFragment : Fragment() {
             modifier = Modifier
                 .fillMaxHeight(0.92f)
         ) {
-            Column() {
+            Column {
                 TopButtons()
                 ListOfProperty(propertyList = SampleProperties.samplePropertyList)
             }
@@ -262,17 +274,17 @@ class PropertyListFragment : Fragment() {
 
                     )
                 }
-
-                IconButton(onClick = { expended = !expended }) {
-                    Icon(
-                        imageVector = if (expended) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                        contentDescription = if (expended) {
-                            stringResource(R.string.show_less)
-                        } else {
-                            stringResource(R.string.show_more)
-                        }
-
-                    )
+                if (windowInfo.screenWidthInfo != WindowInfo.WindowType.Expended) {
+                    IconButton(onClick = { expended = !expended }) {
+                        Icon(
+                            imageVector = if (expended) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                            contentDescription = if (expended) {
+                                stringResource(R.string.show_less)
+                            } else {
+                                stringResource(R.string.show_more)
+                            }
+                        )
+                    }
                 }
             }
             if (expended) {
@@ -293,11 +305,6 @@ class PropertyListFragment : Fragment() {
         }
     }
 
-    @Composable
-    fun recompose() {
-        currentComposer.composition.recompose()
-    }
-
     @Preview(
         showBackground = true,
         widthDp = 320,
@@ -312,12 +319,15 @@ class PropertyListFragment : Fragment() {
         }
     }
 
-    private fun updateCurrencyPref() {
-        if (viewModel.currencyEuro.value) {
-            viewModel.updateCurrencyPreference(false)
-        } else {
-            viewModel.updateCurrencyPreference(true)
-        }
+    private fun navigateToSearchFragment() {
+        val action = PropertyListFragmentDirections.actionPropertyListFragmentToSearchFragment()
+        navController.navigate(action)
+    }
+
+    private fun navigateToCreateFragment() {
+        val action =
+            PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(null)
+        navController.navigate(action)
     }
 
     private fun observeCurrencyPref() {

@@ -46,28 +46,17 @@ class PropertyDetailFragment : Fragment() {
                 val propertyID = args.propertyID
                 fetchPropertyData(propertyID)
                 val property: Property = getDataFromViewModel()
-                if (currencyEuro){
-                    PropertyDetailSharedComposable.Scaffold(
-                        property = SampleProperties.samplePropertyList[0],
-                        navController = navController,
-                        navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
-                            SampleProperties.samplePropertyList[0].price
-                        ),
-                        euro = currencyEuro,
-                        dollarToEuroRate = dollarToEuroRate
-                    )
-                } else {
-                    PropertyDetailSharedComposable.Scaffold(
-                        property = SampleProperties.samplePropertyList[0],
-                        navController = navController,
-                        navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
-                            SampleProperties.samplePropertyList[0].price
-                        ),
-                        euro = false,
-                        dollarToEuroRate = dollarToEuroRate
-                    )
-                }
 
+                PropertyDetailSharedComposable.Scaffold(
+                    property = SampleProperties.samplePropertyList[0],
+                    navController = navController,
+                    navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
+                        SampleProperties.samplePropertyList[0].price
+                    ),
+                    navDirections2 =  PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment("null", SampleProperties.samplePropertyList[0]),
+                    euro = currencyEuro,
+                    dollarToEuroRate = dollarToEuroRate
+                )
             }
         }
     }
@@ -87,6 +76,9 @@ class PropertyDetailFragment : Fragment() {
                 navController = navController,
                 navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
                     SampleProperties.samplePropertyList[0].price
+                ),
+                navDirections2 = PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment(
+                    "null", SampleProperties.samplePropertyList[0]
                 ),
                 euro = currencyEuro,
                 dollarToEuroRate = dollarToEuroRate

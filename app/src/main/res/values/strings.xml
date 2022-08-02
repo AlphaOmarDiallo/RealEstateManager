@@ -48,5 +48,7 @@
     <string name="alert_positive_message">Delete my account</string>
     <string name="alert_negative_message">Cancel</string>
     <string name="alert_title">Delete account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
