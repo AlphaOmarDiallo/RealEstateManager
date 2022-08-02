@@ -65,6 +65,7 @@
     <string name="add_photo">Add Photo</string>
     <string name="save">Save</string>
     <string name="property_list_of_property_type">list of property type</string>
+    <string name="address">Address</string>
 
 
 </resources>

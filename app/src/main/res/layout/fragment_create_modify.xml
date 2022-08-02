@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".ui.CreateModifyFragment">
 
     <ScrollView
@@ -21,6 +22,66 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewAutoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/autocomplete_fragment"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILPropertyAddress"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/address"
+                android:padding="4dp"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:boxStrokeColor="@color/primaryColor"
+                tools:text="10000">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TIETPropertyAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILPropertyNeighbourhood"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="@string/property_neighbourhood"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:boxStrokeColor="@color/primaryColor"
+                tools:text="10000">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TIETPropertyNeighbourhood"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TILPropertyType"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -30,6 +91,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:hint="@string/property_type"
+                android:padding="4dp"
                 android:textColor="@color/primaryDarkColor"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -193,29 +255,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/TILPropertyNeighbourhood"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:hint="@string/property_neighbourhood"
-                android:textColor="@color/primaryDarkColor"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:boxStrokeColor="@color/primaryColor"
-                tools:text="10000">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TIETPropertyNeighbourhood"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
             <ToggleButton
                 android:id="@+id/toggleSaleStatus"
                 android:layout_width="match_parent"
@@ -275,6 +314,13 @@
 
             </LinearLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:scrollbars="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
 
         </LinearLayout>
     </ScrollView>
