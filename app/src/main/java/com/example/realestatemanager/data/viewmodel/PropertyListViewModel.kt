@@ -37,6 +37,12 @@ class PropertyListViewModel @Inject constructor(
         }
     }
 
+    fun updateCurrencyPreference(pref: Boolean){
+        viewModelScope.launch {
+            dataStoreRepository.saveCurrencyPreference(pref)
+        }
+    }
+
     private fun getPropertyList() {
         viewModelScope.launch {
             propertyList.value = propertyRepository.getListOfProperties().first()
@@ -54,5 +60,6 @@ class PropertyListViewModel @Inject constructor(
             dollarToEuroRate.value = dataStoreRepository.readDollarToEuroRate().first()
         }
     }
+
 
 }

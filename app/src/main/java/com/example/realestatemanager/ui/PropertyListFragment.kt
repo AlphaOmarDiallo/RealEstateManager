@@ -20,6 +20,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.Money
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,11 +53,10 @@ class PropertyListFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var selectedProperty: Property
     private lateinit var windowInfo: WindowInfo
-    /*private var currencyEuro by remember {
-        mutableStateOf(viewModel.currencyEuro.value)
-    }*/
+    private var currencyEuro by Delegates.notNull<Boolean>()
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
+    private var listView = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,10 +66,7 @@ class PropertyListFragment : Fragment() {
             setContent {
                 navController = findNavController()
                 windowInfo = rememberWindowInfo()
-                var currencyEuro by remember {
-                    mutableStateOf(viewModel.currencyEuro.value)
-                }
-                //currencyEuro = viewModel.currencyEuro.value
+                currencyEuro = viewModel.currencyEuro.value
                 Log.e(TAG, "onCreateView: euro: $currencyEuro")
                 dollarToEuroRate = viewModel.dollarToEuroRate.value
 
@@ -88,7 +86,7 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun ExpendedScreen() {
-        val currencyEuro = viewModel.currencyEuro.value
+        currencyEuro = viewModel.currencyEuro.value
         Row() {
             Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
                 PropertyList()
@@ -110,17 +108,48 @@ class PropertyListFragment : Fragment() {
     }
 
     @Composable
+    fun TopButtons() {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.background)
+                .fillMaxSize(0.08f)
+        ) {
+            Row(horizontalArrangement = Arrangement.SpaceAround) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Map,
+                        contentDescription = ""
+                    )
+                }
+                IconButton(onClick = {
+                    updateCurrencyPref()
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Money,
+                        contentDescription = ""
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
     fun PropertyList() {
         //val propertyList = viewModel.propertyList.value
-        val currencyEuro = viewModel.currencyEuro.value
+        currencyEuro = viewModel.currencyEuro.value
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colors.background)
+                .fillMaxHeight(0.92f)
         ) {
-            ListOfProperty(propertyList = SampleProperties.samplePropertyList)
+            Column() {
+                TopButtons()
+                ListOfProperty(propertyList = SampleProperties.samplePropertyList)
+            }
+
         }
+
     }
 
     @Composable
@@ -148,7 +177,7 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false) }
-        val currencyEuro = viewModel.currencyEuro.value
+        var isEuro by remember { mutableStateOf(currencyEuro) }
         Column(
             modifier = Modifier
                 .padding(4.dp)
@@ -202,7 +231,11 @@ class PropertyListFragment : Fragment() {
                         neighbourhood = property.neighbourhood,
                         city = property.city
                     )
-                    SharedComposable.TextPrice(price = property.price, euro = currencyEuro, dollarToEuroRate = dollarToEuroRate)
+                    SharedComposable.TextPrice(
+                        price = property.price,
+                        euro = isEuro,
+                        dollarToEuroRate = dollarToEuroRate
+                    )
                 }
 
                 IconButton(onClick = { expended = !expended }) {
@@ -235,6 +268,11 @@ class PropertyListFragment : Fragment() {
         }
     }
 
+    @Composable
+    fun recompose(){
+        currentComposer.composition.recompose()
+    }
+
     @Preview(
         showBackground = true,
         widthDp = 320,
@@ -246,6 +284,18 @@ class PropertyListFragment : Fragment() {
     fun FragmentPreview() {
         RealEstateManagerTheme {
             PropertyList()
+        }
+    }
+
+    private fun fromListToMap() {
+        listView = !listView
+    }
+
+    private fun updateCurrencyPref() {
+        if (viewModel.currencyEuro.value) {
+            viewModel.updateCurrencyPreference(false)
+        } else {
+            viewModel.updateCurrencyPreference(true)
         }
     }
 
