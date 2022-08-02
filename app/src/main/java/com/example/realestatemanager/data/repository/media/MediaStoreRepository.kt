@@ -11,4 +11,6 @@ interface MediaStoreRepository {
     suspend fun loadPhotosFromInternalStorage(context: Context): List<InternalStoragePhoto>
 
     suspend fun deletePhotoFromInternalStorage(filename: String, context: Context): Boolean
+
+    fun getPhotoPath(context: Context, filename: String): String
 }

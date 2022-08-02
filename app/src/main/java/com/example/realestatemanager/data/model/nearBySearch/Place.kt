@@ -1,6 +1,6 @@
 package com.example.realestatemanager.data.model.nearBySearch
 
-data class Result(
+data class Place(
     val business_status: String,
     val geometry: Geometry,
     val icon: String,

@@ -37,7 +37,7 @@ data class Property (
     @ColumnInfo(name = "property_sale_status")
     var saleStatus: String,
     @ColumnInfo(name = "property_on_market_since")
-    var onTheMarketSince: Long,
+    val onTheMarketSince: Long,
     @ColumnInfo(name = "property_off_market_since")
     var offTheMarketSince: Long?,
     @ColumnInfo(name = "property_managing_agent")

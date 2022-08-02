@@ -2,13 +2,16 @@ package com.example.realestatemanager.data.repository.media
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.example.realestatemanager.data.model.InternalStoragePhoto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.IOException
 import javax.inject.Inject
+
 
 class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
 
@@ -35,6 +38,13 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
                 InternalStoragePhoto(it.name, bmp)
             } ?: listOf()
         }
+    }
+
+    override fun getPhotoPath(context: Context, filename: String): String {
+        val cw = ContextWrapper(context)
+        val directory: File = cw.getDir("dirName", MODE_PRIVATE)
+        val myPath = File(directory, "imagename.jpg")
+        return myPath.toString()
     }
 
     override suspend fun deletePhotoFromInternalStorage(filename: String, context: Context): Boolean {
