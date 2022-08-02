@@ -19,11 +19,14 @@ object SampleProperties {
             "50 avenue Hoche 75017 Paris",
             "Paris",
             "17eme district",
-            null,
-            "On sale",
+            false,
             1657490400000,
             null,
-            agents[0].id
+            agents[0].id,
+            false,
+            true,
+            true,
+            true
         ),
         com.example.realestatemanager.data.model.Property(
             0,
@@ -38,11 +41,14 @@ object SampleProperties {
             "100 avenue Hoche 75017 Paris",
             "Paris",
             "17eme",
-            null,
-            "On sale",
+            false,
             1657490400000,
             null,
-            agents[1].id
+            agents[0].id,
+            false,
+            true,
+            true,
+            true
         ),
         com.example.realestatemanager.data.model.Property(
             0,
@@ -57,11 +63,14 @@ object SampleProperties {
             "490 avenue Hoche 75017 Paris",
             "Paris",
             "17eme",
-            null,
-            "On sale",
+            false,
             1657490400000,
             null,
-            agents[2].id
+            agents[0].id,
+            false,
+            true,
+            true,
+            true
         ),
         com.example.realestatemanager.data.model.Property(
             0,
@@ -76,16 +85,25 @@ object SampleProperties {
             "130 avenue Hoche 75017 Paris",
             "Paris",
             "17eme",
-            null,
-            "On sale",
+            false,
             1657490400000,
             null,
-            agents[3].id
+            agents[0].id,
+            true,
+            false,
+            true,
+            true
         ),
         com.example.realestatemanager.data.model.Property(
             0, "Studio", 300000, 40, 1, 1, 1, "Super studio in Paris",
-            photos, "50 avenue Hoche 75017 Paris", "Paris", "17eme", null, "On sale", 1657490400000,
-            null, agents[0].id
+            photos, "50 avenue Hoche 75017 Paris", "Paris", "17eme", false,
+            1657490400000,
+            null,
+            agents[0].id,
+            true,
+            true,
+            true,
+            false
         )
     )
 }

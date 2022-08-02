@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(tableName = "property_table")
-data class Property (
+data class Property(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "property_id")
     var id: Int,
@@ -32,14 +32,20 @@ data class Property (
     var city: String,
     @ColumnInfo(name = "property_neighbourhood")
     var neighbourhood: String,
-    @ColumnInfo(name = "property_interest_around")
-    var interestsAround: List<String>?,
     @ColumnInfo(name = "property_sale_status")
-    var saleStatus: String,
+    var saleStatus: Boolean,
     @ColumnInfo(name = "property_on_market_since")
     val onTheMarketSince: Long,
     @ColumnInfo(name = "property_off_market_since")
     var offTheMarketSince: Long?,
     @ColumnInfo(name = "property_managing_agent")
-    var agentManagingPropertyId: String?
-) :Serializable
+    var agentManagingPropertyId: String?,
+    @ColumnInfo(name = "property_close_school")
+    var closeToSchool: Boolean,
+    @ColumnInfo(name = "property_close_shops")
+    var closeToShops: Boolean,
+    @ColumnInfo(name = "property_close_park")
+    var closeToPark: Boolean,
+    @ColumnInfo(name = "property_close_transport")
+    var closeToTransport: Boolean,
+) : Serializable
