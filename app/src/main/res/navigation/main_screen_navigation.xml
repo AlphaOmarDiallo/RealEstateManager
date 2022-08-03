@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/createModifyFragment"
-        android:name="com.example.realestatemanager.ui.CreateModifyFragment"
+        android:name="com.example.realestatemanager.ui.createEdit.CreateModifyFragment"
         android:label="fragment_create_modify"
         tools:layout="@layout/fragment_create_modify">
         <action

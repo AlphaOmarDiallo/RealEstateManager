@@ -1,6 +1,7 @@
-package com.example.realestatemanager.ui
+package com.example.realestatemanager.ui.createEdit
 
 import android.content.ContentValues.TAG
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -74,9 +75,12 @@ class CreateModifyFragment : Fragment() {
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: ${place.name}, ${place.id}")
-
+                binding.TIETPropertyAddress.setText(place.address)
+                val location = Location("Place")
+                location.latitude = place.latLng.latitude
+                location.longitude = place.latLng.longitude
+                viewModel.getInterestsAround(location)
             }
 
             override fun onError(status: Status) {
