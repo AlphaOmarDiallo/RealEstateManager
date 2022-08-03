@@ -27,12 +27,17 @@ object Constant {
     const val GEOCODING_URL = "geocode/json?"
 
     const val NEARBYSEARCH_URL = "place/nearbysearch/json"
-    const val RADIUS_NEARBYSEARCH = 1000
+    const val RADIUS_NEARBYSEARCH = 2000
 
     const val AUTOCOMPLETE_URL = "place/autocomplete/json"
     const val AUTOCOMPLETE_COMPONENTS = "country:us"
     const val AUTOCOMPLETE_OFFSET = 5
     const val AUTOCOMPLETE_TYPES = "address"
+
+    const val SCHOOL = "school"
+    const val SHOPS = "supermarket"
+    const val TRANSPORT = "train_station"
+    const val PARK = "park"
 
     //Preferences Datastore
     const val APP_PREFERENCES = "app_preferences"

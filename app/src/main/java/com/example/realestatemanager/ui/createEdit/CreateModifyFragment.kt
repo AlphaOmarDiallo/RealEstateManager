@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.realestatemanager.BuildConfig
 import com.example.realestatemanager.R
+import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
 import com.example.realestatemanager.databinding.FragmentCreateModifyBinding
+import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
@@ -33,6 +33,11 @@ class CreateModifyFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateModifyBinding
     lateinit var viewModel: CreateEditViewModel
+
+    private var isCloseToSchool = false
+    private var isCloseToParc = false
+    private var isCloseToShops = false
+    private var isCloseToTransport = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +56,8 @@ class CreateModifyFragment : Fragment() {
             takePhoto.launch()
         }
 
+        viewModel.listInterest.observe(requireActivity(), this::checkList)
+
         // Initialize the SDK
         Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
 
@@ -67,19 +74,22 @@ class CreateModifyFragment : Fragment() {
         autocompleteFragment.setCountries("US")
         autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS)
         autocompleteFragment.setHint("Address")
-        val bounds = RectangularBounds.newInstance(
+        /*val bounds = RectangularBounds.newInstance(
             LatLng(40.524930, -73.668323),
-            LatLng(41.025635, -74.253667))
-        autocompleteFragment.setLocationRestriction(bounds)
+            LatLng(41.025635, -74.253667)
+        )
+        autocompleteFragment.setLocationRestriction(bounds)*/
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.i(TAG, "Place: ${place.name}, ${place.id}")
+
                 binding.TIETPropertyAddress.setText(place.address)
+
                 val location = Location("Place")
                 location.latitude = place.latLng.latitude
                 location.longitude = place.latLng.longitude
+
                 viewModel.getInterestsAround(location)
             }
 
@@ -90,12 +100,39 @@ class CreateModifyFragment : Fragment() {
         })
     }
 
-    private val takePhoto = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-        val fileName = UUID.randomUUID().toString()
-        val isSavedSuccessfully = viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
-        if(isSavedSuccessfully) Utils.snackBarMaker(binding.root, "Photo saved successfully") else Utils.snackBarMaker(binding.root, "Error saving photo")
-        val test = viewModel.getPhotoPath(requireContext(), fileName)
-        Utils.snackBarMaker(binding.root, test)
-    }
+    private val takePhoto =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            val fileName = UUID.randomUUID().toString()
+            val isSavedSuccessfully =
+                viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
+            if (isSavedSuccessfully) Utils.snackBarMaker(
+                binding.root,
+                "Photo saved successfully"
+            ) else Utils.snackBarMaker(binding.root, "Error saving photo")
+            val test = viewModel.getPhotoPath(requireContext(), fileName)
+            Utils.snackBarMaker(binding.root, test)
+        }
 
+    private fun checkList(list: List<Result>) {
+        Log.e(TAG, "checkList: $list")
+        for (item in list) {
+            Log.i(TAG, "checkList: ${item.types}")
+            if (item.types.toString().contains(Constant.SCHOOL)) {
+                isCloseToSchool = true
+                Log.i(TAG, "school")
+            }
+            if (item.types.toString().contains(Constant.SHOPS)) {
+                isCloseToShops = true
+                Log.i(TAG, "shops")
+            }
+            if (item.types.toString().contains(Constant.PARK)) {
+                isCloseToParc = true
+                Log.i(TAG, "park")
+            }
+            if (item.types.toString().contains(Constant.TRANSPORT)) {
+                isCloseToTransport = true
+                Log.i(TAG, "transport")
+            }
+        }
+    }
 }

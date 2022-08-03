@@ -5,7 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.example.realestatemanager.data.model.InternalStoragePhoto
+import com.example.realestatemanager.data.model.nearBySearch.InternalStoragePhoto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
