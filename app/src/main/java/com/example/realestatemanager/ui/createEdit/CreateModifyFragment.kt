@@ -35,15 +35,13 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
-
 @AndroidEntryPoint
 class CreateModifyFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateModifyBinding
-    lateinit var viewModel: CreateEditViewModel
     private lateinit var navController: NavController
     private lateinit var placesClient: PlacesClient
-
+    lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
     private var isCloseToSchool = false
@@ -78,7 +76,6 @@ class CreateModifyFragment : Fragment() {
         setAutoComplete()
 
         updateViews()
-
     }
 
     /**
