@@ -169,7 +169,7 @@ class MainViewModel @Inject constructor(
                     return@launch
                 }
 
-                if (response.body()?.places != null) {
+                if (response.body()?.results != null) {
                     Log.i(TAG, "getInterestsAround: " + response.raw().request.url)
                     getNextInterestAround(location, response.body()!!.next_page_token)
                 } else {
@@ -195,7 +195,7 @@ class MainViewModel @Inject constructor(
                     return@launch
                 }
 
-                if (response.body()?.places != null) {
+                if (response.body()?.results != null) {
                     Log.i(TAG, "getInterestsAround: " + response.raw().request.url)
                     getNextInterestAround(location, response.body()!!.next_page_token)
                 } else {

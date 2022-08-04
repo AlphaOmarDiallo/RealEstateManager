@@ -47,5 +47,5 @@ data class Property(
     @ColumnInfo(name = "property_close_park")
     var closeToPark: Boolean,
     @ColumnInfo(name = "property_close_transport")
-    var closeToTransport: Boolean,
+    var closeToTransport: Boolean
 ) : Serializable

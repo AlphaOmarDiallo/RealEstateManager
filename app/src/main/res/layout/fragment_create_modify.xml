@@ -322,6 +322,35 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"/>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILAgentManagingProperty"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/agent_managing_property"
+                android:padding="4dp"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:boxStrokeColor="@color/primaryColor"
+                tools:text="10000">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextViewAgentManagingProperty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="none"
+                    android:labelFor="@id/autoCompleteTextView"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </ScrollView>
 

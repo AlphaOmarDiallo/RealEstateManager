@@ -66,6 +66,9 @@
     <string name="save">Save</string>
     <string name="property_list_of_property_type">list of property type</string>
     <string name="address">Address</string>
+    <string name="autocomplete_hint">Type an address</string>
+    <string name="optional_helper_text">Optional</string>
+    <string name="agent_managing_property">Agent managing property</string>
 
 
 </resources>
