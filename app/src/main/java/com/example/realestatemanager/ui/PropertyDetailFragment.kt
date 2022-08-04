@@ -46,14 +46,14 @@ class PropertyDetailFragment : Fragment() {
                 val propertyID = args.propertyID
                 fetchPropertyData(propertyID)
                 val property: Property = getDataFromViewModel()
+                val action1 = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(property.price)
+                val action2 = PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment("null", property)
 
                 PropertyDetailSharedComposable.Scaffold(
-                    property = SampleProperties.samplePropertyList[0],
+                    property = property,
                     navController = navController,
-                    navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
-                        SampleProperties.samplePropertyList[0].price
-                    ),
-                    navDirections2 =  PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment("null", SampleProperties.samplePropertyList[0]),
+                    navDirections = action1,
+                    navDirections2 =  action2,
                     euro = currencyEuro,
                     dollarToEuroRate = dollarToEuroRate
                 )

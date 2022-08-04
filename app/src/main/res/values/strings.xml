@@ -70,6 +70,7 @@
     <string name="optional_helper_text">Optional</string>
     <string name="agent_managing_property">Agent managing property</string>
     <string name="property_city">City</string>
+    <string name="optional_field">optional field</string>
 
 
 </resources>

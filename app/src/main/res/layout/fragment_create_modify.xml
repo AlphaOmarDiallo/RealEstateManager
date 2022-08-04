@@ -210,7 +210,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TILPropertyNbBedrooms"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="180dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
@@ -233,7 +233,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TILPropertyNbBathRooms"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="180dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
@@ -292,7 +292,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TILPropertyOnMarketSince"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="180dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
@@ -315,7 +315,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TILPropertyOffMarketSince"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="180dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
@@ -325,6 +325,8 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:boxStrokeColor="@color/primaryColor"
+                    app:helperText="@string/optional_field"
+                    app:helperTextEnabled="true"
                     tools:text="10000">
 
                     <com.google.android.material.textfield.TextInputEditText

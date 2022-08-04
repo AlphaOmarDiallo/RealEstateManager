@@ -42,7 +42,7 @@ class CreateModifyFragment : Fragment() {
     private lateinit var binding: FragmentCreateModifyBinding
     lateinit var viewModel: CreateEditViewModel
     private lateinit var navController: NavController
-    lateinit var placesClient: PlacesClient
+    private lateinit var placesClient: PlacesClient
 
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
@@ -71,6 +71,8 @@ class CreateModifyFragment : Fragment() {
 
         bindButtonPhoto()
 
+        bindButtonSave()
+
         initPlace()
 
         setAutoComplete()
@@ -78,29 +80,6 @@ class CreateModifyFragment : Fragment() {
         updateViews()
 
     }
-
-    /**
-     * Photo intent
-     */
-
-    private fun bindButtonPhoto() {
-        binding.btnAddPhoto.setOnClickListener {
-            takePhoto.launch()
-        }
-    }
-
-    private val takePhoto =
-        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-            val fileName = UUID.randomUUID().toString()
-            val isSavedSuccessfully =
-                viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
-            if (isSavedSuccessfully) Utils.snackBarMaker(
-                binding.root,
-                "Photo saved successfully"
-            ) else Utils.snackBarMaker(binding.root, "Error saving photo")
-            val test = viewModel.getPhotoPath(requireContext(), fileName)
-            Utils.snackBarMaker(binding.root, test)
-        }
 
     /**
      * Get args from NavHost
@@ -227,22 +206,24 @@ class CreateModifyFragment : Fragment() {
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
 
-                val listAddressComponents = place.addressComponents.asList()
+                val listAddressComponents = place.addressComponents?.asList()
 
                 binding.TIETPropertyAddress.setText(place.address)
 
-                for (item in listAddressComponents) {
-                    if (item.types.toString()
-                            .contains("sublocality_level_1")
-                    ) binding.TIETPropertyNeighbourhood.setText(item.name) else binding.TIETPropertyNeighbourhood.setText(
-                        ""
-                    )
-                }
+                if (listAddressComponents != null) {
+                    for (item in listAddressComponents) {
+                        if (item.types.toString()
+                                .contains("sublocality_level_1")
+                        ) binding.TIETPropertyNeighbourhood.setText(item.name) else binding.TIETPropertyNeighbourhood.setText(
+                            ""
+                        )
+                    }
 
-                for (item in listAddressComponents) {
-                    if (item.types.toString()
-                            .contains("locality")
-                    ) binding.TIETPropertyCity.setText(item.name)
+                    for (item in listAddressComponents) {
+                        if (item.types.toString()
+                                .contains("locality")
+                        ) binding.TIETPropertyCity.setText(item.name)
+                    }
                 }
 
                 val location = Location("Place")
@@ -373,7 +354,7 @@ class CreateModifyFragment : Fragment() {
         val closeToTransport: Boolean = isCloseToTransport
         val listInterest: List<String> = listInterestID
 
-        val property: Property = Property(
+        return Property(
             id = id,
             type = type,
             price = price,
@@ -396,12 +377,44 @@ class CreateModifyFragment : Fragment() {
             closeToTransport = closeToTransport,
             listOfInterest = listInterest
         )
+    }
 
-        return property
+    /**
+     * Photo intent
+     */
+
+    private fun bindButtonPhoto() {
+        binding.btnAddPhoto.setOnClickListener {
+            takePhoto.launch()
+        }
+    }
+
+    private val takePhoto =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            val fileName = UUID.randomUUID().toString()
+            val isSavedSuccessfully =
+                viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
+            if (isSavedSuccessfully) Utils.snackBarMaker(
+                binding.root,
+                "Photo saved successfully"
+            ) else Utils.snackBarMaker(binding.root, "Error saving photo")
+            val test = viewModel.getPhotoPath(requireContext(), fileName)
+            Utils.snackBarMaker(binding.root, test)
+        }
+
+    private fun bindButtonSave() {
+        if (args.property != null) binding.btnSave.text = "Update"
+        binding.btnSave.setOnClickListener {
+            saveProperty()
+        }
     }
 
     private fun saveProperty() {
         val property: Property = createProperty()
+
+        if (args.property != null) viewModel.updateProperty(property) else viewModel.insertProperty(
+            property
+        )
     }
 
 }

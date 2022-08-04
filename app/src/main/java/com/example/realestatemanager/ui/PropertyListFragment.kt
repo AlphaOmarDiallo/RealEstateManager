@@ -39,7 +39,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
-import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
 import com.example.realestatemanager.domain.PropertyDetailSharedComposable
 import com.example.realestatemanager.domain.SharedComposable
@@ -150,7 +149,7 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun PropertyList() {
-        //val propertyList = viewModel.propertyList.value
+        val propertyList = viewModel.propertyList.value
 
         Box(
             modifier = Modifier
@@ -158,7 +157,7 @@ class PropertyListFragment : Fragment() {
         ) {
             Column {
                 TopButtons()
-                ListOfProperty(propertyList = SampleProperties.samplePropertyList)
+                ListOfProperty(propertyList = propertyList)
             }
 
         }

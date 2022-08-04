@@ -22,7 +22,7 @@ class PropertyListViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
-    val propertyList: MutableState<List<Property>> = mutableStateOf(listOf())
+    val propertyList: MutableState<List<Property>> = mutableStateOf(mutableListOf())
     val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
     val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
     val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
