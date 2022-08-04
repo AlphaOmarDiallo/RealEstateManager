@@ -7,7 +7,7 @@
     android:background="@color/background">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ivLoadPhoto"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="8dp"
@@ -15,14 +15,14 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddRemove"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionIP"
         tools:srcCompat="@tools:sample/backgrounds/scenic"
         android:contentDescription="@string/internal_photo" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textView"
+        android:id="@+id/tvDescriptionIP"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:hint="@string/short_description"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintBottom_toTopOf="@+id/ivLoadPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -45,14 +45,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnAddRemove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/add"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/ivLoadPhoto"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+        app:layout_constraintStart_toEndOf="@+id/ivLoadPhoto"
+        app:layout_constraintTop_toTopOf="@+id/ivLoadPhoto" />
 </androidx.constraintlayout.widget.ConstraintLayout>

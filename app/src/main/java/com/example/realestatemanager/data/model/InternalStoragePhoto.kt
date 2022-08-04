@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.model.nearBySearch
+package com.example.realestatemanager.data.model
 
 import android.graphics.Bitmap
 

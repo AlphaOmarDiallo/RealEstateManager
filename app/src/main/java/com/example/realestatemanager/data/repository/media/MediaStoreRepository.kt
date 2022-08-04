@@ -2,7 +2,7 @@ package com.example.realestatemanager.data.repository.media
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.example.realestatemanager.data.model.nearBySearch.InternalStoragePhoto
+import com.example.realestatemanager.data.model.InternalStoragePhoto
 
 interface MediaStoreRepository {
 

@@ -16,15 +16,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.realestatemanager.BuildConfig
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
+import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
 import com.example.realestatemanager.databinding.FragmentCreateModifyBinding
 import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
+import com.example.realestatemanager.ui.adapter.PhotoAdapter
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -41,9 +44,11 @@ class CreateModifyFragment : Fragment() {
     private lateinit var binding: FragmentCreateModifyBinding
     private lateinit var navController: NavController
     private lateinit var placesClient: PlacesClient
+    private lateinit var adapter: PhotoAdapter
     lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
+    private val listPhoto: MutableList<Photo> = mutableListOf()
     private var isCloseToSchool = false
     private var isCloseToPark = false
     private var isCloseToShops = false
@@ -61,6 +66,9 @@ class CreateModifyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setPhotoAdapter()
+
         getArgsFromNav()
 
         observeListAgent()
@@ -377,7 +385,7 @@ class CreateModifyFragment : Fragment() {
     }
 
     /**
-     * Photo intent
+     * Photo management
      */
 
     private fun bindButtonPhoto() {
@@ -397,7 +405,41 @@ class CreateModifyFragment : Fragment() {
             ) else Utils.snackBarMaker(binding.root, "Error saving photo")
             val test = viewModel.getPhotoPath(requireContext(), fileName)
             Utils.snackBarMaker(binding.root, test)
+            updateRV()
         }
+
+    /**
+     * ListPhoto
+     */
+    private fun setPhotoAdapter(){
+        adapter = PhotoAdapter(PhotoAdapter.ListDiff())
+        binding.recyclerview.adapter = adapter
+        binding.recyclerview.layoutManager = (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
+
+        updateRV()
+    }
+
+    private fun updateRV(){
+        viewModel.loadPhotosFromInternalStorage(requireContext())
+        viewModel.listInternalPhoto.observe(requireActivity()) {
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
+    }
+
+/*    private fun createListPhoto(list: List<InternalStoragePhoto>): List<Photo> {
+        val listPhoto: MutableList<Photo> = mutableListOf()
+        for (internalPhoto in list) {
+            val photo = Photo(internalPhoto.uri, internalPhoto.name)
+            listPhoto.add(0, photo)
+        }
+        return listPhoto
+    }*/
+
+    /**
+     * Adding Updating
+     */
 
     private fun bindButtonSave() {
         if (args.property != null) binding.btnSave.text = "Update"

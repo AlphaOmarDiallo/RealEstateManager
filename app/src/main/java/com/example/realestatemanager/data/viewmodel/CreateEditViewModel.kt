@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.model.Agent
+import com.example.realestatemanager.data.model.InternalStoragePhoto
 import com.example.realestatemanager.data.model.Property
-import com.example.realestatemanager.data.model.nearBySearch.InternalStoragePhoto
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.repository.agent.AgentRepository
 import com.example.realestatemanager.data.repository.media.MediaStoreRepository
@@ -43,6 +43,10 @@ class CreateEditViewModel @Inject constructor(
     /**
      * Media Storage repository
      */
+
+    private val _listInternalPhoto: MutableLiveData<List<InternalStoragePhoto>> = MutableLiveData()
+    val listInternalPhoto: LiveData<List<InternalStoragePhoto>> get() = _listInternalPhoto
+
     fun savePhotoToInternalStorage(filename: String, bmp: Bitmap, context: Context): Boolean {
         var result = false
         viewModelScope.launch {
@@ -51,12 +55,10 @@ class CreateEditViewModel @Inject constructor(
         return result
     }
 
-    fun loadPhotosFromInternalStorage(context: Context): List<InternalStoragePhoto> {
-        var photoList: List<InternalStoragePhoto> = listOf()
+    fun loadPhotosFromInternalStorage(context: Context){
         viewModelScope.launch {
-            photoList = mediaStoreRepository.loadPhotosFromInternalStorage(context)
+            _listInternalPhoto.value = mediaStoreRepository.loadPhotosFromInternalStorage(context)
         }
-        return photoList
     }
 
     fun deletePhotoFromInternalStorage(filename: String, context: Context): Boolean {
