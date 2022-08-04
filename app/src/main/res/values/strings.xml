@@ -69,6 +69,7 @@
     <string name="autocomplete_hint">Type an address</string>
     <string name="optional_helper_text">Optional</string>
     <string name="agent_managing_property">Agent managing property</string>
+    <string name="property_city">City</string>
 
 
 </resources>

@@ -23,6 +23,7 @@ object SampleProperties {
             1657490400000,
             null,
             agents[0].id,
+            null,
             false,
             true,
             true,
@@ -45,6 +46,7 @@ object SampleProperties {
             1657490400000,
             null,
             agents[0].id,
+            null,
             false,
             true,
             true,
@@ -67,6 +69,7 @@ object SampleProperties {
             1657490400000,
             null,
             agents[0].id,
+            null,
             false,
             true,
             true,
@@ -89,10 +92,11 @@ object SampleProperties {
             1657490400000,
             null,
             agents[0].id,
-            true,
-            false,
-            true,
-            true
+            null,
+            closeToSchool = true,
+            closeToShops = false,
+            closeToPark = true,
+            closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
             0, "Studio", 300000, 40, 1, 1, 1, "Super studio in Paris",
@@ -100,10 +104,11 @@ object SampleProperties {
             1657490400000,
             null,
             agents[0].id,
-            true,
-            true,
-            true,
-            false
+            null,
+            closeToSchool = true,
+            closeToShops = true,
+            closeToPark = true,
+            closeToTransport = false
         )
     )
 }

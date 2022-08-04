@@ -40,6 +40,8 @@ data class Property(
     var offTheMarketSince: Long?,
     @ColumnInfo(name = "property_managing_agent")
     var agentManagingPropertyId: String?,
+    @ColumnInfo(name = "property_list_of_interest")
+    var listOfInterest: List<String>?,
     @ColumnInfo(name = "property_close_school")
     var closeToSchool: Boolean,
     @ColumnInfo(name = "property_close_shops")

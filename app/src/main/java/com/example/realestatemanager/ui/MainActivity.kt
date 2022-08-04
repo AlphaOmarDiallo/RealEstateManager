@@ -135,16 +135,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun observeRates() {
         viewModel.usdRate.observe(this) {
             updatingDollarToEuroRate(it)
-            Log.e(TAG, "observeRates: $it")
         }
         viewModel.eurRate.observe(this) {
             updatingEuroToDollarRate(it)
-            Log.e(TAG, "observeRates: $it")
         }
     }
 
     private fun updatingEuroToDollarRate(rate: Double) {
-        Log.e(TAG, "updatingEuroToDollarRate: $rate")
         viewModel.saveEuroToDollarRateToDataStore(rate)
         euroToDollar = rate
     }
@@ -152,7 +149,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun updatingDollarToEuroRate(rate: Double) {
         viewModel.saveDollarToEuroRateToDataStore(rate)
         dollarToEuro = rate
-        Log.e(TAG, "updatingEuroToDollarRate: $rate")
     }
 
     /**
@@ -160,10 +156,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
      */
 
     private fun checkLocationPermission() {
-        if (hasRequiredPermissionsToCheckLocation()) Log.i(
-            TAG,
-            "checkLocationPermission: location permission granted"
-        ) else requestPermissionsToCheckLocation()
+        if (!hasRequiredPermissionsToCheckLocation()) requestPermissionsToCheckLocation()
     }
 
     private fun hasRequiredPermissionsToCheckLocation() =

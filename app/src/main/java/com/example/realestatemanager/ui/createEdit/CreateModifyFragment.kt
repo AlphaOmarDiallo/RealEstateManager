@@ -29,6 +29,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,10 +42,12 @@ class CreateModifyFragment : Fragment() {
     private lateinit var binding: FragmentCreateModifyBinding
     lateinit var viewModel: CreateEditViewModel
     private lateinit var navController: NavController
-    private val args: CreateModifyFragmentArgs by navArgs()
+    lateinit var placesClient: PlacesClient
 
+    private val args: CreateModifyFragmentArgs by navArgs()
+    private val listInterestID: MutableList<String> = mutableListOf()
     private var isCloseToSchool = false
-    private var isCloseToParc = false
+    private var isCloseToPark = false
     private var isCloseToShops = false
     private var isCloseToTransport = false
 
@@ -114,13 +117,21 @@ class CreateModifyFragment : Fragment() {
     private fun setAutocompleteTextViews(list: List<Agent>?) {
         setTypes()
         setAgent(list)
-        Log.e(TAG, "setAutocompleteTextViews: here")
     }
 
     private fun setTypes() {
         if (args.property == null) {
             val listType =
-                listOf("Apartment", "Penthouse", "Loft", "Duplex", "House", "Villa", "Mansion", "Other")
+                listOf(
+                    "Apartment",
+                    "Penthouse",
+                    "Loft",
+                    "Duplex",
+                    "House",
+                    "Villa",
+                    "Mansion",
+                    "Other"
+                )
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, listType)
             (binding.TILPropertyType.editText as? AutoCompleteTextView)?.setAdapter(adapter)
         } else {
@@ -146,6 +157,7 @@ class CreateModifyFragment : Fragment() {
 
     private fun observeNearBySearchResults() {
         viewModel.listInterest.observe(requireActivity(), this::checkList)
+        viewModel.listInterest.observe(requireActivity(), this::createListPlacesID)
     }
 
     private fun observeListAgent() {
@@ -154,10 +166,16 @@ class CreateModifyFragment : Fragment() {
     }
 
     /**
-     * Set close too
+     * Set interests around
      */
+
+    private fun createListPlacesID(list: List<Result>) {
+        for (item in list) {
+            listInterestID.add(item.place_id)
+        }
+    }
+
     private fun checkList(list: List<Result>) {
-        Log.e(TAG, "checkList: $list")
         for (item in list) {
             Log.i(TAG, "checkList: ${item.types}")
             if (item.types.toString().contains(Constant.SCHOOL)) {
@@ -169,7 +187,7 @@ class CreateModifyFragment : Fragment() {
                 Log.i(TAG, "shops")
             }
             if (item.types.toString().contains(Constant.PARK)) {
-                isCloseToParc = true
+                isCloseToPark = true
                 Log.i(TAG, "park")
             }
             if (item.types.toString().contains(Constant.TRANSPORT)) {
@@ -179,16 +197,13 @@ class CreateModifyFragment : Fragment() {
         }
     }
 
-    private fun saveProperty() {
-
-    }
-
     /**
      * Google places
      */
 
     private fun initPlace() {
         Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
+        placesClient = Places.createClient(requireContext())
     }
 
     private fun setAutoComplete() {
@@ -197,7 +212,13 @@ class CreateModifyFragment : Fragment() {
                     as AutocompleteSupportFragment
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG))
+        autocompleteFragment.setPlaceFields(
+            listOf(
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG,
+                Place.Field.ADDRESS_COMPONENTS
+            )
+        )
         autocompleteFragment.setCountries(Constant.AUTOCOMPLETE_COUNTRY)
         autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS)
         autocompleteFragment.setHint(getString(R.string.autocomplete_hint))
@@ -206,7 +227,23 @@ class CreateModifyFragment : Fragment() {
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
 
+                val listAddressComponents = place.addressComponents.asList()
+
                 binding.TIETPropertyAddress.setText(place.address)
+
+                for (item in listAddressComponents) {
+                    if (item.types.toString()
+                            .contains("sublocality_level_1")
+                    ) binding.TIETPropertyNeighbourhood.setText(item.name) else binding.TIETPropertyNeighbourhood.setText(
+                        ""
+                    )
+                }
+
+                for (item in listAddressComponents) {
+                    if (item.types.toString()
+                            .contains("locality")
+                    ) binding.TIETPropertyCity.setText(item.name)
+                }
 
                 val location = Location("Place")
                 location.latitude = place.latLng?.latitude!!
@@ -244,6 +281,7 @@ class CreateModifyFragment : Fragment() {
         setupOnSaleSince(property.onTheMarketSince)
         setupSoldSince(property.offTheMarketSince)
         setupAgent(property.agentManagingPropertyId)
+        setupListInterest(property.listOfInterest)
     }
 
     private fun setupAddress(address: String) {
@@ -255,7 +293,7 @@ class CreateModifyFragment : Fragment() {
     }
 
     private fun setupType(type: String) {
-        binding.autoCompleteTextViewType.setText(type.toString(), false)
+        binding.autoCompleteTextViewType.setText(type, false)
     }
 
     private fun setupPrice(price: Int) {
@@ -287,7 +325,8 @@ class CreateModifyFragment : Fragment() {
     }
 
     private fun setupOnSaleSince(date: Long) {
-        binding.TIETPropertyOnMarketSince.setText(date.toString())
+        val dateS = Utils.longToDate(date)
+        binding.TIETPropertyOnMarketSince.setText(dateS)
     }
 
     private fun setupSoldSince(date: Long?) {
@@ -296,6 +335,73 @@ class CreateModifyFragment : Fragment() {
 
     private fun setupAgent(agentID: String?) {
         if (agentID != null) viewModel.getAgent(agentID)
+    }
+
+    private fun setupListInterest(list: List<String>?) {
+        if (!list.isNullOrEmpty()) listInterestID.addAll(list)
+    }
+
+    /**
+     * Save or update property
+     */
+
+    private fun createProperty(): Property {
+        val id: Int = if (args.property == null) 0 else args.property!!.id
+        val type: String = binding.autoCompleteTextViewType.text.toString()
+        val price: Int = binding.TIETPropertyPrice.text.toString().toInt()
+        val surface: Int = binding.TIETPropertySurface.text.toString().toInt()
+        val numberOfRooms: Int = binding.TIETPropertyNbRooms.text.toString().toInt()
+        val numberOfBedrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
+        val numberOfBathrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
+        val description: String = binding.TIETPropertyDescription.text.toString()
+        val photo: List<String>? = null
+        val address: String = binding.TIETPropertyAddress.text.toString()
+        val city: String = binding.TIETPropertyCity.text.toString()
+        val neighbourhood: String = binding.TIETPropertyNeighbourhood.text.toString()
+        val saleStatus: Boolean = binding.toggleSaleStatus.isChecked
+        val onTheMarketSince: Long =
+            Utils.stringDateToLong(binding.TIETPropertyOnMarketSince.text.toString())
+        val offTheMarketSince: Long? =
+            if (!binding.TIETPropertyOffMarketSince.text.isNullOrEmpty()) Utils.stringDateToLong(
+                binding.TIETPropertyOffMarketSince.text.toString()
+            ) else null
+        val agentManagingPropertyId: String =
+            viewModel.getAgentID(binding.autoCompleteTextViewAgentManagingProperty.text.toString())
+        val closeToSchool: Boolean = isCloseToSchool
+        val closeToShops: Boolean = isCloseToShops
+        val closeToPark: Boolean = isCloseToPark
+        val closeToTransport: Boolean = isCloseToTransport
+        val listInterest: List<String> = listInterestID
+
+        val property: Property = Property(
+            id = id,
+            type = type,
+            price = price,
+            surface = surface,
+            numberOfRooms = numberOfRooms,
+            numberOfBedrooms = numberOfBedrooms,
+            numberOfBathrooms = numberOfBathrooms,
+            description = description,
+            photo = photo,
+            address = address,
+            city = city,
+            neighbourhood = neighbourhood,
+            saleStatus = saleStatus,
+            onTheMarketSince = onTheMarketSince,
+            offTheMarketSince = offTheMarketSince,
+            agentManagingPropertyId = agentManagingPropertyId,
+            closeToSchool = closeToSchool,
+            closeToPark = closeToPark,
+            closeToShops = closeToShops,
+            closeToTransport = closeToTransport,
+            listOfInterest = listInterest
+        )
+
+        return property
+    }
+
+    private fun saveProperty() {
+        val property: Property = createProperty()
     }
 
 }

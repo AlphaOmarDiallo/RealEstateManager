@@ -40,6 +40,8 @@ object Constant {
     const val TRANSPORT = "train_station"
     const val PARK = "park"
 
+    const val DETAIL_URL = "place/details/json"
+
     //Preferences Datastore
     const val APP_PREFERENCES = "app_preferences"
 

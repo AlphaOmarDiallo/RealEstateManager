@@ -157,4 +157,15 @@ class CreateEditViewModel @Inject constructor(
         viewModelScope.launch { if (agentRepository.getAllAgent().first() != null) _listAgent.value = agentRepository.getAllAgent().first() }
     }
 
+    fun getAgentID(name: String): String{
+        var id: String = ""
+        for (agent in listAgent.value!!) {
+            if (agent.name.equals(name)) {
+                id = agent.id
+                break
+            }
+        }
+        return id
+    }
+
 }

@@ -10,7 +10,6 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import java.io.IOException
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -41,11 +40,21 @@ object Utils {
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
      * @return
      */
+    private val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
     val todayDate: String
         get() {
-            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            return dateFormat.format(Date())
+            return formatter.format(Date())
         }
+
+    fun stringDateToLong(date: String): Long {
+        val date = SimpleDateFormat("dd/MM/yyyy").parse(date)
+        return date.time
+    }
+
+    fun longToDate(date: Long): String {
+        return formatter.format(date)
+    }
 
     /**
      * Vérification de la connexion réseau

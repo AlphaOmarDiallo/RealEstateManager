@@ -33,4 +33,5 @@ interface RetrofitGoogleAPI {
         @Query("types") types: String,
         @Query("key") key: String
     ): Response<Autocomplete>
+
 }
