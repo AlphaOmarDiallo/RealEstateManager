@@ -175,8 +175,8 @@ object PropertyDetailSharedComposable {
                 AsyncImage(
                     model = propertyPhoto,
                     contentDescription = "Property photo",
-                    modifier = Modifier.size(imageHeight),
-                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.size(imageHeight).matchParentSize(),
+                    contentScale = ContentScale.Fit,
                     error = painterResource(id = R.drawable.house_placeholder)
                 )
                 if (photoDescription != null) {

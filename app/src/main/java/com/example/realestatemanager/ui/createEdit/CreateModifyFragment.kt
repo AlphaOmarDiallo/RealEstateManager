@@ -20,14 +20,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.realestatemanager.BuildConfig
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
-import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
 import com.example.realestatemanager.databinding.FragmentCreateModifyBinding
 import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
-import com.example.realestatemanager.ui.adapter.PhotoAdapter
+import com.example.realestatemanager.ui.adapter.InternalStorageAdapter
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -39,16 +38,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class CreateModifyFragment : Fragment() {
+class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalStoragePhotoClickListener {
 
     private lateinit var binding: FragmentCreateModifyBinding
     private lateinit var navController: NavController
     private lateinit var placesClient: PlacesClient
-    private lateinit var adapter: PhotoAdapter
+    private lateinit var adapter: InternalStorageAdapter
     lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
-    private val listPhoto: MutableList<Photo> = mutableListOf()
+    private val listPhoto: MutableList<String> = mutableListOf()
     private var isCloseToSchool = false
     private var isCloseToPark = false
     private var isCloseToShops = false
@@ -327,6 +326,10 @@ class CreateModifyFragment : Fragment() {
         if (!list.isNullOrEmpty()) listInterestID.addAll(list)
     }
 
+    private fun setupListPhoto(list: List<String>){
+        listPhoto.addAll(list)
+    }
+
     /**
      * Save or update property
      */
@@ -340,7 +343,7 @@ class CreateModifyFragment : Fragment() {
         val numberOfBedrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
         val numberOfBathrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
         val description: String = binding.TIETPropertyDescription.text.toString()
-        val photo: List<String>? = null
+        val photo: List<String>? = listPhoto
         val address: String = binding.TIETPropertyAddress.text.toString()
         val city: String = binding.TIETPropertyCity.text.toString()
         val neighbourhood: String = binding.TIETPropertyNeighbourhood.text.toString()
@@ -412,7 +415,7 @@ class CreateModifyFragment : Fragment() {
      * ListPhoto
      */
     private fun setPhotoAdapter(){
-        adapter = PhotoAdapter(PhotoAdapter.ListDiff())
+        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
 
@@ -428,14 +431,20 @@ class CreateModifyFragment : Fragment() {
         }
     }
 
-/*    private fun createListPhoto(list: List<InternalStoragePhoto>): List<Photo> {
-        val listPhoto: MutableList<Photo> = mutableListOf()
-        for (internalPhoto in list) {
-            val photo = Photo(internalPhoto.uri, internalPhoto.name)
-            listPhoto.add(0, photo)
+    override fun onItemClick(position: Int) {
+        var path: String? = null
+        val internalPhotoList = viewModel.listInternalPhoto.value
+        val photo = internalPhotoList?.get(position)
+        if (photo?.name != null) {
+            path = viewModel.getPhotoPath(requireContext(), photo.name)
+            addToListPhoto(path)
         }
-        return listPhoto
-    }*/
+
+    }
+
+    private fun addToListPhoto(path: String) {
+        listPhoto.add(path)
+    }
 
     /**
      * Adding Updating

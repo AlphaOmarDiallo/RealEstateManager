@@ -43,7 +43,7 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
     override fun getPhotoPath(context: Context, filename: String): String {
         val cw = ContextWrapper(context)
         val directory: File = cw.getDir("dirName", MODE_PRIVATE)
-        val myPath = File(directory, "imagename.jpg")
+        val myPath = File(directory, filename)
         return myPath.toString()
     }
 

@@ -12,10 +12,13 @@ import coil.load
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.InternalStoragePhoto
 import com.example.realestatemanager.databinding.PhotoItemBinding
-import com.example.realestatemanager.ui.adapter.PhotoAdapter.PhotoViewHolder
+import com.example.realestatemanager.ui.adapter.InternalStorageAdapter.PhotoViewHolder
 import com.google.android.material.textfield.TextInputEditText
 
-class PhotoAdapter(diffCallback: DiffUtil.ItemCallback<InternalStoragePhoto>) :
+class InternalStorageAdapter(
+    diffCallback: DiffUtil.ItemCallback<InternalStoragePhoto>,
+    private val listener: OnItemInternalStoragePhotoClickListener
+) :
     ListAdapter<InternalStoragePhoto, PhotoViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val binding = PhotoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -42,10 +45,11 @@ class PhotoAdapter(diffCallback: DiffUtil.ItemCallback<InternalStoragePhoto>) :
         }
     }
 
-    class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         var loadPhoto: ImageView
         var description: TextInputEditText
         var saveOrAdd: Button
+
         fun bind(photo: InternalStoragePhoto?) {
             description.setText(photo!!.name)
             loadPhoto.load(photo.bmp)
@@ -55,6 +59,16 @@ class PhotoAdapter(diffCallback: DiffUtil.ItemCallback<InternalStoragePhoto>) :
             loadPhoto = itemView.findViewById(R.id.ivLoadPhoto)
             description = itemView.findViewById(R.id.TIETDescription)
             saveOrAdd = itemView.findViewById(R.id.btnAddRemove)
+            saveOrAdd.setOnClickListener(this)
         }
+
+        override fun onClick(p0: View?) {
+            val position: Int = adapterPosition
+            if (position != RecyclerView.NO_POSITION) listener.onItemClick(position)
+        }
+    }
+
+    interface OnItemInternalStoragePhotoClickListener {
+        fun onItemClick(position: Int)
     }
 }
