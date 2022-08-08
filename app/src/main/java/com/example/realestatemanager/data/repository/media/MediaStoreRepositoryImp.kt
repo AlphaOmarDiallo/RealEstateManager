@@ -17,8 +17,8 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
 
     override suspend fun savePhotoToInternalStorage(filename: String, bmp: Bitmap, context: Context): Boolean {
         return try {
-            context.openFileOutput("$filename.jpg", MODE_PRIVATE).use { stream ->
-                if(!bmp.compress(Bitmap.CompressFormat.JPEG, 95, stream)) {
+            context.openFileOutput("$filename.webp", MODE_PRIVATE).use { stream ->
+                if(!bmp.compress(Bitmap.CompressFormat.WEBP_LOSSY, 70, stream)) {
                     throw IOException("Couldn't save bitmap.")
                 }
             }
@@ -32,7 +32,7 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
     override suspend fun loadPhotosFromInternalStorage(context: Context): List<InternalStoragePhoto> {
         return withContext(Dispatchers.IO) {
             val files = context.filesDir.listFiles()
-            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".jpg") }?.map {
+            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".webp") }?.map {
                 val bytes = it.readBytes()
                 val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 InternalStoragePhoto(it.name, bmp)

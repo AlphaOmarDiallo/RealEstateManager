@@ -1,13 +1,16 @@
 package com.example.realestatemanager.data.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.realestatemanager.data.model.InternalStoragePhoto
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.repository.dataStore.DataStoreRepository
+import com.example.realestatemanager.data.repository.media.MediaStoreRepository
 import com.example.realestatemanager.data.repository.property.PropertyRepository
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.domain.Constant
@@ -19,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PropertyListViewModel @Inject constructor(
     private val propertyRepository: PropertyRepository,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val mediaStoreRepository: MediaStoreRepository
 ) : ViewModel() {
 
     val propertyList: MutableState<List<Property>> = mutableStateOf(mutableListOf())
@@ -65,6 +69,18 @@ class PropertyListViewModel @Inject constructor(
     private fun getDollarToEuroRate() {
         viewModelScope.launch {
             dollarToEuroRate.value = dataStoreRepository.readDollarToEuroRate().first()
+        }
+    }
+
+    /**
+     * MediaRepository
+     */
+
+    val listInternalStoragePhoto: MutableState<List<InternalStoragePhoto>> = mutableStateOf(listOf())
+
+    fun getListInternalPhoto(context: Context){
+        viewModelScope.launch {
+            listInternalStoragePhoto.value = mediaStoreRepository.loadPhotosFromInternalStorage(context)
         }
     }
 

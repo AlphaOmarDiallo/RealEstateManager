@@ -1,25 +1,20 @@
 package com.example.realestatemanager.ui
 
 import android.content.ContentValues.TAG
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.realestatemanager.data.model.Property
-import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.data.viewmodel.PropertyDetailViewModel
 import com.example.realestatemanager.domain.PropertyDetailSharedComposable
-import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
 
@@ -49,19 +44,23 @@ class PropertyDetailFragment : Fragment() {
                 val action1 = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(property.price)
                 val action2 = PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment("null", property)
 
+                viewModel.getListInternalPhoto(requireContext())
+                val listInternalPhoto = viewModel.listInternalStoragePhoto.value
+
                 PropertyDetailSharedComposable.Scaffold(
                     property = property,
                     navController = navController,
                     navDirections = action1,
                     navDirections2 =  action2,
                     euro = currencyEuro,
-                    dollarToEuroRate = dollarToEuroRate
+                    dollarToEuroRate = dollarToEuroRate,
+                    listInternalPhoto = listInternalPhoto
                 )
             }
         }
     }
 
-    @Preview(
+/*    @Preview(
         showBackground = true,
         widthDp = 320,
         uiMode = Configuration.UI_MODE_NIGHT_YES,
@@ -81,10 +80,11 @@ class PropertyDetailFragment : Fragment() {
                     "null", SampleProperties.samplePropertyList[0]
                 ),
                 euro = currencyEuro,
-                dollarToEuroRate = dollarToEuroRate
+                dollarToEuroRate = dollarToEuroRate,
+                listInternalPhoto = listInternalPhoto
             )
         }
-    }
+    }*/
 
     /**
      * Getting data from viewModel

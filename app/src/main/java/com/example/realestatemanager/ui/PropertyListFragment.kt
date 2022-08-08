@@ -98,13 +98,18 @@ class PropertyListFragment : Fragment() {
                     )
                 val action2 =
                     PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(selectedProperty)
+
+                viewModel.getListInternalPhoto(requireContext())
+                val listInternalPhoto = viewModel.listInternalStoragePhoto.value
+
                 PropertyDetailSharedComposable.Scaffold(
                     property = selectedProperty,
                     navController = navController,
                     navDirections = action,
                     navDirections2 = action2,
                     euro = currencyEuro,
-                    dollarToEuroRate = dollarToEuroRate
+                    dollarToEuroRate = dollarToEuroRate,
+                    listInternalPhoto = listInternalPhoto
                 )
             }
         }
@@ -127,7 +132,8 @@ class PropertyListFragment : Fragment() {
                     )
                 }
                 IconButton(onClick = {
-                    navigateToSearchFragment()
+                    //navigateToSearchFragment()
+                    navigateToBlank()
                 }) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
@@ -320,6 +326,11 @@ class PropertyListFragment : Fragment() {
 
     private fun navigateToSearchFragment() {
         val action = PropertyListFragmentDirections.actionPropertyListFragmentToSearchFragment()
+        navController.navigate(action)
+    }
+
+    private fun navigateToBlank() {
+        val action = PropertyListFragmentDirections.actionPropertyListFragmentToBlankFragment()
         navController.navigate(action)
     }
 

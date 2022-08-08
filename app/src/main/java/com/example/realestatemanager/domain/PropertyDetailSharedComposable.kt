@@ -1,7 +1,5 @@
 package com.example.realestatemanager.domain
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -34,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import coil.compose.AsyncImage
 import com.example.realestatemanager.R
+import com.example.realestatemanager.data.model.InternalStoragePhoto
 import com.example.realestatemanager.data.model.Property
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -51,7 +50,8 @@ object PropertyDetailSharedComposable {
         navDirections: NavDirections,
         navDirections2: NavDirections,
         euro: Boolean,
-        dollarToEuroRate: Double
+        dollarToEuroRate: Double,
+        listInternalPhoto: List<InternalStoragePhoto>
     ) {
         Scaffold(
             bottomBar = {
@@ -66,13 +66,13 @@ object PropertyDetailSharedComposable {
             },
         ) {
             Box(modifier = Modifier.padding(it)) {
-                PropertyInDetail(property = property)
+                PropertyInDetail(property = property, list = listInternalPhoto)
             }
         }
     }
 
     @Composable
-    fun PropertyInDetail(property: Property) {
+    fun PropertyInDetail(property: Property, list: List<InternalStoragePhoto>) {
         LazyColumn(
             modifier = Modifier.padding(SharedComposable.largePadding),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -152,8 +152,8 @@ object PropertyDetailSharedComposable {
     fun PropertyImageList(propertyPhoto: List<String>?) {
         if (propertyPhoto != null) {
             LazyRow(verticalAlignment = Alignment.CenterVertically) {
-                items(propertyPhoto) {
-                    DisplayPhoto(propertyPhoto = it, 200.dp, 200.dp, photoDescription = "Something")
+                items(propertyPhoto){
+                    DisplayPhoto(propertyPhoto = it, boxHeight = 200.dp, imageHeight = 200.dp)
                 }
             }
         }
@@ -175,7 +175,9 @@ object PropertyDetailSharedComposable {
                 AsyncImage(
                     model = propertyPhoto,
                     contentDescription = "Property photo",
-                    modifier = Modifier.size(imageHeight).matchParentSize(),
+                    modifier = Modifier
+                        .size(imageHeight)
+                        .matchParentSize(),
                     contentScale = ContentScale.Fit,
                     error = painterResource(id = R.drawable.house_placeholder)
                 )
@@ -332,7 +334,6 @@ object PropertyDetailSharedComposable {
                         rate,
                         years
                     ) else MortgagePaymentUtil.monthlyPaymentMortgage(price.toDouble(), rate, years)
-                    Log.e(TAG, "BottomBar: ${euro}", )
                     if (euro) Text(text = "from €$monthlyPayment per month") else Text(text = "from $$monthlyPayment per month")
                 }
                 IconButton(

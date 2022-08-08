@@ -1,15 +1,20 @@
 package com.example.realestatemanager.data.viewmodel
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.realestatemanager.data.model.InternalStoragePhoto
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.repository.dataStore.DataStoreRepository
 import com.example.realestatemanager.data.repository.geocoding.GeocodingRepository
+import com.example.realestatemanager.data.repository.media.MediaStoreRepository
 import com.example.realestatemanager.data.repository.property.PropertyRepository
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.domain.Constant
@@ -24,7 +29,8 @@ import javax.inject.Inject
 class PropertyDetailViewModel @Inject constructor(
     private val geocodingRepository: GeocodingRepository,
     private val propertyRepository: PropertyRepository,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val mediaStoreRepository: MediaStoreRepository
 ) : ViewModel() {
 
     val location: MutableState<Location?> = mutableStateOf(Location("location"))
@@ -86,4 +92,20 @@ class PropertyDetailViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * MediaRepository
+     */
+
+    val listInternalStoragePhoto: MutableState<List<InternalStoragePhoto>> = mutableStateOf(listOf())
+    val _listInternalStoragePhoto: MutableLiveData<List<InternalStoragePhoto>> = MutableLiveData()
+
+    fun getListInternalPhoto(context: Context){
+        viewModelScope.launch {
+            _listInternalStoragePhoto.value = mediaStoreRepository.loadPhotosFromInternalStorage(context)
+            Log.i(TAG, "getListInternalPhoto: in here")
+        }
+    }
+
+    var propertyListImage: List<InternalStoragePhoto> = listOf()
 }

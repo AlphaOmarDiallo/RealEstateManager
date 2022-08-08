@@ -432,12 +432,10 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
     }
 
     override fun onItemClick(position: Int) {
-        var path: String? = null
         val internalPhotoList = viewModel.listInternalPhoto.value
         val photo = internalPhotoList?.get(position)
         if (photo?.name != null) {
-            path = viewModel.getPhotoPath(requireContext(), photo.name)
-            addToListPhoto(path)
+            addToListPhoto(photo.name)
         }
 
     }
