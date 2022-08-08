@@ -1,9 +1,11 @@
 package com.example.realestatemanager.data.sampleData
 
+import android.graphics.Bitmap
+
 object SampleProperties {
 
     val agents = SampleAgent.getSampleAgentList()
-    private val photos = SamplePropertyPhotos.propertyPhotoList
+    private val photos = listOf<Bitmap>()
 
     val samplePropertyList = listOf(
         com.example.realestatemanager.data.model.Property(

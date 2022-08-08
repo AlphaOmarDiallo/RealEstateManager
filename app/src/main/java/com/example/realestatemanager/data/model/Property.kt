@@ -1,5 +1,6 @@
 package com.example.realestatemanager.data.model
 
+import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -22,7 +23,7 @@ data class Property(
     @ColumnInfo(name = "property_description")
     var description: String,
     @ColumnInfo(name = "property_photos")
-    var photo: List<String>,
+    var photo: List<Bitmap>,
     @ColumnInfo(name = "property_address")
     var address: String,
     @ColumnInfo(name = "property_city")
