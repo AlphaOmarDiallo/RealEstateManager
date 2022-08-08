@@ -34,4 +34,17 @@ class Converters {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
 
+    @TypeConverter
+    fun fromStringInt(value: String?): List<Int>? {
+        val listType = object :
+            TypeToken<ArrayList<Int?>?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromListInt(list: List<Int?>?): String? {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
+
 }

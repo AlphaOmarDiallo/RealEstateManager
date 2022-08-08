@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.realestatemanager.BuildConfig
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
+import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
@@ -47,7 +48,7 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
     lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
-    private val listPhoto: MutableList<String> = mutableListOf()
+    private val listPhoto: MutableList<Int> = mutableListOf()
     private var isCloseToSchool = false
     private var isCloseToPark = false
     private var isCloseToShops = false
@@ -326,7 +327,7 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
         if (!list.isNullOrEmpty()) listInterestID.addAll(list)
     }
 
-    private fun setupListPhoto(list: List<String>){
+    private fun setupListPhoto(list: List<Int>){
         listPhoto.addAll(list)
     }
 
@@ -343,7 +344,7 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
         val numberOfBedrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
         val numberOfBathrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
         val description: String = binding.TIETPropertyDescription.text.toString()
-        val photo: List<String>? = listPhoto
+        val photo: List<Int> = listPhoto
         val address: String = binding.TIETPropertyAddress.text.toString()
         val city: String = binding.TIETPropertyCity.text.toString()
         val neighbourhood: String = binding.TIETPropertyNeighbourhood.text.toString()
@@ -371,7 +372,7 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
             numberOfBedrooms = numberOfBedrooms,
             numberOfBathrooms = numberOfBathrooms,
             description = description,
-            photo = photo,
+            photoIDList = photo,
             address = address,
             city = city,
             neighbourhood = neighbourhood,
@@ -432,16 +433,16 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
     }
 
     override fun onItemClick(position: Int) {
-        val internalPhotoList = viewModel.listInternalPhoto.value
+        //TODO rework
+        /*val internalPhotoList = viewModel.listInternalPhoto.value
         val photo = internalPhotoList?.get(position)
         if (photo?.name != null) {
             addToListPhoto(photo.name)
-        }
-
+        }*/
     }
 
-    private fun addToListPhoto(path: String) {
-        listPhoto.add(path)
+    private fun addToListPhoto(photo: Photo) {
+        listPhoto.add(photo.id)
     }
 
     /**

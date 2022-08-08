@@ -77,9 +77,9 @@ object PropertyDetailSharedComposable {
             modifier = Modifier.padding(SharedComposable.largePadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
+            /*item {
                 PropertyMainImage(propertyMainPhoto = property.photo!![0])
-            }
+            }*/
             item {
                 Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
                     PropertyTitle(
@@ -122,7 +122,7 @@ object PropertyDetailSharedComposable {
                         SharedComposable.SmallTitle(
                             title = "Photo gallery"
                         )
-                        PropertyImageList(propertyPhoto = property.photo)
+                        //PropertyImageList(propertyPhoto = property.photo)
                     }
                 }
             }

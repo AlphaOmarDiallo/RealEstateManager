@@ -1,14 +1,13 @@
 package com.example.realestatemanager.data.sampleData
 
-import android.graphics.Bitmap
-
 object SampleProperties {
 
     val agents = SampleAgent.getSampleAgentList()
-    private val photos = listOf<Bitmap>()
+    private val photos = listOf<Int>()
 
     val samplePropertyList = listOf(
         com.example.realestatemanager.data.model.Property(
+            1,
             "Apartment",
             300000,
             300,
@@ -31,6 +30,7 @@ object SampleProperties {
             closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
+            2,
             "House",
             1000000,
             400,
@@ -53,6 +53,7 @@ object SampleProperties {
             closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
+            3,
             "Penthouse",
             900000,
             300,
@@ -75,6 +76,7 @@ object SampleProperties {
             closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
+            4,
             "Villa",
             1200000,
             367,
@@ -97,6 +99,7 @@ object SampleProperties {
             closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
+            5,
             "Studio",
             300000,
             40,
