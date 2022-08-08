@@ -3,11 +3,10 @@ package com.example.realestatemanager.data.sampleData
 object SampleProperties {
 
     val agents = SampleAgent.getSampleAgentList()
-    val photos = SamplePropertyPhotos.propertyPhotoList
+    private val photos = SamplePropertyPhotos.propertyPhotoList
 
     val samplePropertyList = listOf(
         com.example.realestatemanager.data.model.Property(
-            0,
             "Apartment",
             300000,
             300,
@@ -24,13 +23,12 @@ object SampleProperties {
             null,
             agents[0].id,
             null,
-            false,
-            true,
-            true,
-            true
+            closeToSchool = false,
+            closeToShops = true,
+            closeToPark = true,
+            closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
-            0,
             "House",
             1000000,
             400,
@@ -48,12 +46,11 @@ object SampleProperties {
             agents[0].id,
             null,
             false,
-            true,
-            true,
-            true
+            closeToShops = true,
+            closeToPark = true,
+            closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
-            0,
             "Penthouse",
             900000,
             300,
@@ -70,13 +67,12 @@ object SampleProperties {
             null,
             agents[0].id,
             null,
-            false,
-            true,
-            true,
-            true
+            closeToSchool = false,
+            closeToShops = true,
+            closeToPark = true,
+            closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
-            0,
             "Villa",
             1200000,
             367,
@@ -99,8 +95,16 @@ object SampleProperties {
             closeToTransport = true
         ),
         com.example.realestatemanager.data.model.Property(
-            0, "Studio", 300000, 40, 1, 1, 1, "Super studio in Paris",
-            photos, "50 avenue Hoche 75017 Paris", "Paris", "17eme", false,
+            "Studio",
+            300000,
+            40,
+            1,
+            1,
+            1,
+            "Super studio in Paris",
+            photos,
+            "50 avenue Hoche 75017 Paris", "Paris", "17eme",
+            false,
             1657490400000,
             null,
             agents[0].id,

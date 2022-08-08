@@ -7,9 +7,6 @@ import java.io.Serializable
 
 @Entity(tableName = "property_table")
 data class Property(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "property_id")
-    var id: Int,
     @ColumnInfo(name = "property_type")
     var type: String,
     @ColumnInfo(name = "property_price")
@@ -25,7 +22,7 @@ data class Property(
     @ColumnInfo(name = "property_description")
     var description: String,
     @ColumnInfo(name = "property_photos")
-    var photo: List<String>?,
+    var photo: List<String>,
     @ColumnInfo(name = "property_address")
     var address: String,
     @ColumnInfo(name = "property_city")
@@ -50,4 +47,8 @@ data class Property(
     var closeToPark: Boolean,
     @ColumnInfo(name = "property_close_transport")
     var closeToTransport: Boolean
-) : Serializable
+) : Serializable {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "property_id")
+    var id: Int = 0
+}
