@@ -9,8 +9,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.realestatemanager.data.localData.PhotoDao
 import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.model.InternalStoragePhoto
+import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.repository.agent.AgentRepository
@@ -29,7 +31,8 @@ class CreateEditViewModel @Inject constructor(
     private val mediaStoreRepository: MediaStoreRepository,
     private val nearBySearchRepository: NearBySearchRepository,
     private val propertyRepository: PropertyRepository,
-    private val agentRepository: AgentRepository
+    private val agentRepository: AgentRepository,
+    private val photoDao: PhotoDao
 ) : ViewModel() {
 
     private val _listInterest1: MutableList<Result> = mutableListOf()
@@ -38,6 +41,7 @@ class CreateEditViewModel @Inject constructor(
 
     init {
         getAgentList()
+        getPhotoList()
     }
 
     /**
@@ -55,7 +59,7 @@ class CreateEditViewModel @Inject constructor(
         return result
     }
 
-    fun loadPhotosFromInternalStorage(context: Context){
+    fun loadPhotosFromInternalStorage(context: Context) {
         viewModelScope.launch {
             _listInternalPhoto.value = mediaStoreRepository.loadPhotosFromInternalStorage(context)
         }
@@ -72,6 +76,38 @@ class CreateEditViewModel @Inject constructor(
     fun getPhotoPath(context: Context, filename: String) =
         mediaStoreRepository.getPhotoPath(context, filename)
 
+    /**
+     * Photo Dao
+     */
+
+    private val _listPhotoRoom: MutableLiveData<List<Photo>> = MutableLiveData()
+    val listPhotoRoom: LiveData<List<Photo>> get() = _listPhotoRoom
+
+    private fun getPhotoList() {
+        viewModelScope.launch {
+            _listPhotoRoom.value = photoDao.getListOfPhotos().first()
+        }
+    }
+
+    fun savePhotoInRoom(internalStoragePhoto: InternalStoragePhoto): Int {
+        var isAlreadyInDB = false
+        var photo = Photo(0, internalStoragePhoto.bmp, internalStoragePhoto.name)
+        for (item in listPhotoRoom.value!!) {
+            if (item.name == photo.name) {
+                isAlreadyInDB = true
+                break
+            }
+        }
+        viewModelScope.launch {
+            if (!isAlreadyInDB) {
+                photoDao.insertPhoto(photo)
+            }
+
+            photo = photoDao.getPhotoWithName(photo.name).first()
+        }
+
+        return photo.id
+    }
 
     /**
      * NearBySearch repository
@@ -90,7 +126,10 @@ class CreateEditViewModel @Inject constructor(
                 Log.e(ContentValues.TAG, "getInterestsAround: ${response.body()?.results}")
 
                 if (response.body()?.results != null) {
-                    Log.i(ContentValues.TAG, "getInterestsAround: " + response.raw().request.url)
+                    Log.i(
+                        ContentValues.TAG,
+                        "getInterestsAround: " + response.raw().request.url
+                    )
                     _listInterest1.addAll(response.body()!!.results)
                     _listInterest.value = _listInterest1
                 } else {
@@ -100,7 +139,11 @@ class CreateEditViewModel @Inject constructor(
                 Log.e(ContentValues.TAG, "getInterestsAround: IOException" + e.message, null)
 
             } catch (e: HttpException) {
-                Log.e(ContentValues.TAG, "getInterestsAround: HttpException" + e.message(), null)
+                Log.e(
+                    ContentValues.TAG,
+                    "getInterestsAround: HttpException" + e.message(),
+                    null
+                )
 
             }
         }
@@ -117,7 +160,10 @@ class CreateEditViewModel @Inject constructor(
                 }
 
                 if (response.body()?.results != null) {
-                    Log.i(ContentValues.TAG, "getInterestsAround: " + response.raw().request.url)
+                    Log.i(
+                        ContentValues.TAG,
+                        "getInterestsAround: " + response.raw().request.url
+                    )
                     getNextInterestAround(location, response.body()!!.next_page_token)
                     _listInterest1.addAll(response.body()!!.results)
                     _listInterest.value = _listInterest1
@@ -128,7 +174,11 @@ class CreateEditViewModel @Inject constructor(
                 Log.e(ContentValues.TAG, "getInterestsAround: IOException" + e.message, null)
 
             } catch (e: HttpException) {
-                Log.e(ContentValues.TAG, "getInterestsAround: HttpException" + e.message(), null)
+                Log.e(
+                    ContentValues.TAG,
+                    "getInterestsAround: HttpException" + e.message(),
+                    null
+                )
 
             }
         }
@@ -156,10 +206,13 @@ class CreateEditViewModel @Inject constructor(
     fun getAgent(agentID: String) = agentRepository.getAgentById(agentID)
 
     fun getAgentList() {
-        viewModelScope.launch { if (agentRepository.getAllAgent().first() != null) _listAgent.value = agentRepository.getAllAgent().first() }
+        viewModelScope.launch {
+            if (agentRepository.getAllAgent().first() != null) _listAgent.value =
+                agentRepository.getAllAgent().first()
+        }
     }
 
-    fun getAgentID(name: String): String{
+    fun getAgentID(name: String): String {
         var id: String = ""
         for (agent in listAgent.value!!) {
             if (agent.name.equals(name)) {

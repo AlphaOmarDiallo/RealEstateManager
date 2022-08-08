@@ -12,5 +12,8 @@ data class Photo(
     val id: Int = 0,
 
     @ColumnInfo(name = "photo_bitmap")
-    var bmp: Bitmap
+    val bmp: Bitmap,
+
+    @ColumnInfo(name = "photo_name")
+    val name: String
 )

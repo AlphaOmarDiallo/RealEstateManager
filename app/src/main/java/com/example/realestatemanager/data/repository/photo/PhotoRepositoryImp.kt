@@ -18,5 +18,7 @@ class PhotoRepositoryImp @Inject constructor(
 
     override fun getListOfPhotos(): Flow<List<Photo>> = photoDao.getListOfPhotos()
 
-    override fun getPhoto(id: Int): Flow<Photo> = photoDao.getPhoto(id)
+    override fun getPhoto(id: Int): Flow<Photo> = photoDao.getPhotoWithId(id)
+
+    override fun getPhotoWithName(name: String): Flow<Photo> = photoDao.getPhotoWithName(name)
 }

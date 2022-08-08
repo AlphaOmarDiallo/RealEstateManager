@@ -17,5 +17,8 @@ interface PhotoDao {
     fun getListOfPhotos(): Flow<List<Photo>>
 
     @Query("SELECT * FROM photo_table WHERE photo_id= :id")
-    fun getPhoto(id: Int): Flow<Photo>
+    fun getPhotoWithId(id: Int): Flow<Photo>
+
+    @Query("SELECT * FROM photo_table WHERE photo_name= :name")
+    fun getPhotoWithName(name: String): Flow<Photo>
 }

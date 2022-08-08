@@ -13,4 +13,6 @@ interface PhotoRepository {
 
     fun getPhoto(id: Int): Flow<Photo>
 
+    fun getPhotoWithName(name: String): Flow<Photo>
+
 }
