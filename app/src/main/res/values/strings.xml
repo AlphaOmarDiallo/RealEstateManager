@@ -72,6 +72,7 @@
     <string name="property_city">City</string>
     <string name="optional_field">optional field</string>
     <string name="date_format">dd/MM/yyyy</string>
+    <string name="fill_all_field">You need to fill all fields not marked with optional</string>
 
     <!-- Photo item-->
     <string name="short_description">Short description</string>

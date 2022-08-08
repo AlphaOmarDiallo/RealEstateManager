@@ -20,11 +20,14 @@ import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.data.viewmodel.MortgageCalculatorViewModel
 import com.example.realestatemanager.databinding.FragmentMortgageCalculatorBinding
+import com.example.realestatemanager.domain.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class MortgageCalculatorFragment : Fragment() {
+
+    private var rateKey = "rate key"
 
     private lateinit var binding: FragmentMortgageCalculatorBinding
     private lateinit var navController: NavController
@@ -38,7 +41,7 @@ class MortgageCalculatorFragment : Fragment() {
     private var monthlyPrice by Delegates.notNull<Int>()
     private var monthlyPriceEur by Delegates.notNull<Int>()
     private var euroToDollarRate by Delegates.notNull<Double>()
-    private var dollarToEuroRate by Delegates.notNull<Double>()
+    private var dollarToEuroRate = 0.00
     private var priceList: MutableList<Int> = mutableListOf()
     private var downPayment = 0
     private var downPaymentEuro = 0
@@ -50,6 +53,7 @@ class MortgageCalculatorFragment : Fragment() {
         binding = FragmentMortgageCalculatorBinding.inflate(inflater, container, false)
         val view = inflater.inflate(R.layout.fragment_mortgage_calculator, container, false)
         viewModel = ViewModelProvider(requireActivity())[MortgageCalculatorViewModel::class.java]
+        if (savedInstanceState != null) dollarToEuroRate = savedInstanceState.getDouble(rateKey, Constant.DOLLARS_TO_EURO)
         return binding.root
     }
 
@@ -59,6 +63,12 @@ class MortgageCalculatorFragment : Fragment() {
         initialSetup()
         reactToDataChange()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putDouble(rateKey, dollarToEuroRate)
+    }
+
 
     /**
      * Sequences
@@ -152,7 +162,7 @@ class MortgageCalculatorFragment : Fragment() {
     }
 
     private fun listenToDownPaymentChange() {
-        binding.tiedDownPayment?.addTextChangedListener(object : TextWatcher {
+        binding.tiedDownPayment.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

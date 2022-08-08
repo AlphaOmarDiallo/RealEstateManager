@@ -2,6 +2,7 @@ package com.example.realestatemanager.data.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +27,8 @@ class PropertyListViewModel @Inject constructor(
     private val mediaStoreRepository: MediaStoreRepository
 ) : ViewModel() {
 
-    val propertyList: MutableState<List<Property>> = mutableStateOf(mutableListOf())
+    private var _propertyList = mutableStateListOf<Property>()
+    val propertyList: List<Property> = _propertyList
     val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
     val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
     val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
@@ -55,7 +57,7 @@ class PropertyListViewModel @Inject constructor(
 
     private fun getPropertyList() {
         viewModelScope.launch {
-            propertyList.value = propertyRepository.getListOfProperties().first()
+            _propertyList.addAll(propertyRepository.getListOfProperties().first())
         }
     }
 

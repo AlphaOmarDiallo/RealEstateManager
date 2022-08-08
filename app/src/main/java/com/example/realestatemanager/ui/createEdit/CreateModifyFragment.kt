@@ -119,7 +119,6 @@ class CreateModifyFragment : Fragment(),
 
     override fun onItemClick(position: Int) {
         val internalPhotoList = viewModel.listInternalPhoto.value
-        var photoID = 0
         val photo = internalPhotoList?.get(position)
 
         if (photo != null) {
@@ -295,6 +294,7 @@ class CreateModifyFragment : Fragment(),
     private fun setupViewsWithPropertyInfo(property: Property) {
         setupAddress(property.address)
         setupNeighbourHood(property.neighbourhood)
+        setupCity(property.city)
         setupPrice(property.price)
         setupSurface(property.surface)
         setupRooms(property.numberOfRooms)
@@ -316,6 +316,10 @@ class CreateModifyFragment : Fragment(),
 
     private fun setupNeighbourHood(neighbourhood: String) {
         binding.TIETPropertyNeighbourhood.setText(neighbourhood)
+    }
+
+    private fun setupCity(city: String) {
+        binding.TIETPropertyCity.setText(city)
     }
 
     private fun setupType(type: String) {
@@ -469,10 +473,32 @@ class CreateModifyFragment : Fragment(),
     }
 
     private fun saveProperty() {
-        val property: Property = createProperty()
+        if (checkIfPropertyCanBeSaved()) {
+            val property: Property = createProperty()
 
-        if (args.property != null) viewModel.updateProperty(property) else viewModel.insertProperty(
-            property
-        )
+            if (args.property != null) viewModel.updateProperty(property) else viewModel.insertProperty(
+                property
+            )
+
+            navController.navigateUp()
+
+        } else {
+            Utils.snackBarMaker(binding.root, getString(R.string.fill_all_field))
+        }
+    }
+
+    private fun checkIfPropertyCanBeSaved(): Boolean {
+        return binding.autoCompleteTextViewType.text.toString() != getString(R.string.property_type) &&
+                binding.TIETPropertyPrice.text.toString() != "" &&
+                binding.TIETPropertySurface.text.toString() != "" &&
+                binding.TIETPropertyNbRooms.text.toString() != "" &&
+                binding.TIETPropertyNbBathrooms.text.toString() != "" &&
+                binding.TIETPropertyNbBathrooms.text.toString() != "" &&
+                binding.TIETPropertyDescription.text.toString() != "" &&
+                listPhoto.size != 0 &&
+                binding.TIETPropertyAddress.text.toString() != "" &&
+                binding.TIETPropertyCity.text.toString() != "" &&
+                binding.TIETPropertyNeighbourhood.text.toString() != "" &&
+                binding.TIETPropertyOnMarketSince.text.toString() != ""
     }
 }

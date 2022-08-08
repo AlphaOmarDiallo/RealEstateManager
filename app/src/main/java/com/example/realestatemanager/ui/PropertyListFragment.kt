@@ -1,7 +1,6 @@
 package com.example.realestatemanager.ui
 
 import android.content.ContentValues.TAG
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,7 +30,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -57,6 +55,7 @@ class PropertyListFragment : Fragment() {
     private var currencyEuro by Delegates.notNull<Boolean>()
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
+    private var propertyList = listOf<Property>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +65,7 @@ class PropertyListFragment : Fragment() {
             setContent {
                 navController = findNavController()
                 windowInfo = rememberWindowInfo()
+                propertyList = viewModel.propertyList
                 currencyEuro = viewModel.currencyEuro.value
                 Log.e(TAG, "onCreateView: euro: $currencyEuro")
                 observeCurrencyPref()
@@ -78,7 +78,7 @@ class PropertyListFragment : Fragment() {
                     }
                 } else {
                     RealEstateManagerTheme {
-                        PropertyList()
+                        PropertyList(propertyList)
                     }
                 }
             }
@@ -89,7 +89,7 @@ class PropertyListFragment : Fragment() {
     fun ExpendedScreen() {
         Row {
             Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
-                PropertyList()
+                PropertyList(propertyList)
             }
             Surface(modifier = Modifier.fillMaxWidth()) {
                 val action =
@@ -154,8 +154,8 @@ class PropertyListFragment : Fragment() {
     }
 
     @Composable
-    fun PropertyList() {
-        val propertyList = viewModel.propertyList.value
+    fun PropertyList(propertyList: List<Property>) {
+        //val propertyList = viewModel._propertyList
 
         Box(
             modifier = Modifier
@@ -310,7 +310,7 @@ class PropertyListFragment : Fragment() {
         }
     }
 
-    @Preview(
+/*    @Preview(
         showBackground = true,
         widthDp = 320,
         uiMode = Configuration.UI_MODE_NIGHT_YES,
@@ -322,7 +322,7 @@ class PropertyListFragment : Fragment() {
         RealEstateManagerTheme {
             PropertyList()
         }
-    }
+    }*/
 
     private fun navigateToSearchFragment() {
         val action = PropertyListFragmentDirections.actionPropertyListFragmentToSearchFragment()
