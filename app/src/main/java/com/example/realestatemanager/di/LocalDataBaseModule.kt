@@ -31,4 +31,8 @@ class LocalDataBaseModule {
     @Singleton
     @Provides
     fun provideAgentDao(database: LocalDatabase) = database.agentDao()
+
+    @Singleton
+    @Provides
+    fun providePhotoDao(database: LocalDatabase) = database.photoDao()
 }
