@@ -41,7 +41,6 @@ class CreateEditViewModel @Inject constructor(
 
     init {
         getAgentList()
-        getPhotoList()
     }
 
     /**
@@ -83,13 +82,13 @@ class CreateEditViewModel @Inject constructor(
     private val _listPhotoRoom: MutableLiveData<List<Photo>> = MutableLiveData()
     val listPhotoRoom: LiveData<List<Photo>> get() = _listPhotoRoom
 
-    private fun getPhotoList() {
+    fun getPhotoList() {
         viewModelScope.launch {
             _listPhotoRoom.value = photoDao.getListOfPhotos().first()
         }
     }
 
-    fun savePhotoInRoom(internalStoragePhoto: InternalStoragePhoto): Int {
+    fun savePhotoInRoom(internalStoragePhoto: InternalStoragePhoto) {
         var isAlreadyInDB = false
         var photo = Photo(0, internalStoragePhoto.bmp, internalStoragePhoto.name)
         for (item in listPhotoRoom.value!!) {
@@ -103,15 +102,21 @@ class CreateEditViewModel @Inject constructor(
                 photoDao.insertPhoto(photo)
             }
 
-            photo = photoDao.getPhotoWithName(photo.name).first()
         }
+    }
 
-        return photo.id
+    fun getPhotoByName(name: String): Photo? {
+        var photo: Photo? = null
+        viewModelScope.launch {
+            photo = photoDao.getPhotoWithName(name).first()
+        }
+        return photo
     }
 
     /**
      * NearBySearch repository
      */
+
     fun getInterestsAround(location: Location) {
 
         viewModelScope.launch {
@@ -130,41 +135,6 @@ class CreateEditViewModel @Inject constructor(
                         ContentValues.TAG,
                         "getInterestsAround: " + response.raw().request.url
                     )
-                    _listInterest1.addAll(response.body()!!.results)
-                    _listInterest.value = _listInterest1
-                } else {
-                    Log.e(ContentValues.TAG, "getInterestsAround: null data", null)
-                }
-            } catch (e: IOException) {
-                Log.e(ContentValues.TAG, "getInterestsAround: IOException" + e.message, null)
-
-            } catch (e: HttpException) {
-                Log.e(
-                    ContentValues.TAG,
-                    "getInterestsAround: HttpException" + e.message(),
-                    null
-                )
-
-            }
-        }
-    }
-
-    private fun getNextInterestAround(location: Location, token: String) {
-        viewModelScope.launch {
-            try {
-                val response = nearBySearchRepository.getInterestList(location, token)
-
-                if (!response.isSuccessful) {
-                    Log.w(ContentValues.TAG, "getInterestsAround: no response from API", null)
-                    return@launch
-                }
-
-                if (response.body()?.results != null) {
-                    Log.i(
-                        ContentValues.TAG,
-                        "getInterestsAround: " + response.raw().request.url
-                    )
-                    getNextInterestAround(location, response.body()!!.next_page_token)
                     _listInterest1.addAll(response.body()!!.results)
                     _listInterest.value = _listInterest1
                 } else {

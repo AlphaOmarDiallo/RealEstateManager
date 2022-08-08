@@ -3,7 +3,7 @@ package com.example.realestatemanager.data.sampleData
 object SampleProperties {
 
     val agents = SampleAgent.getSampleAgentList()
-    private val photos = listOf<Int>()
+    private val photos = listOf<String>()
 
     val samplePropertyList = listOf(
         com.example.realestatemanager.data.model.Property(

@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.realestatemanager.BuildConfig
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
-import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
@@ -39,7 +38,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalStoragePhotoClickListener {
+class CreateModifyFragment : Fragment(),
+    InternalStorageAdapter.OnItemInternalStoragePhotoClickListener {
 
     private lateinit var binding: FragmentCreateModifyBinding
     private lateinit var navController: NavController
@@ -48,7 +48,7 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
     lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
-    private val listPhoto: MutableList<Int> = mutableListOf()
+    private val listPhoto: MutableList<String> = mutableListOf()
     private var isCloseToSchool = false
     private var isCloseToPark = false
     private var isCloseToShops = false
@@ -67,23 +67,23 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getArgsFromNav()
+
         setPhotoAdapter()
 
-        getArgsFromNav()
+        observeNearBySearchResults()
 
         observeListAgent()
 
-        observeNearBySearchResults()
+        setAutoComplete()
+
+        initPlace()
+
+        updateViews()
 
         bindButtonPhoto()
 
         bindButtonSave()
-
-        initPlace()
-
-        setAutoComplete()
-
-        updateViews()
     }
 
     /**
@@ -95,15 +95,64 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
     }
 
     /**
+     * List Internal Photo
+     */
+    private fun setPhotoAdapter() {
+        viewModel.getPhotoList()
+
+        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
+        binding.recyclerview.adapter = adapter
+        binding.recyclerview.layoutManager =
+            (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
+
+        updateRV()
+    }
+
+    private fun updateRV() {
+        viewModel.loadPhotosFromInternalStorage(requireContext())
+        viewModel.listInternalPhoto.observe(requireActivity()) {
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
+    }
+
+    override fun onItemClick(position: Int) {
+        val internalPhotoList = viewModel.listInternalPhoto.value
+        var photoID = 0
+        val photo = internalPhotoList?.get(position)
+
+        if (photo != null) {
+            listPhoto.add(photo.name)
+            Log.i(TAG, "onItemClick: $listPhoto")
+        }
+
+    }
+
+    /**
+     * Observe data relative to nearBySearch and Agent in ViewModel
+     */
+
+    private fun observeNearBySearchResults() {
+        viewModel.listInterest.observe(requireActivity(), this::checkList)
+        viewModel.listInterest.observe(requireActivity(), this::createListPlacesID)
+    }
+
+    private fun observeListAgent() {
+        viewModel.getAgentList()
+        viewModel.listAgent.observe(requireActivity(), this::setAutocompleteTextViews)
+    }
+
+    /**
      * Set autocomplete text views
      */
 
     private fun setAutocompleteTextViews(list: List<Agent>?) {
-        setTypes()
-        setAgent(list)
+        setTypesAutocomplete()
+        setAgentAutoComplete(list)
     }
 
-    private fun setTypes() {
+    private fun setTypesAutocomplete() {
         if (args.property == null) {
             val listType =
                 listOf(
@@ -124,7 +173,7 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
 
     }
 
-    private fun setAgent(list: List<Agent>?) {
+    private fun setAgentAutoComplete(list: List<Agent>?) {
         val listAgentName: MutableList<String> = mutableListOf()
         if (list != null) {
             for (agent in list) {
@@ -132,52 +181,6 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
             }
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, listAgentName)
             (binding.TILAgentManagingProperty.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-        }
-    }
-
-    /**
-     * Observe nearBySearchResults
-     */
-
-    private fun observeNearBySearchResults() {
-        viewModel.listInterest.observe(requireActivity(), this::checkList)
-        viewModel.listInterest.observe(requireActivity(), this::createListPlacesID)
-    }
-
-    private fun observeListAgent() {
-        viewModel.getAgentList()
-        viewModel.listAgent.observe(requireActivity(), this::setAutocompleteTextViews)
-    }
-
-    /**
-     * Set interests around
-     */
-
-    private fun createListPlacesID(list: List<Result>) {
-        for (item in list) {
-            listInterestID.add(item.place_id)
-        }
-    }
-
-    private fun checkList(list: List<Result>) {
-        for (item in list) {
-            Log.i(TAG, "checkList: ${item.types}")
-            if (item.types.toString().contains(Constant.SCHOOL)) {
-                isCloseToSchool = true
-                Log.i(TAG, "school")
-            }
-            if (item.types.toString().contains(Constant.SHOPS)) {
-                isCloseToShops = true
-                Log.i(TAG, "shops")
-            }
-            if (item.types.toString().contains(Constant.PARK)) {
-                isCloseToPark = true
-                Log.i(TAG, "park")
-            }
-            if (item.types.toString().contains(Constant.TRANSPORT)) {
-                isCloseToTransport = true
-                Log.i(TAG, "transport")
-            }
         }
     }
 
@@ -246,11 +249,46 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
     }
 
     /**
+     * Set interests around
+     */
+
+    private fun createListPlacesID(list: List<Result>) {
+        for (item in list) {
+            listInterestID.add(item.place_id)
+        }
+    }
+
+    private fun checkList(list: List<Result>) {
+        for (item in list) {
+            Log.i(TAG, "checkList: ${item.types}")
+            if (item.types.toString().contains(Constant.SCHOOL)) {
+                isCloseToSchool = true
+                Log.i(TAG, "school")
+            }
+            if (item.types.toString().contains(Constant.SHOPS)) {
+                isCloseToShops = true
+                Log.i(TAG, "shops")
+            }
+            if (item.types.toString().contains(Constant.PARK)) {
+                isCloseToPark = true
+                Log.i(TAG, "park")
+            }
+            if (item.types.toString().contains(Constant.TRANSPORT)) {
+                isCloseToTransport = true
+                Log.i(TAG, "transport")
+            }
+        }
+    }
+
+
+    /**
      * Update Views
      */
     private fun updateViews() {
         if (args.property != null) {
             setupViewsWithPropertyInfo(args.property!!)
+        } else {
+            setupOnMarketSinceDate(null)
         }
     }
 
@@ -268,6 +306,8 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
         setupSoldSince(property.offTheMarketSince)
         setupAgent(property.agentManagingPropertyId)
         setupListInterest(property.listOfInterest)
+        setupListPhoto(property.photoIDList)
+        setupOnMarketSinceDate(property.onTheMarketSince)
     }
 
     private fun setupAddress(address: String) {
@@ -327,9 +367,42 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
         if (!list.isNullOrEmpty()) listInterestID.addAll(list)
     }
 
-    private fun setupListPhoto(list: List<Int>){
+    private fun setupListPhoto(list: List<String>) {
         listPhoto.addAll(list)
     }
+
+    private fun setupOnMarketSinceDate(date: Long?) {
+        if (date != null) {
+            binding.TIETPropertyOnMarketSince.setText(Utils.longToDate(date = date))
+        } else {
+            binding.TIETPropertyOnMarketSince.setText(Utils.todayDate)
+        }
+
+    }
+
+    /**
+     * Photo management
+     */
+
+    private fun bindButtonPhoto() {
+        binding.btnAddPhoto.setOnClickListener {
+            takePhoto.launch()
+        }
+    }
+
+    private val takePhoto =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            val fileName = UUID.randomUUID().toString()
+            val isSavedSuccessfully =
+                viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
+            if (isSavedSuccessfully) Utils.snackBarMaker(
+                binding.root,
+                "Photo saved successfully"
+            ) else Utils.snackBarMaker(binding.root, "Error saving photo")
+            val test = viewModel.getPhotoPath(requireContext(), fileName)
+            Utils.snackBarMaker(binding.root, test)
+            updateRV()
+        }
 
     /**
      * Save or update property
@@ -344,7 +417,7 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
         val numberOfBedrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
         val numberOfBathrooms: Int = binding.TIETPropertyNbBathrooms.text.toString().toInt()
         val description: String = binding.TIETPropertyDescription.text.toString()
-        val photo: List<Int> = listPhoto
+        val photo: List<String> = listPhoto
         val address: String = binding.TIETPropertyAddress.text.toString()
         val city: String = binding.TIETPropertyCity.text.toString()
         val neighbourhood: String = binding.TIETPropertyNeighbourhood.text.toString()
@@ -388,66 +461,6 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
         )
     }
 
-    /**
-     * Photo management
-     */
-
-    private fun bindButtonPhoto() {
-        binding.btnAddPhoto.setOnClickListener {
-            takePhoto.launch()
-        }
-    }
-
-    private val takePhoto =
-        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-            val fileName = UUID.randomUUID().toString()
-            val isSavedSuccessfully =
-                viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
-            if (isSavedSuccessfully) Utils.snackBarMaker(
-                binding.root,
-                "Photo saved successfully"
-            ) else Utils.snackBarMaker(binding.root, "Error saving photo")
-            val test = viewModel.getPhotoPath(requireContext(), fileName)
-            Utils.snackBarMaker(binding.root, test)
-            updateRV()
-        }
-
-    /**
-     * ListPhoto
-     */
-    private fun setPhotoAdapter(){
-        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
-        binding.recyclerview.adapter = adapter
-        binding.recyclerview.layoutManager = (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
-
-        updateRV()
-    }
-
-    private fun updateRV(){
-        viewModel.loadPhotosFromInternalStorage(requireContext())
-        viewModel.listInternalPhoto.observe(requireActivity()) {
-            it?.let {
-                adapter.submitList(it)
-            }
-        }
-    }
-
-    override fun onItemClick(position: Int) {
-        val internalPhotoList = viewModel.listInternalPhoto.value
-        val photo = internalPhotoList?.get(position)
-        if (photo != null) {
-            listPhoto.add(viewModel.savePhotoInRoom(photo))
-        }
-    }
-
-    private fun addToListPhoto(photo: Photo) {
-        listPhoto.add(photo.id)
-    }
-
-    /**
-     * Adding Updating
-     */
-
     private fun bindButtonSave() {
         if (args.property != null) binding.btnSave.text = "Update"
         binding.btnSave.setOnClickListener {
@@ -462,5 +475,4 @@ class CreateModifyFragment : Fragment(), InternalStorageAdapter.OnItemInternalSt
             property
         )
     }
-
 }

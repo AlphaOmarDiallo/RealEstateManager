@@ -25,7 +25,7 @@ data class Property(
     @ColumnInfo(name = "property_description")
     var description: String,
     @ColumnInfo(name = "property_photos")
-    var photoIDList: List<Int>,
+    var photoIDList: List<String>,
     @ColumnInfo(name = "property_address")
     var address: String,
     @ColumnInfo(name = "property_city")

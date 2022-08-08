@@ -45,4 +45,7 @@ object Constant {
     //Preferences Datastore
     const val APP_PREFERENCES = "app_preferences"
 
+    //ROOM
+    const val PHOTO_ERROR = 999999
+
 }

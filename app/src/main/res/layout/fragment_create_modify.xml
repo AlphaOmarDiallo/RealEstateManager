@@ -302,6 +302,8 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:boxStrokeColor="@color/primaryColor"
+                    app:helperText="@string/date_format"
+                    app:helperTextEnabled="true"
                     tools:text="10000">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -341,11 +343,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview"
-                android:scrollbars="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"/>
+                android:scrollbars="horizontal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TILAgentManagingProperty"
@@ -361,6 +363,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:boxStrokeColor="@color/primaryColor"
+                app:helperText="@string/optional_field"
+                app:helperTextEnabled="true"
                 tools:text="10000">
 
                 <AutoCompleteTextView

@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class Photo(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "photo_id")
-    val id: Int = 0,
+    var id: Int = 0,
 
     @ColumnInfo(name = "photo_bitmap")
     val bmp: Bitmap,
