@@ -3,6 +3,7 @@ package com.example.realestatemanager.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 import java.io.Serializable
 
 @Entity(tableName = "property_table")
@@ -30,6 +31,8 @@ data class Property(
     var address: String,
     @ColumnInfo(name = "property_city")
     var city: String,
+    @ColumnInfo(name = "property_LatLng")
+    var latLng: LatLng,
     @ColumnInfo(name = "property_neighbourhood")
     var neighbourhood: String,
     @ColumnInfo(name = "property_sale_status")

@@ -1,5 +1,7 @@
 package com.example.realestatemanager.data.sampleData
 
+import com.google.android.gms.maps.model.LatLng
+
 object SampleProperties {
 
     val agents = SampleAgent.getSampleAgentList()
@@ -18,6 +20,7 @@ object SampleProperties {
             photos,
             "50 avenue Hoche 75017 Paris",
             "Paris",
+            LatLng(40.68642012430784, -73.92547262919133),
             "17eme district",
             false,
             1657490400000,
@@ -41,6 +44,7 @@ object SampleProperties {
             photos,
             "100 avenue Hoche 75017 Paris",
             "Paris",
+            LatLng(40.74288636427961, -73.98443626625692),
             "17eme",
             false,
             1657490400000,
@@ -64,6 +68,7 @@ object SampleProperties {
             photos,
             "490 avenue Hoche 75017 Paris",
             "Paris",
+            LatLng(40.74288636427961, -73.98443626625692),
             "17eme",
             false,
             1657490400000,
@@ -87,6 +92,7 @@ object SampleProperties {
             photos,
             "130 avenue Hoche 75017 Paris",
             "Paris",
+            LatLng(40.76136839930912, -73.98197416537418),
             "17eme",
             false,
             1657490400000,
@@ -108,7 +114,10 @@ object SampleProperties {
             1,
             "Super studio in Paris",
             photos,
-            "50 avenue Hoche 75017 Paris", "Paris", "17eme",
+            "50 avenue Hoche 75017 Paris",
+            "Paris",
+            LatLng(40.769953553695004, -73.9630374733489),
+            "17eme",
             false,
             1657490400000,
             null,

@@ -28,6 +28,7 @@ import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
 import com.example.realestatemanager.ui.adapter.InternalStorageAdapter
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
@@ -53,6 +54,7 @@ class CreateModifyFragment : Fragment(),
     private var isCloseToPark = false
     private var isCloseToShops = false
     private var isCloseToTransport = false
+    private var latLng: LatLng = LatLng(40.741694549848404, -73.98956985396345)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -237,6 +239,8 @@ class CreateModifyFragment : Fragment(),
                 location.latitude = place.latLng?.latitude!!
                 location.longitude = place.latLng?.longitude!!
 
+                latLng = place.latLng
+
                 viewModel.getInterestsAround(location)
 
             }
@@ -308,6 +312,7 @@ class CreateModifyFragment : Fragment(),
         setupListInterest(property.listOfInterest)
         setupListPhoto(property.photoIDList)
         setupOnMarketSinceDate(property.onTheMarketSince)
+        setupLatLng(property.latLng)
     }
 
     private fun setupAddress(address: String) {
@@ -384,6 +389,10 @@ class CreateModifyFragment : Fragment(),
 
     }
 
+    private fun setupLatLng(latLng: LatLng) {
+        this.latLng = latLng
+    }
+
     /**
      * Photo management
      */
@@ -452,6 +461,7 @@ class CreateModifyFragment : Fragment(),
             photoIDList = photo,
             address = address,
             city = city,
+            latLng = latLng,
             neighbourhood = neighbourhood,
             saleStatus = saleStatus,
             onTheMarketSince = onTheMarketSince,
