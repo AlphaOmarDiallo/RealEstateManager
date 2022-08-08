@@ -55,7 +55,7 @@ class PropertyListFragment : Fragment() {
     private var currencyEuro by Delegates.notNull<Boolean>()
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
-    private var propertyList = listOf<Property>()
+    private var propertyList = mutableListOf<Property>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +65,7 @@ class PropertyListFragment : Fragment() {
             setContent {
                 navController = findNavController()
                 windowInfo = rememberWindowInfo()
-                propertyList = viewModel.propertyList
+                propertyList = viewModel.propertyList.toMutableStateList()
                 currencyEuro = viewModel.currencyEuro.value
                 Log.e(TAG, "onCreateView: euro: $currencyEuro")
                 observeCurrencyPref()
@@ -132,8 +132,7 @@ class PropertyListFragment : Fragment() {
                     )
                 }
                 IconButton(onClick = {
-                    //navigateToSearchFragment()
-                    navigateToBlank()
+                    navigateToSearchFragment()
                 }) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
@@ -326,11 +325,6 @@ class PropertyListFragment : Fragment() {
 
     private fun navigateToSearchFragment() {
         val action = PropertyListFragmentDirections.actionPropertyListFragmentToSearchFragment()
-        navController.navigate(action)
-    }
-
-    private fun navigateToBlank() {
-        val action = PropertyListFragmentDirections.actionPropertyListFragmentToBlankFragment()
         navController.navigate(action)
     }
 
