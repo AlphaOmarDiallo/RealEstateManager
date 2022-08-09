@@ -3,7 +3,6 @@ package com.example.realestatemanager.testDI
 import com.example.realestatemanager.data.remoteData.RetrofitGoogleAPI
 import com.example.realestatemanager.data.repository.autocomplete.AutocompleteRepository
 import com.example.realestatemanager.data.repository.autocomplete.AutocompleteRepositoryImp
-import com.example.realestatemanager.di.AutocompleteModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

@@ -36,6 +36,18 @@ class Converters {
     }
 
     @TypeConverter
+    fun latLngToString(latLng: LatLng) : String{
+        return "(${latLng.latitude},${latLng.longitude}"
+    }
+
+    @TypeConverter
+    fun stringToLatLng(string: String) : LatLng{
+        val s = string.replace("(", "").replace(")", "")
+        val list = s.split(",")
+        return LatLng(list.first().toDouble(), list.last().toDouble())
+    }
+
+    @TypeConverter
     fun fromStringInt(value: String?): List<Int>? {
         val listType = object :
             TypeToken<ArrayList<Int?>?>() {}.type
@@ -46,18 +58,6 @@ class Converters {
     fun fromListInt(list: List<Int?>?): String? {
         val gson = Gson()
         return gson.toJson(list)
-    }
-
-    @TypeConverter
-    fun latLngToString(latLng: LatLng) : String{
-        return "(${latLng.latitude},${latLng.longitude}"
-    }
-
-    @TypeConverter
-    fun stringToLatLng(string: String) : LatLng{
-        val s = string.replace("(", "").replace(")", "")
-        val list = s.split(",")
-        return LatLng(list.first().toDouble(), list.last().toDouble())
     }
 
 }

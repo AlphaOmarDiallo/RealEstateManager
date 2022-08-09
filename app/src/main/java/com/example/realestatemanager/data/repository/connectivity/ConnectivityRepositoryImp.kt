@@ -7,15 +7,13 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import java.io.IOException
 
 class ConnectivityRepositoryImp : ConnectivityRepository {
 
-    private var connected: MutableLiveData<Boolean> = MutableLiveData()
+    private var connected: Boolean = false
 
-    override fun isInternetAvailable(context: Context): LiveData<Boolean> {
+    override fun isInternetAvailable(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             isInternetAvailableBuildVersionCodAboveM(context)
         } else {
@@ -23,23 +21,23 @@ class ConnectivityRepositoryImp : ConnectivityRepository {
         }
     }
 
-    private fun isInternetAvailableBuildVersionBelowM(): LiveData<Boolean> {
+    private fun isInternetAvailableBuildVersionBelowM(): Boolean {
         val ping = "/system/bin/ping -c 1 8.8.8.8"
         val runtime = Runtime.getRuntime()
-        try {
+        connected = try {
             val ipProcess = runtime.exec(ping)
             val exitValue = ipProcess.waitFor()
-            connected.value = exitValue == 0
+            exitValue == 0
         } catch (exception: IOException) {
             exception.printStackTrace()
-            connected.value = false
+            false
         }
         return connected
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission")
-    private fun isInternetAvailableBuildVersionCodAboveM(context: Context): LiveData<Boolean> {
+    private fun isInternetAvailableBuildVersionCodAboveM(context: Context): Boolean {
 
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -49,22 +47,22 @@ class ConnectivityRepositoryImp : ConnectivityRepository {
             when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                    connected.value = true
+                    connected = true
                     return connected
                 }
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                    connected.value = true
+                    connected = true
                     return connected
                 }
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
                     Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                    connected.value = true
+                    connected = true
                     return connected
                 }
             }
         }
-        connected.value = false
+        connected = false
         return connected
     }
 }

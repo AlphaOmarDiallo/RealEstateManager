@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import javax.inject.Inject
 
-class LocationRepositoryImp @Inject constructor(): LocationRepository{
+class LocationRepositoryImp @Inject constructor() : LocationRepository {
 
     private val officeLongitude = 40.741694549848404f
     private val officeLatitude = -73.98956985396345f

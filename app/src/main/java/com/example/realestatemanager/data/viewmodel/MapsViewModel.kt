@@ -19,11 +19,7 @@ import javax.inject.Inject
 class MapsViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
     private val propertyRepository: PropertyRepository
-): ViewModel() {
-
-    init {
-
-    }
+) : ViewModel() {
 
     /**
      * Location repository
@@ -31,7 +27,8 @@ class MapsViewModel @Inject constructor(
 
     fun getOfficeLocation(): Location? = locationRepository.getOfficeLocation()
 
-    fun startLocationTracking(activity: Activity, context: Context) = locationRepository.startLocationRequest(context,activity)
+    fun startLocationTracking(activity: Activity, context: Context) =
+        locationRepository.startLocationRequest(context, activity)
 
     fun getCurrentLocation(): LiveData<Location?>? = locationRepository.getCurrentLocation()
 
@@ -47,6 +44,5 @@ class MapsViewModel @Inject constructor(
             _propertyList.value = propertyRepository.getListOfProperties().first()
         }
     }
-
 
 }

@@ -19,20 +19,9 @@
             android:background="@color/primaryDarkColor"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ToolBarStyle"
-            app:layout_constraintBottom_toTopOf="@+id/tvInternetStatusMA"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvInternetStatusMA"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/primaryColor"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
@@ -43,7 +32,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvInternetStatusMA"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:navGraph="@navigation/main_screen_navigation" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

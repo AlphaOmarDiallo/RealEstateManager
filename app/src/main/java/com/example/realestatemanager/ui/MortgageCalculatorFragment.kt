@@ -51,9 +51,9 @@ class MortgageCalculatorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMortgageCalculatorBinding.inflate(inflater, container, false)
-        val view = inflater.inflate(R.layout.fragment_mortgage_calculator, container, false)
         viewModel = ViewModelProvider(requireActivity())[MortgageCalculatorViewModel::class.java]
-        if (savedInstanceState != null) dollarToEuroRate = savedInstanceState.getDouble(rateKey, Constant.DOLLARS_TO_EURO)
+        if (savedInstanceState != null) dollarToEuroRate =
+            savedInstanceState.getDouble(rateKey, Constant.DOLLARS_TO_EURO)
         return binding.root
     }
 

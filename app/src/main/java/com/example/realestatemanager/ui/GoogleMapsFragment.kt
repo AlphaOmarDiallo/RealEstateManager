@@ -32,6 +32,7 @@ class GoogleMapsFragment : Fragment() {
     private lateinit var location: Location
     private lateinit var navController: NavController
     private val defaultZoom = 16f
+    private val latLngOfficeNY = LatLng(40.741695, -73.989569)
 
     private val callback = OnMapReadyCallback { googleMap ->
 
@@ -39,10 +40,15 @@ class GoogleMapsFragment : Fragment() {
 
         addOfficeMarker()
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(40.741695, -73.989569), defaultZoom))
-        googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-        googleMap.uiSettings.isMapToolbarEnabled = true
-        googleMap.uiSettings.isMyLocationButtonEnabled = true
+        map.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                latLngOfficeNY,
+                defaultZoom
+            )
+        )
+
+        //map.uiSettings.isMapToolbarEnabled = true
+        //map.uiSettings.isMyLocationButtonEnabled = true
 
     }
 
@@ -68,7 +74,6 @@ class GoogleMapsFragment : Fragment() {
     }
 
     private fun addOfficeMarker() {
-        val latLngOfficeNY = LatLng(40.741695, -73.989569)
         map.addMarker(
             MarkerOptions()
                 .position(latLngOfficeNY)
@@ -105,34 +110,35 @@ class GoogleMapsFragment : Fragment() {
     }
 
     private fun updateLocation(newLocation: Location?) {
-        if (this.isAdded) {
-            if (newLocation != null) {
-                location = newLocation
-            }
+        if (newLocation != null && this::map.isInitialized) {
+            location = newLocation
+            enableMyLocation(map)
         }
     }
 
-    private fun enableMyLocation(map: GoogleMap) {
-        map.isMyLocationEnabled = true
+    fun enableMyLocation(googleMap: GoogleMap) {
+        googleMap.isMyLocationEnabled = true
     }
 
     /**
      * Properties setup
      */
 
-    private fun observePropertyList(){
+    private fun observePropertyList() {
         viewModel.getProperties()
-        viewModel.propertyList.observe(requireActivity()){putMarkersOnMap(it)}
+        viewModel.propertyList.observe(requireActivity()) { putMarkersOnMap(it) }
     }
 
-    private fun putMarkersOnMap(list: List<Property>){
+    private fun putMarkersOnMap(list: List<Property>) {
 
-        for (property in list){
+        for (property in list) {
             map.addMarker(
                 MarkerOptions()
-                    .title("${property.type}, ${property.surface} msq, " +
-                            "${property.numberOfBedrooms} bed, ${property.numberOfBathrooms} bath," +
-                            " $${property.price}")
+                    .title(
+                        "${property.type}, ${property.surface} msq, " +
+                                "${property.numberOfBedrooms} bed, ${property.numberOfBathrooms} bath," +
+                                " $${property.price}"
+                    )
                     .position(property.latLng)
             )
         }
@@ -141,7 +147,10 @@ class GoogleMapsFragment : Fragment() {
             for (property in list) {
                 if (property.latLng == it.position) {
                     Log.e(TAG, "putMarkersOnMap: here", null)
-                    val action = GoogleMapsFragmentDirections.actionGoogleMapsFragmentToPropertyDetail(property.id)
+                    val action =
+                        GoogleMapsFragmentDirections.actionGoogleMapsFragmentToPropertyDetail(
+                            property.id
+                        )
                     navController.navigate(action)
                 }
             }
