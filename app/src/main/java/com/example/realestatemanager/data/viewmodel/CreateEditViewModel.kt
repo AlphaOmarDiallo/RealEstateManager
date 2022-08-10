@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.localData.PhotoDao
 import com.example.realestatemanager.data.model.Agent
-import com.example.realestatemanager.data.model.InternalStoragePhoto
 import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.repository.agent.AgentRepository
 import com.example.realestatemanager.data.repository.media.MediaStoreRepository
@@ -75,6 +75,8 @@ class CreateEditViewModel @Inject constructor(
     fun getPhotoPath(context: Context, filename: String) =
         mediaStoreRepository.getPhotoPath(context, filename)
 
+
+    fun initContentProvider(context: Context) = mediaStoreRepository.initContentObserver(context)
     /**
      * Photo Dao
      */

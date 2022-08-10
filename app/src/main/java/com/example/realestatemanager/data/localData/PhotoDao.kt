@@ -21,4 +21,10 @@ interface PhotoDao {
 
     @Query("SELECT * FROM photo_table WHERE photo_name= :name")
     fun getPhotoWithName(name: String): Flow<Photo>
+
+    /**
+     * Only for test purpose, app does not allow to delete properties
+     */
+    @Query("DELETE FROM photo_table")
+    fun nukeTable()
 }

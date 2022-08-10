@@ -1,6 +1,7 @@
 package com.example.realestatemanager.ui.createEdit
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -70,6 +71,8 @@ class CreateModifyFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         getArgsFromNav()
+
+        initContentObserver(requireContext())
 
         setPhotoAdapter()
 
@@ -416,6 +419,13 @@ class CreateModifyFragment : Fragment(),
             Utils.snackBarMaker(binding.root, test)
             updateRV()
         }
+
+    /**
+     * Content observer
+     */
+    private fun initContentObserver(context: Context) {
+        viewModel.initContentProvider(context)
+    }
 
     /**
      * Save or update property

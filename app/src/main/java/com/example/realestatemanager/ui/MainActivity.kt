@@ -160,7 +160,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         EasyPermissions.hasPermissions(
             this,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
 
     private fun requestPermissionsToCheckLocation() =
@@ -169,7 +170,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             getString(R.string.connectivity_rational),
             Constant.PERMISSION_CONNECTIVITY_REQUEST_CODE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
 
     override fun onRequestPermissionsResult(
@@ -191,7 +193,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        Utils.snackBarMaker(binding.root, "Location permissions granted")
+        Utils.snackBarMaker(binding.root, "Permissions granted")
         Utils.isInternetAvailableBuildVersionCodAboveM(this)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.realestatemanager.domain
 
+import android.graphics.Bitmap
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -32,7 +33,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import coil.compose.AsyncImage
 import com.example.realestatemanager.R
-import com.example.realestatemanager.data.model.InternalStoragePhoto
+import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -51,7 +52,7 @@ object PropertyDetailSharedComposable {
         navDirections2: NavDirections,
         euro: Boolean,
         dollarToEuroRate: Double,
-        listInternalPhoto: List<InternalStoragePhoto>
+        listPhoto: List<Photo>
     ) {
         Scaffold(
             bottomBar = {
@@ -66,20 +67,22 @@ object PropertyDetailSharedComposable {
             },
         ) {
             Box(modifier = Modifier.padding(it)) {
-                PropertyInDetail(property = property, list = listInternalPhoto)
+                PropertyInDetail(property = property, list = listPhoto)
             }
         }
     }
 
     @Composable
-    fun PropertyInDetail(property: Property, list: List<InternalStoragePhoto>) {
+    fun PropertyInDetail(property: Property, list: List<Photo>) {
         LazyColumn(
             modifier = Modifier.padding(SharedComposable.largePadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            /*item {
-                PropertyMainImage(propertyMainPhoto = property.photo!![0])
-            }*/
+            if (list.isNotEmpty()) {
+                item {
+                    PropertyMainImage(propertyMainPhoto = list[0].bmp)
+                }
+            }
             item {
                 Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
                     PropertyTitle(
@@ -133,7 +136,7 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun PropertyMainImage(propertyMainPhoto: String) {
+    fun PropertyMainImage(propertyMainPhoto: Bitmap) {
         DisplayPhoto(propertyPhoto = propertyMainPhoto, 400.dp, 400.dp)
     }
 
@@ -149,7 +152,7 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun PropertyImageList(propertyPhoto: List<String>?) {
+    fun PropertyImageList(propertyPhoto: List<Bitmap>?) {
         if (propertyPhoto != null) {
             LazyRow(verticalAlignment = Alignment.CenterVertically) {
                 items(propertyPhoto){
@@ -161,7 +164,7 @@ object PropertyDetailSharedComposable {
 
     @Composable
     fun DisplayPhoto(
-        propertyPhoto: String,
+        propertyPhoto: Bitmap,
         boxHeight: Dp,
         imageHeight: Dp,
         photoDescription: String? = null

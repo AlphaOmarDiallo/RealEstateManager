@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.realestatemanager.R
-import com.example.realestatemanager.data.model.InternalStoragePhoto
+import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.databinding.PhotoItemBinding
 import com.example.realestatemanager.ui.adapter.InternalStorageAdapter.PhotoViewHolder
 import com.google.android.material.textfield.TextInputEditText

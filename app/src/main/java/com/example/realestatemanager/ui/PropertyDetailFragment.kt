@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyDetailViewModel
 import com.example.realestatemanager.domain.PropertyDetailSharedComposable
@@ -47,6 +48,8 @@ class PropertyDetailFragment : Fragment() {
                 viewModel.getListInternalPhoto(requireContext())
                 val listInternalPhoto = viewModel.listInternalStoragePhoto.value
 
+                val propertyPhoto = getPropertyPhoto(property.photoIDList)
+
                 PropertyDetailSharedComposable.Scaffold(
                     property = property,
                     navController = navController,
@@ -54,7 +57,7 @@ class PropertyDetailFragment : Fragment() {
                     navDirections2 =  action2,
                     euro = currencyEuro,
                     dollarToEuroRate = dollarToEuroRate,
-                    listInternalPhoto = listInternalPhoto
+                    listPhoto = propertyPhoto
                 )
             }
         }
@@ -101,4 +104,9 @@ class PropertyDetailFragment : Fragment() {
     private fun fetchPropertyData(id: Int) {
         viewModel.getProperty(id)
     }
+
+    /**
+     * PropertyPhoto
+     */
+    private fun getPropertyPhoto(list: List<String>): List<Photo> = viewModel.getListOfPropertyPhoto(list)
 }

@@ -100,7 +100,7 @@ class PropertyListFragment : Fragment() {
                     PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(selectedProperty)
 
                 viewModel.getListInternalPhoto(requireContext())
-                val listInternalPhoto = viewModel.listInternalStoragePhoto.value
+                val listPhoto = viewModel.getListOfPropertyPhoto(selectedProperty.photoIDList)
 
                 PropertyDetailSharedComposable.Scaffold(
                     property = selectedProperty,
@@ -109,7 +109,7 @@ class PropertyListFragment : Fragment() {
                     navDirections2 = action2,
                     euro = currencyEuro,
                     dollarToEuroRate = dollarToEuroRate,
-                    listInternalPhoto = listInternalPhoto
+                    listPhoto = listPhoto
                 )
             }
         }

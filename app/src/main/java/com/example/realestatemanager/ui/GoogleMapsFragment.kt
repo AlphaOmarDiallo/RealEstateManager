@@ -116,7 +116,7 @@ class GoogleMapsFragment : Fragment() {
         }
     }
 
-    fun enableMyLocation(googleMap: GoogleMap) {
+    private fun enableMyLocation(googleMap: GoogleMap) {
         googleMap.isMyLocationEnabled = true
     }
 

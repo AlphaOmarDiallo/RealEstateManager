@@ -1,4 +1,4 @@
-package com.example.realestatemanager.data.model
+package com.example.realestatemanager.data.model.media
 
 import android.graphics.Bitmap
 
