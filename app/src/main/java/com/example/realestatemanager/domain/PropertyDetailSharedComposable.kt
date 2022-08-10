@@ -1,9 +1,10 @@
 package com.example.realestatemanager.domain
 
-import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,9 +31,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import coil.compose.AsyncImage
+import coil.compose.rememberImagePainter
 import com.example.realestatemanager.R
-import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -52,7 +51,7 @@ object PropertyDetailSharedComposable {
         navDirections2: NavDirections,
         euro: Boolean,
         dollarToEuroRate: Double,
-        listPhoto: List<Photo>
+        listPhoto: List<String>
     ) {
         Scaffold(
             bottomBar = {
@@ -73,14 +72,14 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun PropertyInDetail(property: Property, list: List<Photo>) {
+    fun PropertyInDetail(property: Property, list: List<String>) {
         LazyColumn(
             modifier = Modifier.padding(SharedComposable.largePadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (list.isNotEmpty()) {
                 item {
-                    PropertyMainImage(propertyMainPhoto = list[0].bmp)
+                    PropertyMainImage(propertyMainPhoto = property.photoIDList[0])
                 }
             }
             item {
@@ -125,7 +124,7 @@ object PropertyDetailSharedComposable {
                         SharedComposable.SmallTitle(
                             title = "Photo gallery"
                         )
-                        //PropertyImageList(propertyPhoto = property.photo)
+                        PropertyImageList(propertyPhoto = property.photoIDList)
                     }
                 }
             }
@@ -136,7 +135,7 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun PropertyMainImage(propertyMainPhoto: Bitmap) {
+    fun PropertyMainImage(propertyMainPhoto: String) {
         DisplayPhoto(propertyPhoto = propertyMainPhoto, 400.dp, 400.dp)
     }
 
@@ -152,7 +151,7 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun PropertyImageList(propertyPhoto: List<Bitmap>?) {
+    fun PropertyImageList(propertyPhoto: List<String>?) {
         if (propertyPhoto != null) {
             LazyRow(verticalAlignment = Alignment.CenterVertically) {
                 items(propertyPhoto){
@@ -164,7 +163,7 @@ object PropertyDetailSharedComposable {
 
     @Composable
     fun DisplayPhoto(
-        propertyPhoto: Bitmap,
+        propertyPhoto: String,
         boxHeight: Dp,
         imageHeight: Dp,
         photoDescription: String? = null
@@ -175,15 +174,24 @@ object PropertyDetailSharedComposable {
             elevation = 5.dp
         ) {
             Box(modifier = Modifier.height(boxHeight)) {
-                AsyncImage(
-                    model = propertyPhoto,
+                Image(painter = rememberImagePainter(Uri.parse(propertyPhoto)),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(imageHeight)
+                )
+                /*AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(Uri.parse(propertyPhoto))
+                        .crossfade(true)
+                        .build(),
+                    placeholder = painterResource(id = R.drawable.house_placeholder),
                     contentDescription = "Property photo",
                     modifier = Modifier
                         .size(imageHeight)
                         .matchParentSize(),
                     contentScale = ContentScale.Fit,
                     error = painterResource(id = R.drawable.house_placeholder)
-                )
+                )*/
                 if (photoDescription != null) {
                     Box(
                         modifier = Modifier

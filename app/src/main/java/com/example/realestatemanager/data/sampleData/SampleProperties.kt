@@ -1,5 +1,6 @@
 package com.example.realestatemanager.data.sampleData
 
+import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 
 object SampleProperties {

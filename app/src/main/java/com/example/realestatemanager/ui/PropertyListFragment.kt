@@ -55,7 +55,7 @@ class PropertyListFragment : Fragment() {
     private var currencyEuro by Delegates.notNull<Boolean>()
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
-    private var propertyList = mutableListOf<Property>()
+    private var propertyList = mutableStateListOf<Property>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,7 +100,7 @@ class PropertyListFragment : Fragment() {
                     PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(selectedProperty)
 
                 viewModel.getListInternalPhoto(requireContext())
-                val listPhoto = viewModel.getListOfPropertyPhoto(selectedProperty.photoIDList)
+                val listPhoto = selectedProperty.photoIDList
 
                 PropertyDetailSharedComposable.Scaffold(
                     property = selectedProperty,

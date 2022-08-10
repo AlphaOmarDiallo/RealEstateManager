@@ -1,8 +1,8 @@
 package com.example.realestatemanager.ui.createEdit
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,6 +29,7 @@ import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
 import com.example.realestatemanager.ui.adapter.ExternalStorageAdapter
 import com.example.realestatemanager.ui.adapter.InternalStorageAdapter
+import com.example.realestatemanager.ui.adapter.PhotoListAdapter
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -43,13 +44,15 @@ import java.util.*
 @AndroidEntryPoint
 class CreateModifyFragment : Fragment(),
     InternalStorageAdapter.OnItemInternalStoragePhotoClickListener,
-    ExternalStorageAdapter.OnItemExternalStoragePhotoClickListener {
+    ExternalStorageAdapter.OnItemExternalStoragePhotoClickListener,
+    PhotoListAdapter.OnItemPhotoListClickListener {
 
     private lateinit var binding: FragmentCreateModifyBinding
     private lateinit var navController: NavController
     private lateinit var placesClient: PlacesClient
     private lateinit var adapter: InternalStorageAdapter
     private lateinit var adapterExt: ExternalStorageAdapter
+    private lateinit var photoListAdapter: PhotoListAdapter
     lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
@@ -78,6 +81,8 @@ class CreateModifyFragment : Fragment(),
         setPhotoAdapter()
 
         setExternalPhotoAdapter()
+
+        setPhotoListAdapter()
 
         observeNearBySearchResults()
 
@@ -125,15 +130,27 @@ class CreateModifyFragment : Fragment(),
         }
     }
 
+    private fun updateAdapter() {
+        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
+    }
+
     override fun onItemClick(position: Int) {
         val internalPhotoList = viewModel.listInternalPhoto.value
         val photo = internalPhotoList?.get(position)
 
-        if (photo != null) {
-            listPhoto.add(photo.uri.toString())
-            Log.i(TAG, "onItemClick: $listPhoto")
-        }
+        /*if (photo != null) {
 
+            if (listPhoto.contains(photo.uri.toPath().toString())) {
+                val test = listPhoto.remove(photo.uri.toPath().toString())
+                Log.i(TAG, "onItemClick: $test")
+            } else {
+                listPhoto.add(photo.uri.toPath().toString())
+                Log.i(TAG, "onItemClick: $listPhoto")
+            }
+
+            updateAdapter()
+            updatePhotoListRV()
+        }*/
     }
 
     /**
@@ -159,7 +176,6 @@ class CreateModifyFragment : Fragment(),
         }
     }
 
-
     override fun onItemExternalClick(position: Int) {
         val externalPhotoList = viewModel.listExternalPhoto.value
         val photo = externalPhotoList?.get(position)
@@ -168,6 +184,29 @@ class CreateModifyFragment : Fragment(),
             listPhoto.add(photo.contentUri.toString())
             Log.i(TAG, "onItemClick: $listPhoto")
         }
+
+        updatePhotoListRV()
+    }
+
+    /**
+     * Display photos in property
+     */
+    private fun setPhotoListAdapter() {
+        photoListAdapter = PhotoListAdapter(PhotoListAdapter.ListDiff(), this)
+        binding.recyclerviewListPhoto.adapter = photoListAdapter
+        binding.recyclerviewListPhoto.layoutManager =
+            (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
+
+        updatePhotoListRV()
+    }
+
+    private fun updatePhotoListRV() {
+        photoListAdapter.submitList(listPhoto)
+    }
+
+    override fun onItemPhotoListClick(position: Int) {
+        listPhoto.removeAt(position)
+        updatePhotoListRV()
     }
 
     /**
@@ -204,6 +243,7 @@ class CreateModifyFragment : Fragment(),
                     "House",
                     "Villa",
                     "Mansion",
+                    "Studio",
                     "Other"
                 )
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, listType)
@@ -447,7 +487,8 @@ class CreateModifyFragment : Fragment(),
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
             val fileName = UUID.randomUUID().toString()
             val isSavedSuccessfully =
-                viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
+                viewModel.savePhotoInExternalStorage(fileName, it!!, requireContext())
+            //viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
             if (isSavedSuccessfully) Utils.snackBarMaker(
                 binding.root,
                 "Photo saved successfully"
@@ -456,13 +497,6 @@ class CreateModifyFragment : Fragment(),
             Utils.snackBarMaker(binding.root, test)
             updateRV()
         }
-
-    /**
-     * Content observer
-     */
-    private fun initContentObserver(context: Context) {
-        viewModel.initContentProvider(context)
-    }
 
     /**
      * Save or update property

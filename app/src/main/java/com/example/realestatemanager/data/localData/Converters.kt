@@ -2,6 +2,7 @@ package com.example.realestatemanager.data.localData
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.room.TypeConverter
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
@@ -36,15 +37,38 @@ class Converters {
     }
 
     @TypeConverter
-    fun latLngToString(latLng: LatLng) : String{
+    fun latLngToString(latLng: LatLng): String {
         return "(${latLng.latitude},${latLng.longitude}"
     }
 
     @TypeConverter
-    fun stringToLatLng(string: String) : LatLng{
+    fun stringToLatLng(string: String): LatLng {
         val s = string.replace("(", "").replace(")", "")
         val list = s.split(",")
         return LatLng(list.first().toDouble(), list.last().toDouble())
+    }
+
+    @TypeConverter
+    fun fromStringToUri(value: String?): Uri? {
+        return if (value == null) null else Uri.parse(value)
+    }
+
+    @TypeConverter
+    fun fromUriToString(uri: Uri?): String? {
+        return uri?.toString()
+    }
+
+    @TypeConverter
+    fun fromStringToUriList(value: String?): List<Uri>? {
+        val listType = object :
+            TypeToken<ArrayList<Uri?>?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromListUriToString(list: List<Uri?>?): String? {
+        val gson = Gson()
+        return gson.toJson(list)
     }
 
     @TypeConverter

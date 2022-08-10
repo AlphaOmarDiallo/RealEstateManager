@@ -18,4 +18,6 @@ interface MediaStoreRepository {
     suspend fun loadPhotosFromExternalStorage(context: Context): List<SharedStoragePhoto>
 
     fun initContentObserver(context: Context)
+
+    suspend fun savePhotoToExternalStorage(displayName: String, bmp: Bitmap, context: Context): Boolean
 }

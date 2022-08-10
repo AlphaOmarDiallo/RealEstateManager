@@ -84,6 +84,11 @@ class CreateEditViewModel @Inject constructor(
 
     fun loadPhotoFromExternalStorage(context: Context) = viewModelScope.launch { _listExternalPhoto.value = mediaStoreRepository.loadPhotosFromExternalStorage(context) }
 
+    fun savePhotoInExternalStorage(name: String, bmp: Bitmap, context: Context): Boolean {
+        var result = false
+        viewModelScope.launch { result = mediaStoreRepository.savePhotoToExternalStorage(name, bmp, context) }
+        return result
+    }
 
     /**
      * Photo Dao

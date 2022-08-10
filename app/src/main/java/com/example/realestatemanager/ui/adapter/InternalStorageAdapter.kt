@@ -51,8 +51,8 @@ class InternalStorageAdapter(
         var saveOrAdd: Button
 
         fun bind(photo: InternalStoragePhoto) {
-            description.setText(photo!!.name)
-            loadPhoto.load(photo.bmp)
+            description.setText(photo.name)
+            loadPhoto.load(photo.uri.path)
         }
 
         init {

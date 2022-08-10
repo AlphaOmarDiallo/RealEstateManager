@@ -48,7 +48,7 @@ class PropertyDetailFragment : Fragment() {
                 viewModel.getListInternalPhoto(requireContext())
                 val listInternalPhoto = viewModel.listInternalStoragePhoto.value
 
-                val propertyPhoto = getPropertyPhoto(property.photoIDList)
+                val propertyPhoto = property.photoIDList
 
                 PropertyDetailSharedComposable.Scaffold(
                     property = property,
