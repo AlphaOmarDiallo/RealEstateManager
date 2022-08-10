@@ -1,9 +1,13 @@
 package com.example.realestatemanager.data.viewmodel
 
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,8 +36,8 @@ class PropertyListViewModel @Inject constructor(
 
     private var _pList = MutableLiveData<List<Property>>()
     val pList: LiveData<List<Property>> get() = _pList
-    private var _propertyList = mutableStateListOf<Property>()
-    val propertyList: List<Property> =  _propertyList
+    private var _propertyList: SnapshotStateList<Property> = mutableStateListOf<Property>()
+    val propertyList: List<Property> get() = _propertyList
     val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
     val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
     val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
@@ -54,9 +58,10 @@ class PropertyListViewModel @Inject constructor(
     }
 
     @JvmName("getPropertyList1")
-    private fun getPropertyList() {
+    fun getPropertyList() {
         viewModelScope.launch {
-            //_propertyList = propertyRepository.getListOfProperties().first().toMutableStateList()
+            _propertyList = propertyRepository.getListOfProperties().first().toMutableStateList()
+            Log.e(TAG, "getPropertyList: ${_propertyList.toString()}")
             _pList.value = propertyRepository.getListOfProperties().first()
         }
     }
@@ -78,7 +83,7 @@ class PropertyListViewModel @Inject constructor(
      * MediaRepository
      */
 
-    val listInternalStoragePhoto: MutableState<List<InternalStoragePhoto>> = mutableStateOf(listOf())
+    private val listInternalStoragePhoto: MutableState<List<InternalStoragePhoto>> = mutableStateOf(listOf())
 
     fun getListInternalPhoto(context: Context){
         viewModelScope.launch {

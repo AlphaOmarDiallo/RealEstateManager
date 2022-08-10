@@ -74,26 +74,35 @@ class PropertyListFragment : Fragment() {
                 navController = findNavController()
                 windowInfo = rememberWindowInfo()
                 currencyEuro = viewModel.currencyEuro.value
-                Log.e(TAG, "onCreateView: euro: $currencyEuro")
                 observeCurrencyPref()
                 dollarToEuroRate = viewModel.dollarToEuroRate.value
-
-                if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
-                    selectedProperty = viewModel.property.value
-                    RealEstateManagerTheme {
-                        ExpendedScreen()
-                    }
-                } else {
-                    RealEstateManagerTheme {
-                        PropertyList(propertyList)
-                    }
-                }
+                selectedProperty = viewModel.property.value
+                
+                screenWidth(viewModel = viewModel)
             }
         }
     }
 
     @Composable
-    fun ExpendedScreen() {
+    fun screenWidth(viewModel: PropertyListViewModel){
+        viewModel.getPropertyList()
+        val list = viewModel.propertyList
+        if (list.isNotEmpty()) Log.e(TAG, "screenWidth: ${list.last().price}")
+
+        if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
+
+            RealEstateManagerTheme {
+                ExpendedScreen(list)
+            }
+        } else {
+            RealEstateManagerTheme {
+                PropertyList(list)
+            }
+        }
+    }
+
+    @Composable
+    fun ExpendedScreen(propertyList: List<Property>) {
         Row {
             Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
 
@@ -165,9 +174,9 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun PropertyList(propertyList: List<Property>) {
 
-        Box(
+        Surface(
             modifier = Modifier
-                .fillMaxHeight(0.92f)
+                .fillMaxHeight()
         ) {
             Column {
                 TopButtons()
@@ -181,7 +190,7 @@ class PropertyListFragment : Fragment() {
     @Composable
     fun ListOfProperty(propertyList: List<Property>) {
         LazyColumn(
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
         ) {
             items(propertyList) { property ->
                 PropertyItem(property = property)
@@ -204,7 +213,7 @@ class PropertyListFragment : Fragment() {
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false) }
         var euro by remember { mutableStateOf(false) }
-        var new by remember { mutableStateOf(false) }
+
         Column(
             modifier = Modifier
                 .padding(4.dp)
