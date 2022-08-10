@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyDetailViewModel
 import com.example.realestatemanager.domain.PropertyDetailSharedComposable
@@ -46,7 +45,6 @@ class PropertyDetailFragment : Fragment() {
                 val action2 = PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment("null", property)
 
                 viewModel.getListInternalPhoto(requireContext())
-                val listInternalPhoto = viewModel.listInternalStoragePhoto.value
 
                 val propertyPhoto = property.photoIDList
 
@@ -106,7 +104,8 @@ class PropertyDetailFragment : Fragment() {
     }
 
     /**
-     * PropertyPhoto
+     *
      */
-    private fun getPropertyPhoto(list: List<String>): List<Photo> = viewModel.getListOfPropertyPhoto(list)
+
+
 }

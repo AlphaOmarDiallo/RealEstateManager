@@ -6,7 +6,6 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +54,7 @@ object PropertyDetailSharedComposable {
         Scaffold(
             bottomBar = {
                 BottomBar(
-                    price = property.price,
+                    property = property,
                     navController = navController,
                     navDirections1 = navDirections,
                     navDirections2 = navDirections2,
@@ -129,7 +127,15 @@ object PropertyDetailSharedComposable {
                 }
             }
             item {
-                AddMap(address = property.address)
+                AddMap(latLng = property.latLng, address = property.address, type = property.type)
+            }
+            item {
+                Text(text = "3 km radius", style = MaterialTheme.typography.h6)
+                Column {
+                    Text(style = MaterialTheme.typography.body1, text = "Close to school = ${if (property.closeToSchool) "yes" else "no"}")
+                    Text(style = MaterialTheme.typography.body1, text = "Close to parks = ${if (property.closeToPark) "yes" else "no"}")
+                    Text(style = MaterialTheme.typography.body1, text = "Close to shops = ${if (property.closeToShops) "yes" else "no"}")
+                }
             }
         }
     }
@@ -182,7 +188,6 @@ object PropertyDetailSharedComposable {
                 /*AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
                         .data(Uri.parse(propertyPhoto))
-                        .crossfade(true)
                         .build(),
                     placeholder = painterResource(id = R.drawable.house_placeholder),
                     contentDescription = "Property photo",
@@ -282,7 +287,7 @@ object PropertyDetailSharedComposable {
     }
 
     @Composable
-    fun AddMap(address: String) {
+    fun AddMap(latLng: LatLng, address: String, type: String) {
         //var addressToLocation: Location? = viewModel.location.value
 
         Card(
@@ -292,18 +297,17 @@ object PropertyDetailSharedComposable {
             shape = RoundedCornerShape(15.dp),
             elevation = 10.dp
         ) {
-            val addressLatLng = LatLng(1.35, 103.87)
             val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(addressLatLng, 10f)
+                position = CameraPosition.fromLatLngZoom(latLng, 16f)
             }
             GoogleMap(
                 modifier = Modifier.size(300.dp),
                 cameraPositionState = cameraPositionState
             ) {
                 Marker(
-                    state = MarkerState(position = addressLatLng),
-                    title = "Singapore",
-                    snippet = "Marker in Singapore"
+                    state = MarkerState(position = latLng),
+                    title = type,
+                    snippet = address
                 )
             }
         }
@@ -311,7 +315,7 @@ object PropertyDetailSharedComposable {
 
     @Composable
     fun BottomBar(
-        price: Int,
+        property: Property,
         navController: NavController,
         navDirections1: NavDirections,
         navDirections2: NavDirections,
@@ -330,7 +334,7 @@ object PropertyDetailSharedComposable {
             ) {
                 Column {
                     Text(
-                        text = if (euro) "€ ${(price * dollarToEuroRate).toInt()}" else "$ $price",
+                        text = if (euro) "€ ${(property.price * dollarToEuroRate).toInt()}" else "$ ${property.price}",
                         style = MaterialTheme.typography.h5,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primaryVariant,
@@ -338,17 +342,25 @@ object PropertyDetailSharedComposable {
                             navController.navigate(navDirections1)
                         }
                     )
-                    val rate = 2.00
-                    val years = 30
-                    val monthlyPayment = if (euro) MortgagePaymentUtil.monthlyPaymentMortgage(
-                        (price.toDouble() * dollarToEuroRate),
-                        rate,
-                        years
-                    ) else MortgagePaymentUtil.monthlyPaymentMortgage(price.toDouble(), rate, years)
-                    if (euro) Text(text = "from €$monthlyPayment per month") else Text(text = "from $$monthlyPayment per month")
+                    if (property.saleStatus){
+                        Text(text = "SOLD")
+                    } else {
+                        val rate = 2.00
+                        val years = 30
+                        val monthlyPayment = if (euro) MortgagePaymentUtil.monthlyPaymentMortgage(
+                            (property.price.toDouble() * dollarToEuroRate),
+                            rate,
+                            years
+                        ) else MortgagePaymentUtil.monthlyPaymentMortgage(
+                            property.price.toDouble(),
+                            rate,
+                            years
+                        )
+                        if (euro) Text(text = "from €$monthlyPayment per month") else Text(text = "from $$monthlyPayment per month")
+                    }
                 }
-                IconButton(
-                    onClick = { /*TODO*/ },
+/*                IconButton(
+                    onClick = { *//*TODO*//* },
                     modifier = Modifier
                         .padding(SharedComposable.mediumPadding)
                         .border(
@@ -370,7 +382,7 @@ object PropertyDetailSharedComposable {
                             color = MaterialTheme.colors.primary
                         )
                     }
-                }
+                }*/
                 IconButton(onClick = {
                     navigateToEditFragment(navDirections2, navController)
                 }) {

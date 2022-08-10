@@ -343,7 +343,7 @@ class CreateModifyFragment : Fragment(),
     private fun checkList(list: List<Result>) {
         for (item in list) {
             Log.i(TAG, "checkList: ${item.types}")
-            if (item.types.toString().contains(Constant.SCHOOL)) {
+            if (item.types.toString().contains(Constant.SCHOOL) || item.types.toString().contains(Constant.S_SCHOOL) || item.types.toString().contains(Constant.P_SCHOOL)) {
                 isCloseToSchool = true
                 Log.i(TAG, "school")
             }

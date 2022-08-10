@@ -36,6 +36,8 @@ object Constant {
     const val AUTOCOMPLETE_COUNTRY = "US"
 
     const val SCHOOL = "school"
+    const val S_SCHOOL = "secondary_school"
+    const val P_SCHOOL = "primary_school"
     const val SHOPS = "supermarket"
     const val TRANSPORT = "train_station"
     const val PARK = "park"

@@ -1,6 +1,7 @@
 package com.example.realestatemanager.ui
 
 import android.content.ContentValues.TAG
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,8 +27,8 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import coil.compose.rememberImagePainter
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
@@ -57,11 +59,16 @@ class PropertyListFragment : Fragment() {
     private val viewModel: PropertyListViewModel by viewModels()
     private var propertyList: List<Property> = listOf()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.pList.observe(requireActivity()){propertyList = it}
+        viewModel.pList.observe(requireActivity()){
+            propertyList = it
+            Log.i(TAG, "onCreateView: addedProperty")
+            setNew()
+        }
         return ComposeView(requireContext()).apply {
             setContent {
                 navController = findNavController()
@@ -98,7 +105,9 @@ class PropertyListFragment : Fragment() {
                         selectedProperty.price
                     )
                 val action2 =
-                    PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(selectedProperty)
+                    PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(
+                        selectedProperty
+                    )
 
                 viewModel.getListInternalPhoto(requireContext())
                 val listPhoto = selectedProperty.photoIDList
@@ -195,6 +204,7 @@ class PropertyListFragment : Fragment() {
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false) }
         var euro by remember { mutableStateOf(false) }
+        var new by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .padding(4.dp)
@@ -223,13 +233,18 @@ class PropertyListFragment : Fragment() {
                 modifier = Modifier
                     .padding(12.dp)
             ) {
-                Image(
+               /* Image(
                     painter = painterResource(id = R.drawable.property_placeholder),
                     contentDescription = "Image of the property",
                     modifier = Modifier
                         //.size(100.dp)
                         .weight(1f)
                         .fillMaxSize(),
+                )*/
+                Image(painter = rememberImagePainter(Uri.parse(property.photoIDList[0])),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(50.dp)
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -264,6 +279,9 @@ class PropertyListFragment : Fragment() {
 
                 }
 
+                if (property.saleStatus) {
+                    Text(text = "Sold", color = MaterialTheme.colors.error)
+                }
                 IconButton(onClick = {
                     euro = !euro
                     currencyEuro = euro
@@ -346,4 +364,7 @@ class PropertyListFragment : Fragment() {
         return (price * dollarToEuroRate).toInt()
     }
 
+    private fun setNew() {
+
+    }
 }
