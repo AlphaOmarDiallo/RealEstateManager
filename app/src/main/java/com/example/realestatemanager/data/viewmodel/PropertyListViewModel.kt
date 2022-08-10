@@ -8,9 +8,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.repository.dataStore.DataStoreRepository
 import com.example.realestatemanager.data.repository.media.MediaStoreRepository
 import com.example.realestatemanager.data.repository.photo.PhotoRepository
@@ -30,8 +30,10 @@ class PropertyListViewModel @Inject constructor(
     private val photoRepository: PhotoRepository
 ) : ViewModel() {
 
+    private var _pList = MutableLiveData<List<Property>>()
+    val pList: LiveData<List<Property>> get() = _pList
     private var _propertyList = mutableStateListOf<Property>()
-    val propertyList: List<Property> = _propertyList
+    val propertyList: List<Property> =  _propertyList
     val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
     val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
     val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
@@ -51,9 +53,11 @@ class PropertyListViewModel @Inject constructor(
         }
     }
 
+    @JvmName("getPropertyList1")
     private fun getPropertyList() {
         viewModelScope.launch {
-            _propertyList.addAll(propertyRepository.getListOfProperties().first())
+            //_propertyList = propertyRepository.getListOfProperties().first().toMutableStateList()
+            _pList.value = propertyRepository.getListOfProperties().first()
         }
     }
 

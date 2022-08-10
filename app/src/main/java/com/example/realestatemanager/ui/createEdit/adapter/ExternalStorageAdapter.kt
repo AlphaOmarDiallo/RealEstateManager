@@ -1,4 +1,4 @@
-package com.example.realestatemanager.ui.adapter
+package com.example.realestatemanager.ui.createEdit.adapter
 
 import android.view.LayoutInflater
 import android.view.View

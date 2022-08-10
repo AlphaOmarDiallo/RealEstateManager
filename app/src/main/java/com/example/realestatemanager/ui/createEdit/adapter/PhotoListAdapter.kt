@@ -1,4 +1,4 @@
-package com.example.realestatemanager.ui.adapter
+package com.example.realestatemanager.ui.createEdit.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.realestatemanager.R
 import com.example.realestatemanager.databinding.PhotoItemBinding
-import com.example.realestatemanager.ui.adapter.PhotoListAdapter.PhotoListViewHolder
+import com.example.realestatemanager.ui.createEdit.adapter.PhotoListAdapter.PhotoListViewHolder
 import com.google.android.material.textfield.TextInputEditText
 
 class PhotoListAdapter(

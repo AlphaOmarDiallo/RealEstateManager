@@ -55,17 +55,17 @@ class PropertyListFragment : Fragment() {
     private var currencyEuro by Delegates.notNull<Boolean>()
     private var dollarToEuroRate by Delegates.notNull<Double>()
     private val viewModel: PropertyListViewModel by viewModels()
-    private var propertyList = mutableStateListOf<Property>()
+    private var propertyList: List<Property> = listOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel.pList.observe(requireActivity()){propertyList = it}
         return ComposeView(requireContext()).apply {
             setContent {
                 navController = findNavController()
                 windowInfo = rememberWindowInfo()
-                propertyList = viewModel.propertyList.toMutableStateList()
                 currencyEuro = viewModel.currencyEuro.value
                 Log.e(TAG, "onCreateView: euro: $currencyEuro")
                 observeCurrencyPref()
@@ -89,6 +89,7 @@ class PropertyListFragment : Fragment() {
     fun ExpendedScreen() {
         Row {
             Surface(modifier = Modifier.fillMaxWidth(0.4f)) {
+
                 PropertyList(propertyList)
             }
             Surface(modifier = Modifier.fillMaxWidth()) {
@@ -154,7 +155,6 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun PropertyList(propertyList: List<Property>) {
-        //val propertyList = viewModel._propertyList
 
         Box(
             modifier = Modifier

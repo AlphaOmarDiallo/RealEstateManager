@@ -2,7 +2,6 @@ package com.example.realestatemanager.ui.createEdit
 
 import android.content.ContentValues.TAG
 import android.location.Location
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,9 +26,9 @@ import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
 import com.example.realestatemanager.databinding.FragmentCreateModifyBinding
 import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
-import com.example.realestatemanager.ui.adapter.ExternalStorageAdapter
-import com.example.realestatemanager.ui.adapter.InternalStorageAdapter
-import com.example.realestatemanager.ui.adapter.PhotoListAdapter
+import com.example.realestatemanager.ui.createEdit.adapter.ExternalStorageAdapter
+import com.example.realestatemanager.ui.createEdit.adapter.InternalStorageAdapter
+import com.example.realestatemanager.ui.createEdit.adapter.PhotoListAdapter
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
