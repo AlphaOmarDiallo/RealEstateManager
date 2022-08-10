@@ -233,14 +233,6 @@ class PropertyListFragment : Fragment() {
                 modifier = Modifier
                     .padding(12.dp)
             ) {
-               /* Image(
-                    painter = painterResource(id = R.drawable.property_placeholder),
-                    contentDescription = "Image of the property",
-                    modifier = Modifier
-                        //.size(100.dp)
-                        .weight(1f)
-                        .fillMaxSize(),
-                )*/
                 Image(painter = rememberImagePainter(Uri.parse(property.photoIDList[0])),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
