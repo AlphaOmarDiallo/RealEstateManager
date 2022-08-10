@@ -29,7 +29,7 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
         contentObserver = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
                 if (true) {
-                    //loadPhotosFromExternalStorageIntoRecyclerView()
+                    //loadPhotosFromInternalStorage(context)
                 }
             }
         }

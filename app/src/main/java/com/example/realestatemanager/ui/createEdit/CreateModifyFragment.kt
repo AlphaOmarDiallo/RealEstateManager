@@ -72,8 +72,6 @@ class CreateModifyFragment : Fragment(),
 
         getArgsFromNav()
 
-        initContentObserver(requireContext())
-
         setPhotoAdapter()
 
         observeNearBySearchResults()
@@ -132,6 +130,30 @@ class CreateModifyFragment : Fragment(),
         }
 
     }
+
+    /**
+     * List External Photo
+     */
+    private fun setExternalPhotoAdapter() {
+        viewModel.initContentProvider(requireContext())
+
+        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
+        binding.recyclerview.adapter = adapter
+        binding.recyclerview.layoutManager =
+            (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
+
+        updateExternalRV()
+    }
+
+    private fun updateExternalRV() {
+        viewModel.loadPhotosFromInternalStorage(requireContext())
+        viewModel.listInternalPhoto.observe(requireActivity()) {
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
+    }
+
 
     /**
      * Observe data relative to nearBySearch and Agent in ViewModel

@@ -77,6 +77,8 @@ class CreateEditViewModel @Inject constructor(
 
 
     fun initContentProvider(context: Context) = mediaStoreRepository.initContentObserver(context)
+
+    fun loadPhotoFromExternalStorage(context: Context) = viewModelScope.launch { mediaStoreRepository.loadPhotosFromExternalStorage(context) }
     /**
      * Photo Dao
      */
