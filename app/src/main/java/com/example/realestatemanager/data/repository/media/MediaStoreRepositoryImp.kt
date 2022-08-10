@@ -62,8 +62,9 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
             val files = context.filesDir.listFiles()
             files?.filter { it.canRead() && it.isFile && it.name.endsWith(".webp") }?.map {
                 val bytes = it.readBytes()
+                val uri = it.toURI()
                 val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                InternalStoragePhoto(it.name, bmp)
+                InternalStoragePhoto(it.name, bmp, uri)
             } ?: listOf()
         }
     }
@@ -123,6 +124,7 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         id
                     )
+                    //Log.i(TAG, "loadPhotosFromExternalStorage: $contentUri")
                     photos.add(SharedStoragePhoto(id, displayName, width, height, contentUri))
                 }
                 photos.toList()

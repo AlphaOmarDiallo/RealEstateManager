@@ -130,7 +130,7 @@ class CreateModifyFragment : Fragment(),
         val photo = internalPhotoList?.get(position)
 
         if (photo != null) {
-            listPhoto.add(photo.name)
+            listPhoto.add(photo.uri.toString())
             Log.i(TAG, "onItemClick: $listPhoto")
         }
 
@@ -161,8 +161,13 @@ class CreateModifyFragment : Fragment(),
 
 
     override fun onItemExternalClick(position: Int) {
-        TODO("Not yet implemented")
-        Log.i(TAG, "onItemExternalClick: clicked")
+        val externalPhotoList = viewModel.listExternalPhoto.value
+        val photo = externalPhotoList?.get(position)
+
+        if (photo != null) {
+            listPhoto.add(photo.contentUri.toString())
+            Log.i(TAG, "onItemClick: $listPhoto")
+        }
     }
 
     /**
