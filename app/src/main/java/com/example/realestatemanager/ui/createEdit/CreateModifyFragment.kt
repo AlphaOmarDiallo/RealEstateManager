@@ -27,6 +27,7 @@ import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
 import com.example.realestatemanager.databinding.FragmentCreateModifyBinding
 import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
+import com.example.realestatemanager.ui.adapter.ExternalStorageAdapter
 import com.example.realestatemanager.ui.adapter.InternalStorageAdapter
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
@@ -41,12 +42,14 @@ import java.util.*
 
 @AndroidEntryPoint
 class CreateModifyFragment : Fragment(),
-    InternalStorageAdapter.OnItemInternalStoragePhotoClickListener {
+    InternalStorageAdapter.OnItemInternalStoragePhotoClickListener,
+    ExternalStorageAdapter.OnItemExternalStoragePhotoClickListener {
 
     private lateinit var binding: FragmentCreateModifyBinding
     private lateinit var navController: NavController
     private lateinit var placesClient: PlacesClient
     private lateinit var adapter: InternalStorageAdapter
+    private lateinit var adapterExt: ExternalStorageAdapter
     lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
@@ -73,6 +76,8 @@ class CreateModifyFragment : Fragment(),
         getArgsFromNav()
 
         setPhotoAdapter()
+
+        setExternalPhotoAdapter()
 
         observeNearBySearchResults()
 
@@ -137,23 +142,28 @@ class CreateModifyFragment : Fragment(),
     private fun setExternalPhotoAdapter() {
         viewModel.initContentProvider(requireContext())
 
-        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
-        binding.recyclerview.adapter = adapter
-        binding.recyclerview.layoutManager =
+        adapterExt = ExternalStorageAdapter(ExternalStorageAdapter.ListDiff(), this)
+        binding.recyclerview2.adapter = adapterExt
+        binding.recyclerview2.layoutManager =
             (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
 
         updateExternalRV()
     }
 
     private fun updateExternalRV() {
-        viewModel.loadPhotosFromInternalStorage(requireContext())
-        viewModel.listInternalPhoto.observe(requireActivity()) {
+        viewModel.loadPhotoFromExternalStorage(requireContext())
+        viewModel.listExternalPhoto.observe(requireActivity()) {
             it?.let {
-                adapter.submitList(it)
+                adapterExt.submitList(it)
             }
         }
     }
 
+
+    override fun onItemExternalClick(position: Int) {
+        TODO("Not yet implemented")
+        Log.i(TAG, "onItemExternalClick: clicked")
+    }
 
     /**
      * Observe data relative to nearBySearch and Agent in ViewModel
@@ -543,4 +553,5 @@ class CreateModifyFragment : Fragment(),
                 binding.TIETPropertyNeighbourhood.text.toString() != "" &&
                 binding.TIETPropertyOnMarketSince.text.toString() != ""
     }
+
 }

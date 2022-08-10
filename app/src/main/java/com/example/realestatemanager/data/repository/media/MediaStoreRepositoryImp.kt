@@ -99,6 +99,7 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
                 MediaStore.Images.Media.DISPLAY_NAME,
                 MediaStore.Images.Media.WIDTH,
                 MediaStore.Images.Media.HEIGHT,
+                MediaStore.Images.Media.DATE_ADDED
             )
             val photos = mutableListOf<SharedStoragePhoto>()
             context.contentResolver.query(
@@ -106,7 +107,7 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
                 projection,
                 null,
                 null,
-                "${MediaStore.Images.Media.DISPLAY_NAME} ASC"
+                "${MediaStore.Images.Media.DATE_ADDED} DESC"
             )?.use { cursor ->
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
                 val displayNameColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)

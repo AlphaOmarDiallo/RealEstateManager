@@ -14,6 +14,7 @@ import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.media.InternalStoragePhoto
+import com.example.realestatemanager.data.model.media.SharedStoragePhoto
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.repository.agent.AgentRepository
 import com.example.realestatemanager.data.repository.media.MediaStoreRepository
@@ -50,6 +51,9 @@ class CreateEditViewModel @Inject constructor(
     private val _listInternalPhoto: MutableLiveData<List<InternalStoragePhoto>> = MutableLiveData()
     val listInternalPhoto: LiveData<List<InternalStoragePhoto>> get() = _listInternalPhoto
 
+    private val _listExternalPhoto: MutableLiveData<List<SharedStoragePhoto>> = MutableLiveData()
+    val listExternalPhoto: LiveData<List<SharedStoragePhoto>> get() = _listExternalPhoto
+
     fun savePhotoToInternalStorage(filename: String, bmp: Bitmap, context: Context): Boolean {
         var result = false
         viewModelScope.launch {
@@ -78,7 +82,9 @@ class CreateEditViewModel @Inject constructor(
 
     fun initContentProvider(context: Context) = mediaStoreRepository.initContentObserver(context)
 
-    fun loadPhotoFromExternalStorage(context: Context) = viewModelScope.launch { mediaStoreRepository.loadPhotosFromExternalStorage(context) }
+    fun loadPhotoFromExternalStorage(context: Context) = viewModelScope.launch { _listExternalPhoto.value = mediaStoreRepository.loadPhotosFromExternalStorage(context) }
+
+
     /**
      * Photo Dao
      */

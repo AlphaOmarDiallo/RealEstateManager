@@ -64,12 +64,12 @@ class ExternalStorageAdapter(
 
         override fun onClick(p0: View?) {
             val position: Int = adapterPosition
-            if (position != RecyclerView.NO_POSITION) listener.onItemClick(position)
+            if (position != RecyclerView.NO_POSITION) listener.onItemExternalClick(position)
         }
     }
 
     interface OnItemExternalStoragePhotoClickListener {
-        fun onItemClick(position: Int)
+        fun onItemExternalClick(position: Int)
     }
 
 }
