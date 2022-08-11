@@ -1,5 +1,6 @@
 package com.example.realestatemanager.data.localData
 
+import android.database.Cursor
 import androidx.room.*
 import com.example.realestatemanager.data.model.Agent
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,13 @@ interface AgentDao {
 
     @Query("SELECT * FROM agent_table WHERE agent_id= :id")
     fun getUserById(id: String): Flow<Agent?>
+
+    /**
+     * Content provider
+     */
+    @Query("SELECT * FROM agent_table WHERE agent_id= :id")
+    fun getUserByIdWithCursor(id: String): Cursor
+
 
     /**
      * Only for test purpose

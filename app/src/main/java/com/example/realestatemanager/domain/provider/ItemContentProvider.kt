@@ -1,44 +1,50 @@
-package com.example.realestatemanager.domain.provider;
+package com.example.realestatemanager.domain.provider
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.database.Cursor
+import android.net.Uri
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+class ItemContentProvider : ContentProvider() {
 
-public class ItemContentProvider extends ContentProvider {
-    @Override
-    public boolean onCreate() {
-        return false;
+    companion object{
+        val AUTHORITY = "com.example.realestatemanager.provider"
+        private val PROPERTY_TABLE = "property_table"
+        val CONTENT_URI : Uri = Uri.parse("content://$AUTHORITY/$PROPERTY_TABLE")
     }
 
-    @Nullable
-    @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        return null;
+    override fun onCreate(): Boolean {
+        return false
     }
 
-    @Nullable
-    @Override
-    public String getType(@NonNull Uri uri) {
-        return null;
+    override fun query(
+        uri: Uri,
+        strings: Array<String>?,
+        s: String?,
+        strings1: Array<String>?,
+        s1: String?
+    ): Cursor? {
+        return null
     }
 
-    @Nullable
-    @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+    override fun getType(uri: Uri): String? {
+        return null
     }
 
-    @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    override fun insert(uri: Uri, contentValues: ContentValues?): Uri? {
+        return null
     }
 
-    @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    override fun delete(uri: Uri, s: String?, strings: Array<String>?): Int {
+        return 0
+    }
+
+    override fun update(
+        uri: Uri,
+        contentValues: ContentValues?,
+        s: String?,
+        strings: Array<String>?
+    ): Int {
+        return 0
     }
 }
