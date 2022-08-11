@@ -29,10 +29,6 @@ object Constant {
     const val NEARBYSEARCH_URL = "place/nearbysearch/json"
     const val RADIUS_NEARBYSEARCH = 3000
 
-    const val AUTOCOMPLETE_URL = "place/autocomplete/json"
-    const val AUTOCOMPLETE_COMPONENTS = "country:us"
-    const val AUTOCOMPLETE_OFFSET = 5
-    const val AUTOCOMPLETE_TYPES = "address"
     const val AUTOCOMPLETE_COUNTRY = "US"
 
     const val SCHOOL = "school"
@@ -42,12 +38,7 @@ object Constant {
     const val TRANSPORT = "train_station"
     const val PARK = "park"
 
-    const val DETAIL_URL = "place/details/json"
-
     //Preferences Datastore
     const val APP_PREFERENCES = "app_preferences"
-
-    //ROOM
-    const val PHOTO_ERROR = 999999
 
 }
