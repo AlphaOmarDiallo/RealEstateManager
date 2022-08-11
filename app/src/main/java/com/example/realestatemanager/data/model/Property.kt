@@ -45,6 +45,8 @@ data class Property(
     var agentManagingPropertyId: String?,
     @ColumnInfo(name = "property_list_of_interest")
     var listOfInterest: List<String>?,
+    @ColumnInfo(name = "property_place_detail")
+    var listPlaceDetail: List<PlaceDetail>?,
     @ColumnInfo(name = "property_close_school")
     var closeToSchool: Boolean,
     @ColumnInfo(name = "property_close_shops")

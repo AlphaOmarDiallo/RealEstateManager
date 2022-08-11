@@ -1,6 +1,5 @@
 package com.example.realestatemanager.data.sampleData
 
-import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 
 object SampleProperties {
@@ -28,6 +27,7 @@ object SampleProperties {
             null,
             agents[0].id,
             null,
+            null,
             closeToSchool = false,
             closeToShops = true,
             closeToPark = true,
@@ -51,6 +51,7 @@ object SampleProperties {
             1657490400000,
             null,
             agents[0].id,
+            null,
             null,
             false,
             closeToShops = true,
@@ -76,6 +77,7 @@ object SampleProperties {
             null,
             agents[0].id,
             null,
+            null,
             closeToSchool = false,
             closeToShops = true,
             closeToPark = true,
@@ -100,6 +102,7 @@ object SampleProperties {
             null,
             agents[0].id,
             null,
+            null,
             closeToSchool = true,
             closeToShops = false,
             closeToPark = true,
@@ -123,6 +126,7 @@ object SampleProperties {
             1657490400000,
             null,
             agents[0].id,
+            null,
             null,
             closeToSchool = true,
             closeToShops = true,

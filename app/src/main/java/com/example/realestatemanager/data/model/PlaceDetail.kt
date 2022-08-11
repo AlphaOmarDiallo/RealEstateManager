@@ -5,5 +5,6 @@ data class PlaceDetail(
     val placeName: String,
     val placeLat: String,
     val placeLng: String,
-    val placeWebSiteUri: String?
+    val placeWebSiteUri: String?,
+    val placeType: String
 )

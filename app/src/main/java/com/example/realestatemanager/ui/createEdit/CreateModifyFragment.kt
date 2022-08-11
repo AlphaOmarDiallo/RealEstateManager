@@ -314,7 +314,7 @@ class CreateModifyFragment : Fragment(),
     }
 
     private fun createListPlaceDetail(list: List<Result>) {
-        if (placesClient != null) {
+        if (this::placesClient.isInitialized) {
             for (result in list) {
 
                 val placeId = result.place_id
@@ -340,7 +340,8 @@ class CreateModifyFragment : Fragment(),
                         placeName = result.name,
                         placeLat = result.geometry.location.lat.toString(),
                         placeLng = result.geometry.location.lng.toString(),
-                        placeWebSiteUri = placeResponse?.websiteUri.toString()
+                        placeWebSiteUri = placeResponse?.websiteUri.toString(),
+                        placeType = result.types.toString()
                     )
 
                 listPlaceDetail.add(place)
@@ -537,7 +538,8 @@ class CreateModifyFragment : Fragment(),
             closeToPark = closeToPark,
             closeToShops = closeToShops,
             closeToTransport = closeToTransport,
-            listOfInterest = listInterest
+            listOfInterest = listInterest,
+            listPlaceDetail = listPlaceDetail
         )
     }
 

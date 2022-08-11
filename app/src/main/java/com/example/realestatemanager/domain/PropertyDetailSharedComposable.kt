@@ -1,6 +1,8 @@
 package com.example.realestatemanager.domain
 
+import android.content.ContentValues.TAG
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -21,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,13 +34,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import coil.compose.rememberImagePainter
 import com.example.realestatemanager.R
+import com.example.realestatemanager.data.model.PlaceDetail
 import com.example.realestatemanager.data.model.Property
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.android.gms.maps.model.Marker
+import com.google.maps.android.compose.*
 
 @Composable
 fun Scaffold(
@@ -125,7 +128,12 @@ fun PropertyInDetail(property: Property, list: List<String>) {
             }
         }
         item {
-            AddMap(latLng = property.latLng, address = property.address, type = property.type)
+            AddMap(
+                latLng = property.latLng,
+                address = property.address,
+                type = property.type,
+                list = property.listPlaceDetail
+            )
         }
         item {
             Text(text = "3 km radius", style = MaterialTheme.typography.h6)
@@ -284,8 +292,12 @@ fun PropertyDescription(propertyDescription: String, maxLines: Int) {
 }
 
 @Composable
-fun AddMap(latLng: LatLng, address: String, type: String) {
-    //var addressToLocation: Location? = viewModel.location.value
+fun AddMap(latLng: LatLng, address: String, type: String, list: List<PlaceDetail>?) {
+
+    val markerClick: (Marker) -> Boolean = {
+        Log.d(TAG, "${it.title} was clicked")
+        false
+    }
 
     Card(
         modifier = Modifier
@@ -306,6 +318,28 @@ fun AddMap(latLng: LatLng, address: String, type: String) {
                 title = type,
                 snippet = address
             )
+
+            if (!list.isNullOrEmpty()) {
+                for (place in list) {
+                    MarkerInfoWindowContent(
+                        state = MarkerState(
+                            position = LatLng(
+                                place.placeLat.toDouble(),
+                                place.placeLng.toDouble()
+                            )
+                        ),
+                        title = place.placeName,
+                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE),
+                        onClick = markerClick,
+                        snippet = place.placeType
+                    ) {
+                        Column() {
+                            Text(text = it.title ?: "Title", style = MaterialTheme.typography.body1,color = Color.Blue)
+                            Text(text = it.snippet ?: "Title", color = Color.Black)
+                        }
+                    }
+                }
+            }
         }
     }
 }
