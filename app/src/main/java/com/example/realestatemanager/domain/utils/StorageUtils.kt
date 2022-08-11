@@ -1,4 +1,4 @@
-package com.example.realestatemanager.domain
+package com.example.realestatemanager.domain.utils
 
 import android.os.Build
 

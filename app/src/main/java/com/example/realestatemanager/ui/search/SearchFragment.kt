@@ -1,4 +1,4 @@
-package com.example.realestatemanager.ui
+package com.example.realestatemanager.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater

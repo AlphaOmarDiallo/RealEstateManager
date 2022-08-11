@@ -11,7 +11,7 @@ import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.model.media.SharedStoragePhoto
-import com.example.realestatemanager.domain.sdk29AndUp
+import com.example.realestatemanager.domain.utils.sdk29AndUp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

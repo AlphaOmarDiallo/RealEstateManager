@@ -1,4 +1,4 @@
-package com.example.realestatemanager.ui
+package com.example.realestatemanager.ui.myAccount
 
 import android.content.ContentValues.TAG
 import android.os.Bundle
@@ -14,7 +14,7 @@ import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.viewmodel.MyAccountViewModel
 import com.example.realestatemanager.databinding.ActivityMyAccountBinding
-import com.example.realestatemanager.domain.Utils
+import com.example.realestatemanager.domain.utils.Utils
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
@@ -249,15 +249,17 @@ class MyAccountActivity : AppCompatActivity() {
                 Log.e(TAG, "onCreatePreferences: new value $newValue")
                 val value: Boolean = newValue.toString() == "true"
                 viewModel.saveCurrencyPreferenceToDataStore(value)
-                Log.e(TAG, "onCreatePreferences: is euro: ${viewModel.readCurrencyPreferenceFromDataStore()}", )
+                Log.e(
+                    TAG,
+                    "onCreatePreferences: is euro: ${viewModel.readCurrencyPreferenceFromDataStore()}",
+                )
                 return@setOnPreferenceChangeListener true
             }
 
-            notificationSwitch.setOnPreferenceChangeListener { _, newValue ->
+            notificationSwitch.setOnPreferenceChangeListener { _, _ ->
                 if (notificationSwitch.isChecked) viewModel.saveNotificationPreferenceToDataStore(true) else viewModel.saveNotificationPreferenceToDataStore(false)
                 return@setOnPreferenceChangeListener true
             }
-
         }
 
         private fun setCurrencySwitch() {

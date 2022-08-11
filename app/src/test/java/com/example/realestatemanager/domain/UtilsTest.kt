@@ -1,5 +1,6 @@
 package com.example.realestatemanager.domain
 
+import com.example.realestatemanager.domain.utils.Utils
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import java.time.LocalDate

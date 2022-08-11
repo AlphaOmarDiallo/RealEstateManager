@@ -1,4 +1,4 @@
-package com.example.realestatemanager.domain
+package com.example.realestatemanager.domain.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
+import com.example.realestatemanager.domain.Constant
 import com.google.android.material.snackbar.Snackbar
 import java.io.IOException
 import java.text.SimpleDateFormat

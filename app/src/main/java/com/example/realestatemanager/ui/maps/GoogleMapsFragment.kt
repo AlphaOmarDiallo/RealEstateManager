@@ -1,4 +1,4 @@
-package com.example.realestatemanager.ui
+package com.example.realestatemanager.ui.maps
 
 import android.content.ContentValues.TAG
 import android.location.Location

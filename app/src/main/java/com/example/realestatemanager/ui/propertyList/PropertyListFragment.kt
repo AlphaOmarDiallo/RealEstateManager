@@ -1,4 +1,4 @@
-package com.example.realestatemanager.ui
+package com.example.realestatemanager.ui.propertyList
 
 import android.content.ContentValues.TAG
 import android.net.Uri
@@ -41,6 +41,8 @@ import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
 import com.example.realestatemanager.domain.*
+import com.example.realestatemanager.domain.composable.WindowInfo
+import com.example.realestatemanager.domain.composable.rememberWindowInfo
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -103,7 +105,7 @@ class PropertyListFragment : Fragment() {
                     }
                 }
 
-                if (compose){
+                if (compose) {
                     Log.e(TAG, "onCreateView: here composing")
                     screenWidth(list = propertyList)
                 }
@@ -165,7 +167,8 @@ class PropertyListFragment : Fragment() {
 
     @Composable
     fun TopButtons() {
-        val action = PropertyListFragmentDirections.actionPropertyListFragmentToGoogleMapsFragment()
+        val action =
+            PropertyListFragmentDirections.actionPropertyListFragmentToGoogleMapsFragment()
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -358,28 +361,17 @@ class PropertyListFragment : Fragment() {
         }
     }
 
-/*    @Preview(
-        showBackground = true,
-        widthDp = 320,
-        uiMode = Configuration.UI_MODE_NIGHT_YES,
-        name = "DefaultPreviewDark"
-    )
-    @Preview(showBackground = true)
-    @Composable
-    fun FragmentPreview() {
-        RealEstateManagerTheme {
-            PropertyList()
-        }
-    }*/
-
     private fun navigateToSearchFragment() {
-        val action = PropertyListFragmentDirections.actionPropertyListFragmentToSearchFragment()
+        val action =
+            PropertyListFragmentDirections.actionPropertyListFragmentToSearchFragment()
         navController.navigate(action)
     }
 
     private fun navigateToCreateFragment() {
         val action =
-            PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(null)
+            PropertyListFragmentDirections.actionPropertyListFragmentToCreateModifyFragment(
+                null
+            )
         navController.navigate(action)
     }
 

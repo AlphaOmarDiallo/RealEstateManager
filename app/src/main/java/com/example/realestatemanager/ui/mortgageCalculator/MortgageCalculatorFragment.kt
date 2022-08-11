@@ -1,4 +1,4 @@
-package com.example.realestatemanager.ui
+package com.example.realestatemanager.ui.mortgageCalculator
 
 import android.content.ContentValues.TAG
 import android.os.Bundle

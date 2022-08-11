@@ -16,7 +16,9 @@ import com.example.realestatemanager.R
 import com.example.realestatemanager.data.viewmodel.MainViewModel
 import com.example.realestatemanager.databinding.ActivityMainBinding
 import com.example.realestatemanager.domain.Constant
-import com.example.realestatemanager.domain.Utils
+import com.example.realestatemanager.domain.utils.Utils
+import com.example.realestatemanager.ui.mortgageCalculator.MortgageCalculatorActivity
+import com.example.realestatemanager.ui.myAccount.MyAccountActivity
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import dagger.hilt.android.AndroidEntryPoint

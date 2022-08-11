@@ -26,7 +26,8 @@ import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
 import com.example.realestatemanager.databinding.FragmentCreateModifyBinding
 import com.example.realestatemanager.domain.Constant
-import com.example.realestatemanager.domain.Utils
+import com.example.realestatemanager.domain.notification.PropertyNotificationService
+import com.example.realestatemanager.domain.utils.Utils
 import com.example.realestatemanager.ui.createEdit.adapter.ExternalStorageAdapter
 import com.example.realestatemanager.ui.createEdit.adapter.PhotoListAdapter
 import com.google.android.gms.common.api.ApiException
@@ -556,14 +557,13 @@ class CreateModifyFragment : Fragment(),
 
             if (args.property != null) viewModel.updateProperty(property) else viewModel.insertProperty(property)
 
-            val id = viewModel.getLastPropertyAdded()
+            val service = PropertyNotificationService(requireContext())
+            service.showNewPropertyNotification(property)
 
             val action = CreateModifyFragmentDirections.actionCreateModifyFragmentToPropertyListFragment()
             navController.navigate(action)
 
         } else {
-            val action = CreateModifyFragmentDirections.actionCreateModifyFragmentToPropertyListFragment()
-            navController.navigate(action)
             Utils.snackBarMaker(binding.root, getString(R.string.fill_all_field))
         }
     }

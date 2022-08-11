@@ -21,10 +21,10 @@
         android:theme="@style/Theme.RealEstateManager">
 
         <activity
-            android:name=".ui.MortgageCalculatorActivity"
+            android:name=".ui.mortgageCalculator.MortgageCalculatorActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.MyAccountActivity"
+            android:name=".ui.myAccount.MyAccountActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"

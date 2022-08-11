@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/myAccountActivity"
     android:background="@color/background"
-    tools:context=".ui.MyAccountActivity">
+    tools:context=".ui.myAccount.MyAccountActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

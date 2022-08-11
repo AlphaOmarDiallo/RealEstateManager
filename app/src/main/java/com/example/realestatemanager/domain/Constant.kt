@@ -5,8 +5,8 @@ import com.example.realestatemanager.BuildConfig
 object Constant {
 
     // Currency conversion
-    const val DOLLARS_TO_EURO = 0.950
-    const val EURO_TO_DOLLARS = 1.05
+    const val DOLLARS_TO_EURO = 0.967
+    const val EURO_TO_DOLLARS = 1.03
 
     //Date format
     const val DATE_FORMAT = "dd/MM/yyyy"

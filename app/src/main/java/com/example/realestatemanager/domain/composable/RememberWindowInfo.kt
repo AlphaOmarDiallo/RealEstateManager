@@ -1,4 +1,4 @@
-package com.example.realestatemanager.domain
+package com.example.realestatemanager.domain.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration

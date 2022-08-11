@@ -1,5 +1,6 @@
 package com.example.realestatemanager.domain
 
+import com.example.realestatemanager.domain.utils.MortgagePaymentUtil
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 

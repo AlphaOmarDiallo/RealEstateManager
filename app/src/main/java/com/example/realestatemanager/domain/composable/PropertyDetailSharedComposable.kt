@@ -36,6 +36,7 @@ import coil.compose.rememberImagePainter
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.PlaceDetail
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.domain.utils.MortgagePaymentUtil
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng

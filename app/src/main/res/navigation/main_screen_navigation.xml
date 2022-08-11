@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/propertyListFragment"
-        android:name="com.example.realestatemanager.ui.PropertyListFragment"
+        android:name="com.example.realestatemanager.ui.propertyList.PropertyListFragment"
         android:label="fragment_property_list">
         <action
             android:id="@+id/action_propertyListFragment_to_propertyDetail"
@@ -22,8 +22,6 @@
         <action
             android:id="@+id/action_propertyListFragment_to_createModifyFragment"
             app:destination="@id/createModifyFragment"
-            app:popUpTo="@+id/main_screen_navigation"
-            app:popUpToInclusive="true"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
@@ -35,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/propertyDetail"
-        android:name="com.example.realestatemanager.ui.PropertyDetailFragment"
+        android:name="com.example.realestatemanager.ui.propertyDetail.PropertyDetailFragment"
         android:label="fragment_property_detail">
         <action
             android:id="@+id/action_propertyDetail_to_propertyListFragment"
@@ -61,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/mortgageCalculatorFragment"
-        android:name="com.example.realestatemanager.ui.MortgageCalculatorFragment"
+        android:name="com.example.realestatemanager.ui.mortgageCalculator.MortgageCalculatorFragment"
         android:label="fragment_mortgage_calculator"
         tools:layout="@layout/fragment_mortgage_calculator">
         <action
@@ -101,7 +99,7 @@
     </fragment>
     <fragment
         android:id="@+id/googleMapsFragment"
-        android:name="com.example.realestatemanager.ui.GoogleMapsFragment"
+        android:name="com.example.realestatemanager.ui.maps.GoogleMapsFragment"
         android:label="fragment_google_maps"
         tools:layout="@layout/fragment_google_maps" >
         <action
