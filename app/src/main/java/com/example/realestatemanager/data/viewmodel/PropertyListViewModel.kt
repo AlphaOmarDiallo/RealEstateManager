@@ -10,12 +10,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.repository.dataStore.DataStoreRepository
 import com.example.realestatemanager.data.repository.media.MediaStoreRepository
-import com.example.realestatemanager.data.repository.photo.PhotoRepository
 import com.example.realestatemanager.data.repository.property.PropertyRepository
 import com.example.realestatemanager.data.sampleData.SampleProperties
 import com.example.realestatemanager.domain.Constant
@@ -28,8 +26,7 @@ import javax.inject.Inject
 class PropertyListViewModel @Inject constructor(
     private val propertyRepository: PropertyRepository,
     private val dataStoreRepository: DataStoreRepository,
-    private val mediaStoreRepository: MediaStoreRepository,
-    private val photoRepository: PhotoRepository
+    private val mediaStoreRepository: MediaStoreRepository
 ) : ViewModel() {
 
     private var _pList = MutableLiveData<List<Property>>()
@@ -65,7 +62,7 @@ class PropertyListViewModel @Inject constructor(
         }
     }
 
-    fun updateStateList(): List<Property> {
+    private fun updateStateList(): List<Property> {
         var list: List<Property> = listOf()
         viewModelScope.launch {
             list = propertyRepository.getListOfProperties().first()
@@ -99,26 +96,5 @@ class PropertyListViewModel @Inject constructor(
                 mediaStoreRepository.loadPhotosFromInternalStorage(context)
         }
     }
-
-    /**
-     * Photo repository
-     */
-
-    /**
-     * Photo repository
-     */
-
-    fun getListOfPropertyPhoto(list: List<String>): List<Photo> {
-        val listPhoto = mutableListOf<Photo>()
-
-        viewModelScope.launch {
-            for (item in list) {
-                listPhoto.add(photoRepository.getPhotoWithName(item).first())
-            }
-        }
-
-        return listPhoto
-    }
-
 
 }

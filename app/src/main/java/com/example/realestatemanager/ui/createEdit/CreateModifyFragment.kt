@@ -522,9 +522,7 @@ class CreateModifyFragment : Fragment(),
                 property
             )
 
-            binding.btnSave.visibility = View.GONE
-            /*val action = CreateModifyFragmentDirections.actionCreateModifyFragmentToPropertyListFragment()
-            navController.navigate(action)*/
+            navController.navigateUp()
         } else {
             Utils.snackBarMaker(binding.root, getString(R.string.fill_all_field))
         }

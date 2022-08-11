@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.realestatemanager.data.localData.PhotoDao
 import com.example.realestatemanager.data.model.Agent
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.media.SharedStoragePhoto
@@ -30,8 +29,7 @@ class CreateEditViewModel @Inject constructor(
     private val mediaStoreRepository: MediaStoreRepository,
     private val nearBySearchRepository: NearBySearchRepository,
     private val propertyRepository: PropertyRepository,
-    private val agentRepository: AgentRepository,
-    private val photoDao: PhotoDao
+    private val agentRepository: AgentRepository
 ) : ViewModel() {
 
     private val _listInterest1: MutableList<Result> = mutableListOf()
@@ -45,38 +43,9 @@ class CreateEditViewModel @Inject constructor(
     /**
      * Media Storage repository
      */
-/*
-    private val _listInternalPhoto: MutableLiveData<List<InternalStoragePhoto>> = MutableLiveData()
-    val listInternalPhoto: LiveData<List<InternalStoragePhoto>> get() = _listInternalPhoto*/
 
     private val _listExternalPhoto: MutableLiveData<List<SharedStoragePhoto>> = MutableLiveData()
     val listExternalPhoto: LiveData<List<SharedStoragePhoto>> get() = _listExternalPhoto
-
-/*    fun savePhotoToInternalStorage(filename: String, bmp: Bitmap, context: Context): Boolean {
-        var result = false
-        viewModelScope.launch {
-            result = mediaStoreRepository.savePhotoToInternalStorage(filename, bmp, context)
-        }
-        return result
-    }
-
-    fun loadPhotosFromInternalStorage(context: Context) {
-        viewModelScope.launch {
-            _listInternalPhoto.value = mediaStoreRepository.loadPhotosFromInternalStorage(context)
-        }
-    }
-
-    fun deletePhotoFromInternalStorage(filename: String, context: Context): Boolean {
-        var result = false
-        viewModelScope.launch {
-            result = mediaStoreRepository.deletePhotoFromInternalStorage(filename, context)
-        }
-        return result
-    }
-
-    fun getPhotoPath(context: Context, filename: String) =
-        mediaStoreRepository.getPhotoPath(context, filename)*/
-
 
     fun initContentProvider(context: Context) = mediaStoreRepository.initContentObserver(context)
 
@@ -91,43 +60,6 @@ class CreateEditViewModel @Inject constructor(
         }
         return result
     }
-
-    /**
-     * Photo Dao
-     */
-
-/*    private val _listPhotoRoom: MutableLiveData<List<Photo>> = MutableLiveData()
-    val listPhotoRoom: LiveData<List<Photo>> get() = _listPhotoRoom
-
-    fun getPhotoList() {
-        viewModelScope.launch {
-            _listPhotoRoom.value = photoDao.getListOfPhotos().first()
-        }
-    }*/
-
-/*   fun savePhotoInRoom(internalStoragePhoto: InternalStoragePhoto) {
-        var isAlreadyInDB = false
-        var photo = Photo(0, internalStoragePhoto.bmp, internalStoragePhoto.name)
-        for (item in listPhotoRoom.value!!) {
-            if (item.name == photo.name) {
-                isAlreadyInDB = true
-                break
-            }
-        }
-        viewModelScope.launch {
-            if (!isAlreadyInDB) {
-                photoDao.insertPhoto(photo)
-            }
-        }
-    }*/
-
-/*    fun getPhotoByName(name: String): Photo? {
-        var photo: Photo? = null
-        viewModelScope.launch {
-            photo = photoDao.getPhotoWithName(name).first()
-        }
-        return photo
-    }*/
 
     /**
      * NearBySearch repository
@@ -193,7 +125,7 @@ class CreateEditViewModel @Inject constructor(
 
     fun getAgentList() {
         viewModelScope.launch {
-            if (_listAgent != null)_listAgent.value =
+            if (_listAgent != null) _listAgent.value =
                 agentRepository.getAllAgent().first()
         }
     }
