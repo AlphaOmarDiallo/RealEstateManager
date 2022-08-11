@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.realestatemanager.BuildConfig
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Agent
+import com.example.realestatemanager.data.model.PlaceDetail
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.viewmodel.CreateEditViewModel
@@ -28,11 +29,14 @@ import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
 import com.example.realestatemanager.ui.createEdit.adapter.ExternalStorageAdapter
 import com.example.realestatemanager.ui.createEdit.adapter.PhotoListAdapter
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
@@ -52,6 +56,7 @@ class CreateModifyFragment : Fragment(),
     lateinit var viewModel: CreateEditViewModel
     private val args: CreateModifyFragmentArgs by navArgs()
     private val listInterestID: MutableList<String> = mutableListOf()
+    private val listPlaceDetail: MutableList<PlaceDetail> = mutableListOf()
     private val listPhoto: MutableList<String> = mutableListOf()
     private var isCloseToSchool = false
     private var isCloseToPark = false
@@ -164,6 +169,7 @@ class CreateModifyFragment : Fragment(),
     private fun observeNearBySearchResults() {
         viewModel.listInterest.observe(requireActivity(), this::checkList)
         viewModel.listInterest.observe(requireActivity(), this::createListPlacesID)
+        viewModel.listInterest.observe(requireActivity(), this::createListPlaceDetail)
     }
 
     private fun observeListAgent() {
@@ -314,6 +320,43 @@ class CreateModifyFragment : Fragment(),
         }
     }
 
+    private fun createListPlaceDetail(list: List<Result>) {
+        if (placesClient != null) {
+            for (result in list) {
+
+                // Define a Place ID.
+                val placeId = result.place_id
+
+                val placeFields = listOf(Place.Field.ID, Place.Field.WEBSITE_URI)
+
+                val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+
+                var placeResponse: Place? = null
+
+                placesClient.fetchPlace(request)
+                    .addOnSuccessListener { response: FetchPlaceResponse ->
+                        placeResponse = response.place
+                    }.addOnFailureListener { exception: Exception ->
+                        if (exception is ApiException) {
+                            Log.e(TAG, "Place not found: ${exception.message}")
+                            val statusCode = exception.statusCode
+                        }
+                    }
+
+                val place =
+                    PlaceDetail(
+                        placeID = result.place_id,
+                        placeName = result.name,
+                        placeLat = result.geometry.location.lat.toString(),
+                        placeLng = result.geometry.location.lng.toString(),
+                        placeWebSiteUri = placeResponse?.websiteUri.toString()
+                    )
+
+                listPlaceDetail.add(place)
+            }
+        }
+
+    }
 
     /**
      * Update Views

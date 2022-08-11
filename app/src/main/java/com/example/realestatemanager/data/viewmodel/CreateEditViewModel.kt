@@ -97,7 +97,6 @@ class CreateEditViewModel @Inject constructor(
                     "getInterestsAround: HttpException" + e.message(),
                     null
                 )
-
             }
         }
     }

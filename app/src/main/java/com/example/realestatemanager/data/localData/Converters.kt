@@ -2,8 +2,8 @@ package com.example.realestatemanager.data.localData
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.room.TypeConverter
+import com.example.realestatemanager.data.model.PlaceDetail
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -20,6 +20,19 @@ class Converters {
 
     @TypeConverter
     fun fromList(list: List<String?>?): String? {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun placeListFromString(value: String?): List<PlaceDetail>? {
+        val listType = object :
+            TypeToken<ArrayList<PlaceDetail?>?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun placeListFromListToString(list: List<PlaceDetail?>?): String? {
         val gson = Gson()
         return gson.toJson(list)
     }
@@ -46,29 +59,6 @@ class Converters {
         val s = string.replace("(", "").replace(")", "")
         val list = s.split(",")
         return LatLng(list.first().toDouble(), list.last().toDouble())
-    }
-
-    @TypeConverter
-    fun fromStringToUri(value: String?): Uri? {
-        return if (value == null) null else Uri.parse(value)
-    }
-
-    @TypeConverter
-    fun fromUriToString(uri: Uri?): String? {
-        return uri?.toString()
-    }
-
-    @TypeConverter
-    fun fromStringToUriList(value: String?): List<Uri>? {
-        val listType = object :
-            TypeToken<ArrayList<Uri?>?>() {}.type
-        return Gson().fromJson(value, listType)
-    }
-
-    @TypeConverter
-    fun fromListUriToString(list: List<Uri?>?): String? {
-        val gson = Gson()
-        return gson.toJson(list)
     }
 
     @TypeConverter

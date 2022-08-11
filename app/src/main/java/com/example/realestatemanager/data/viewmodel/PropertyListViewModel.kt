@@ -1,8 +1,6 @@
 package com.example.realestatemanager.data.viewmodel
 
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
@@ -56,8 +54,6 @@ class PropertyListViewModel @Inject constructor(
     fun getPropertyList() {
         viewModelScope.launch {
             _propertyList = propertyRepository.getListOfProperties().first().toMutableStateList()
-            Log.e(TAG, "getPropertyList: _propertyList ${_propertyList.last().price}")
-            Log.e(TAG, "getPropertyList: propertyList ${propertyList.last().price}")
             _pList.value = propertyRepository.getListOfProperties().first()
         }
     }
