@@ -24,6 +24,4 @@ interface RetrofitGoogleAPI {
         @Nullable @Query("pagetoken") pageToken: String?
     ): Response<NearBySearch>
 
-
-
 }

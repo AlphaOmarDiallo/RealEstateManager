@@ -124,7 +124,6 @@ class CreateModifyFragment : Fragment(),
         viewModel.listExternalPhoto.observe(requireActivity()) {
             it?.let {
                 adapterExt.submitList(it)
-                Log.i(TAG, "updateExternalRV: here")
             }
         }
     }
@@ -135,7 +134,6 @@ class CreateModifyFragment : Fragment(),
 
         if (photo != null) {
             listPhoto.add(photo.contentUri.toString())
-            Log.i(TAG, "onItemClick: $listPhoto")
         }
 
         updatePhotoListRV()
@@ -280,7 +278,7 @@ class CreateModifyFragment : Fragment(),
             }
 
             override fun onError(status: Status) {
-                Log.i(TAG, "An error occurred: $status")
+                Log.w(TAG, "An error occurred: $status")
             }
         })
     }
@@ -297,25 +295,20 @@ class CreateModifyFragment : Fragment(),
 
     private fun checkList(list: List<Result>) {
         for (item in list) {
-            Log.i(TAG, "checkList: ${item.types}")
             if (item.types.toString().contains(Constant.SCHOOL) || item.types.toString()
                     .contains(Constant.S_SCHOOL) || item.types.toString()
                     .contains(Constant.P_SCHOOL)
             ) {
                 isCloseToSchool = true
-                Log.i(TAG, "school")
             }
             if (item.types.toString().contains(Constant.SHOPS)) {
                 isCloseToShops = true
-                Log.i(TAG, "shops")
             }
             if (item.types.toString().contains(Constant.PARK)) {
                 isCloseToPark = true
-                Log.i(TAG, "park")
             }
             if (item.types.toString().contains(Constant.TRANSPORT)) {
                 isCloseToTransport = true
-                Log.i(TAG, "transport")
             }
         }
     }
@@ -324,7 +317,6 @@ class CreateModifyFragment : Fragment(),
         if (placesClient != null) {
             for (result in list) {
 
-                // Define a Place ID.
                 val placeId = result.place_id
 
                 val placeFields = listOf(Place.Field.ID, Place.Field.WEBSITE_URI)
@@ -339,7 +331,6 @@ class CreateModifyFragment : Fragment(),
                     }.addOnFailureListener { exception: Exception ->
                         if (exception is ApiException) {
                             Log.e(TAG, "Place not found: ${exception.message}")
-                            val statusCode = exception.statusCode
                         }
                     }
 
