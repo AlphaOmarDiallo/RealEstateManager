@@ -35,6 +35,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <provider
+            android:authorities="com.example.realestatemanager.provider"
+            android:name=".domain.provider.ItemContentProvider"
+            android:exported="true"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
