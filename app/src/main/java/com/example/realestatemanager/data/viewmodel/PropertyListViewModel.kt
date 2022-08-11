@@ -4,9 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -36,7 +34,7 @@ class PropertyListViewModel @Inject constructor(
 
     private var _pList = MutableLiveData<List<Property>>()
     val pList: LiveData<List<Property>> get() = _pList
-    private var _propertyList: SnapshotStateList<Property> = mutableStateListOf<Property>()
+    private var _propertyList = updateStateList()
     val propertyList: List<Property> get() = _propertyList
     val property: MutableState<Property> = mutableStateOf(SampleProperties.samplePropertyList[0])
     val currencyEuro: MutableState<Boolean> = mutableStateOf(false)
@@ -61,9 +59,18 @@ class PropertyListViewModel @Inject constructor(
     fun getPropertyList() {
         viewModelScope.launch {
             _propertyList = propertyRepository.getListOfProperties().first().toMutableStateList()
-            Log.e(TAG, "getPropertyList: ${_propertyList.toString()}")
+            Log.e(TAG, "getPropertyList: _propertyList ${_propertyList.last().price}")
+            Log.e(TAG, "getPropertyList: propertyList ${propertyList.last().price}")
             _pList.value = propertyRepository.getListOfProperties().first()
         }
+    }
+
+    fun updateStateList(): List<Property> {
+        var list: List<Property> = listOf()
+        viewModelScope.launch {
+            list = propertyRepository.getListOfProperties().first()
+        }
+        return list.toMutableStateList()
     }
 
     private fun checkCurrencyPreference() {
@@ -83,11 +90,13 @@ class PropertyListViewModel @Inject constructor(
      * MediaRepository
      */
 
-    private val listInternalStoragePhoto: MutableState<List<InternalStoragePhoto>> = mutableStateOf(listOf())
+    private val listInternalStoragePhoto: MutableState<List<InternalStoragePhoto>> =
+        mutableStateOf(listOf())
 
-    fun getListInternalPhoto(context: Context){
+    fun getListInternalPhoto(context: Context) {
         viewModelScope.launch {
-            listInternalStoragePhoto.value = mediaStoreRepository.loadPhotosFromInternalStorage(context)
+            listInternalStoragePhoto.value =
+                mediaStoreRepository.loadPhotosFromInternalStorage(context)
         }
     }
 
@@ -99,11 +108,11 @@ class PropertyListViewModel @Inject constructor(
      * Photo repository
      */
 
-    fun getListOfPropertyPhoto(list: List<String>): List<Photo>{
+    fun getListOfPropertyPhoto(list: List<String>): List<Photo> {
         val listPhoto = mutableListOf<Photo>()
 
         viewModelScope.launch {
-            for(item in list) {
+            for (item in list) {
                 listPhoto.add(photoRepository.getPhotoWithName(item).first())
             }
         }

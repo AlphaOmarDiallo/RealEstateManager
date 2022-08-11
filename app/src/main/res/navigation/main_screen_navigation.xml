@@ -96,6 +96,9 @@
             android:name="property"
             app:argType="com.example.realestatemanager.data.model.Property"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_createModifyFragment_to_propertyListFragment2"
+            app:destination="@id/propertyListFragment" />
     </fragment>
     <fragment
         android:id="@+id/googleMapsFragment"

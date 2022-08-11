@@ -39,363 +39,335 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
-object PropertyDetailSharedComposable {
-
-    @Composable
-    fun Scaffold(
-        property: Property,
-        navController: NavController,
-        navDirections: NavDirections,
-        navDirections2: NavDirections,
-        euro: Boolean,
-        dollarToEuroRate: Double,
-        listPhoto: List<String>
+@Composable
+fun Scaffold(
+    property: Property,
+    navController: NavController,
+    navDirections: NavDirections,
+    navDirections2: NavDirections,
+    euro: Boolean,
+    dollarToEuroRate: Double,
+    listPhoto: List<String>
+) {
+    Scaffold(
+        bottomBar = {
+            BottomBar(
+                property = property,
+                navController = navController,
+                navDirections1 = navDirections,
+                navDirections2 = navDirections2,
+                euro = euro,
+                dollarToEuroRate = dollarToEuroRate
+            )
+        },
     ) {
-        Scaffold(
-            bottomBar = {
-                BottomBar(
-                    property = property,
-                    navController = navController,
-                    navDirections1 = navDirections,
-                    navDirections2 = navDirections2,
-                    euro = euro,
-                    dollarToEuroRate = dollarToEuroRate
-                )
-            },
-        ) {
-            Box(modifier = Modifier.padding(it)) {
-                PropertyInDetail(property = property, list = listPhoto)
-            }
+        Box(modifier = Modifier.padding(it)) {
+            PropertyInDetail(property = property, list = listPhoto)
         }
     }
+}
 
-    @Composable
-    fun PropertyInDetail(property: Property, list: List<String>) {
-        LazyColumn(
-            modifier = Modifier.padding(SharedComposable.largePadding),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (list.isNotEmpty()) {
-                item {
-                    PropertyMainImage(propertyMainPhoto = property.photoIDList[0])
-                }
-            }
-            item {
-                Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
-                    PropertyTitle(
-                        type = property.type,
-                        neighbourhood = property.neighbourhood,
-                        city = property.city
-                    )
-                }
-            }
-            item {
-                Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
-                    SharedComposable.TextAddress(
-                        address = property.address,
-                        style = MaterialTheme.typography.body1,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-            item {
-                Box(modifier = Modifier.padding(vertical = SharedComposable.mediumPadding)) {
-                    SharedComposable.PropertyAttributes(
-                        surface = property.surface,
-                        rooms = property.numberOfRooms,
-                        bedRooms = property.numberOfBedrooms,
-                        bathRoom = property.numberOfBathrooms
-                    )
-                }
-            }
-            item {
-                CardDescription(property = property)
-            }
-            item {
-                Box(modifier = Modifier.padding(SharedComposable.mediumPadding)) {
-                    Column(
-                        modifier = Modifier.padding(
-                            horizontal = SharedComposable.mediumPadding,
-                            vertical = SharedComposable.largePadding
-                        )
-                    ) {
-                        SharedComposable.SmallTitle(
-                            title = "Photo gallery"
-                        )
-                        PropertyImageList(propertyPhoto = property.photoIDList)
-                    }
-                }
-            }
-            item {
-                AddMap(latLng = property.latLng, address = property.address, type = property.type)
-            }
-            item {
-                Text(text = "3 km radius", style = MaterialTheme.typography.h6)
-                Column {
-                    Text(style = MaterialTheme.typography.body1, text = "Close to school = ${if (property.closeToSchool) "yes" else "no"}")
-                    Text(style = MaterialTheme.typography.body1, text = "Close to parks = ${if (property.closeToPark) "yes" else "no"}")
-                    Text(style = MaterialTheme.typography.body1, text = "Close to shops = ${if (property.closeToShops) "yes" else "no"}")
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun PropertyMainImage(propertyMainPhoto: String) {
-        DisplayPhoto(propertyPhoto = propertyMainPhoto, 400.dp, 400.dp)
-    }
-
-    @Composable
-    fun PropertyTitle(type: String, neighbourhood: String, city: String) {
-        Text(
-            text = "$type in $neighbourhood of $city",
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(8.dp),
-            color = MaterialTheme.colors.secondary
-        )
-    }
-
-    @Composable
-    fun PropertyImageList(propertyPhoto: List<String>?) {
-        if (propertyPhoto != null) {
-            LazyRow(verticalAlignment = Alignment.CenterVertically) {
-                items(propertyPhoto){
-                    DisplayPhoto(propertyPhoto = it, boxHeight = 200.dp, imageHeight = 200.dp)
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun DisplayPhoto(
-        propertyPhoto: String,
-        boxHeight: Dp,
-        imageHeight: Dp,
-        photoDescription: String? = null
+@Composable
+fun PropertyInDetail(property: Property, list: List<String>) {
+    LazyColumn(
+        modifier = Modifier.padding(largePadding),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card(
-            modifier = Modifier
-                .padding(8.dp),
-            elevation = 5.dp
-        ) {
-            Box(modifier = Modifier.height(boxHeight)) {
-                Image(painter = rememberImagePainter(Uri.parse(propertyPhoto)),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(imageHeight)
+        if (list.isNotEmpty()) {
+            item {
+                PropertyMainImage(propertyMainPhoto = property.photoIDList[0])
+            }
+        }
+        item {
+            Box(modifier = Modifier.padding(vertical = mediumPadding)) {
+                PropertyTitle(
+                    type = property.type,
+                    neighbourhood = property.neighbourhood,
+                    city = property.city
                 )
-                /*AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(Uri.parse(propertyPhoto))
-                        .build(),
-                    placeholder = painterResource(id = R.drawable.house_placeholder),
-                    contentDescription = "Property photo",
+            }
+        }
+        item {
+            Box(modifier = Modifier.padding(vertical = mediumPadding)) {
+                TextAddress(
+                    address = property.address,
+                    style = MaterialTheme.typography.body1,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+        item {
+            Box(modifier = Modifier.padding(vertical = mediumPadding)) {
+                PropertyAttributes(
+                    surface = property.surface,
+                    rooms = property.numberOfRooms,
+                    bedRooms = property.numberOfBedrooms,
+                    bathRoom = property.numberOfBathrooms
+                )
+            }
+        }
+        item {
+            CardDescription(property = property)
+        }
+        item {
+            Box(modifier = Modifier.padding(mediumPadding)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = mediumPadding,
+                        vertical = largePadding
+                    )
+                ) {
+                    SmallTitle(
+                        title = "Photo gallery"
+                    )
+                    PropertyImageList(propertyPhoto = property.photoIDList)
+                }
+            }
+        }
+        item {
+            AddMap(latLng = property.latLng, address = property.address, type = property.type)
+        }
+        item {
+            Text(text = "3 km radius", style = MaterialTheme.typography.h6)
+            Column {
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    text = "Close to school = ${if (property.closeToSchool) "yes" else "no"}"
+                )
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    text = "Close to parks = ${if (property.closeToPark) "yes" else "no"}"
+                )
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    text = "Close to shops = ${if (property.closeToShops) "yes" else "no"}"
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PropertyMainImage(propertyMainPhoto: String) {
+    DisplayPhoto(propertyPhoto = propertyMainPhoto, 400.dp, 400.dp)
+}
+
+@Composable
+fun PropertyTitle(type: String, neighbourhood: String, city: String) {
+    Text(
+        text = "$type in $neighbourhood of $city",
+        style = MaterialTheme.typography.body1,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(8.dp),
+        color = MaterialTheme.colors.secondary
+    )
+}
+
+@Composable
+fun PropertyImageList(propertyPhoto: List<String>?) {
+    if (propertyPhoto != null) {
+        LazyRow(verticalAlignment = Alignment.CenterVertically) {
+            items(propertyPhoto) {
+                DisplayPhoto(propertyPhoto = it, boxHeight = 200.dp, imageHeight = 200.dp)
+            }
+        }
+    }
+}
+
+@Composable
+fun DisplayPhoto(
+    propertyPhoto: String,
+    boxHeight: Dp,
+    imageHeight: Dp,
+    photoDescription: String? = null
+) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp),
+        elevation = 5.dp
+    ) {
+        Box(modifier = Modifier.height(boxHeight)) {
+            Image(
+                painter = rememberImagePainter(Uri.parse(propertyPhoto)),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(imageHeight)
+            )
+
+            if (photoDescription != null) {
+                Box(
                     modifier = Modifier
-                        .size(imageHeight)
-                        .matchParentSize(),
-                    contentScale = ContentScale.Fit,
-                    error = painterResource(id = R.drawable.house_placeholder)
-                )*/
-                if (photoDescription != null) {
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colorGradient,
+                                startY = 500f,
+                                endY = 1000f
+                            ),
+                        )
+                ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    SharedComposable.colorGradient,
-                                    startY = 500f,
-                                    endY = 1000f
-                                ),
-                            )
+                            .padding(mediumPadding),
+                        contentAlignment = Alignment.BottomCenter
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(SharedComposable.mediumPadding),
-                            contentAlignment = Alignment.BottomCenter
-                        ) {
-                            Text(
-                                text = photoDescription,
-                                color = MaterialTheme.colors.onPrimary,
-                                style = MaterialTheme.typography.body1
-                            )
-                        }
+                        Text(
+                            text = photoDescription,
+                            color = MaterialTheme.colors.onPrimary,
+                            style = MaterialTheme.typography.body1
+                        )
                     }
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun CardDescription(property: Property) {
-        var expended by remember { mutableStateOf(false) }
-        Box(
+@Composable
+fun CardDescription(property: Property) {
+    var expended by remember { mutableStateOf(false) }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth(),
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = SharedComposable.smallPadding)
-                    .fillMaxWidth()
-                    .animateContentSize(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = Spring.StiffnessLow
-                        )
-                    )
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .padding(vertical = SharedComposable.smallPadding)
-                ) {
-
-                    SharedComposable.SmallTitle("Description")
-
-                    IconButton(onClick = { expended = !expended }) {
-                        Icon(
-                            imageVector = if (expended) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                            contentDescription = if (expended) {
-                                stringResource(R.string.show_less)
-                            } else {
-                                stringResource(R.string.show_more)
-                            }
-
-                        )
-                    }
-                }
-                if (!expended) {
-                    PropertyDescription(propertyDescription = property.description, maxLines = 100)
-                } else if (expended) {
-                    PropertyDescription(propertyDescription = property.description, maxLines = 3)
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun PropertyDescription(propertyDescription: String, maxLines: Int) {
-        Text(
-            text = propertyDescription,
-            style = MaterialTheme.typography.body1,
-            textAlign = TextAlign.Justify,
-            modifier = Modifier.padding(4.dp),
-            maxLines = maxLines
-        )
-    }
-
-    @Composable
-    fun AddMap(latLng: LatLng, address: String, type: String) {
-        //var addressToLocation: Location? = viewModel.location.value
-
-        Card(
-            modifier = Modifier
+                .padding(horizontal = smallPadding)
                 .fillMaxWidth()
-                .padding(SharedComposable.mediumPadding),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 10.dp
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )
         ) {
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(latLng, 16f)
-            }
-            GoogleMap(
-                modifier = Modifier.size(300.dp),
-                cameraPositionState = cameraPositionState
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = smallPadding)
             ) {
-                Marker(
-                    state = MarkerState(position = latLng),
-                    title = type,
-                    snippet = address
+
+                SmallTitle("Description")
+
+                IconButton(onClick = { expended = !expended }) {
+                    Icon(
+                        imageVector = if (expended) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                        contentDescription = if (expended) {
+                            stringResource(R.string.show_less)
+                        } else {
+                            stringResource(R.string.show_more)
+                        }
+
+                    )
+                }
+            }
+            if (!expended) {
+                PropertyDescription(propertyDescription = property.description, maxLines = 100)
+            } else if (expended) {
+                PropertyDescription(propertyDescription = property.description, maxLines = 3)
+            }
+        }
+    }
+}
+
+@Composable
+fun PropertyDescription(propertyDescription: String, maxLines: Int) {
+    Text(
+        text = propertyDescription,
+        style = MaterialTheme.typography.body1,
+        textAlign = TextAlign.Justify,
+        modifier = Modifier.padding(4.dp),
+        maxLines = maxLines
+    )
+}
+
+@Composable
+fun AddMap(latLng: LatLng, address: String, type: String) {
+    //var addressToLocation: Location? = viewModel.location.value
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(mediumPadding),
+        shape = RoundedCornerShape(15.dp),
+        elevation = 10.dp
+    ) {
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(latLng, 16f)
+        }
+        GoogleMap(
+            modifier = Modifier.size(300.dp),
+            cameraPositionState = cameraPositionState
+        ) {
+            Marker(
+                state = MarkerState(position = latLng),
+                title = type,
+                snippet = address
+            )
+        }
+    }
+}
+
+@Composable
+fun BottomBar(
+    property: Property,
+    navController: NavController,
+    navDirections1: NavDirections,
+    navDirections2: NavDirections,
+    euro: Boolean,
+    dollarToEuroRate: Double
+) {
+    Surface(
+        elevation = 5.dp,
+        modifier = Modifier
+            .background(MaterialTheme.colors.onPrimary)
+            .fillMaxWidth()
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Column {
+                Text(
+                    text = if (euro) "€ ${(property.price * dollarToEuroRate).toInt()}" else "$ ${property.price}",
+                    style = MaterialTheme.typography.h5,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.primaryVariant,
+                    modifier = Modifier.clickable {
+                        navController.navigate(navDirections1)
+                    }
+                )
+                if (property.saleStatus) {
+                    Text(text = "SOLD")
+                } else {
+                    val rate = 2.00
+                    val years = 30
+                    val monthlyPayment = if (euro) MortgagePaymentUtil.monthlyPaymentMortgage(
+                        (property.price.toDouble() * dollarToEuroRate),
+                        rate,
+                        years
+                    ) else MortgagePaymentUtil.monthlyPaymentMortgage(
+                        property.price.toDouble(),
+                        rate,
+                        years
+                    )
+                    if (euro) Text(text = "from €$monthlyPayment per month") else Text(text = "from $$monthlyPayment per month")
+                }
+            }
+            IconButton(onClick = {
+                navigateToEditFragment(navDirections2, navController)
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = ""
                 )
             }
         }
     }
+}
 
-    @Composable
-    fun BottomBar(
-        property: Property,
-        navController: NavController,
-        navDirections1: NavDirections,
-        navDirections2: NavDirections,
-        euro: Boolean,
-        dollarToEuroRate: Double
-    ) {
-        Surface(
-            elevation = 5.dp,
-            modifier = Modifier
-                .background(MaterialTheme.colors.onPrimary)
-                .fillMaxWidth()
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Column {
-                    Text(
-                        text = if (euro) "€ ${(property.price * dollarToEuroRate).toInt()}" else "$ ${property.price}",
-                        style = MaterialTheme.typography.h5,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.primaryVariant,
-                        modifier = Modifier.clickable {
-                            navController.navigate(navDirections1)
-                        }
-                    )
-                    if (property.saleStatus){
-                        Text(text = "SOLD")
-                    } else {
-                        val rate = 2.00
-                        val years = 30
-                        val monthlyPayment = if (euro) MortgagePaymentUtil.monthlyPaymentMortgage(
-                            (property.price.toDouble() * dollarToEuroRate),
-                            rate,
-                            years
-                        ) else MortgagePaymentUtil.monthlyPaymentMortgage(
-                            property.price.toDouble(),
-                            rate,
-                            years
-                        )
-                        if (euro) Text(text = "from €$monthlyPayment per month") else Text(text = "from $$monthlyPayment per month")
-                    }
-                }
-/*                IconButton(
-                    onClick = { *//*TODO*//* },
-                    modifier = Modifier
-                        .padding(SharedComposable.mediumPadding)
-                        .border(
-                            2.dp,
-                            color = MaterialTheme.colors.primary,
-                            shape = MaterialTheme.shapes.medium
-                        )
-                ) {
-                    Row(horizontalArrangement = Arrangement.Center) {
-                        Icon(
-                            imageVector = Icons.Outlined.Payments,
-                            contentDescription = "Bills for payment",
-                            modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
-                            tint = MaterialTheme.colors.primaryVariant
-                        )
-                        Text(
-                            text = "Found a buyer",
-                            modifier = Modifier.padding(horizontal = SharedComposable.smallPadding),
-                            color = MaterialTheme.colors.primary
-                        )
-                    }
-                }*/
-                IconButton(onClick = {
-                    navigateToEditFragment(navDirections2, navController)
-                }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = ""
-                    )
-                }
-            }
-        }
-    }
-
-    private fun navigateToEditFragment(navDirections: NavDirections, navController: NavController){
-        navController.navigate(navDirections)
-    }
+private fun navigateToEditFragment(navDirections: NavDirections, navController: NavController) {
+    navController.navigate(navDirections)
 }

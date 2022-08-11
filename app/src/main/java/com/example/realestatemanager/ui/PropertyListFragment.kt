@@ -40,10 +40,7 @@ import coil.compose.rememberImagePainter
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
-import com.example.realestatemanager.domain.PropertyDetailSharedComposable
-import com.example.realestatemanager.domain.SharedComposable
-import com.example.realestatemanager.domain.WindowInfo
-import com.example.realestatemanager.domain.rememberWindowInfo
+import com.example.realestatemanager.domain.*
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -64,10 +61,19 @@ class PropertyListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.pList.observe(requireActivity()){
-            propertyList = it
-            Log.i(TAG, "onCreateView: addedProperty")
-            setNew()
+        viewModel.pList.observe(requireActivity()) {
+            if (propertyList.isEmpty()) {
+                propertyList = it
+                Log.i(TAG, "onCreateView: list was empty")
+            } else if (propertyList.isNotEmpty()) {
+                if (it.size == propertyList.size) {
+                    Log.i(TAG, "onCreateView: list was the same size")
+                } else {
+                    propertyList = it
+                    viewModel.getPropertyList()
+                    Log.i(TAG, "onCreateView: list was not the same size")
+                }
+            }
         }
         return ComposeView(requireContext()).apply {
             setContent {
@@ -77,16 +83,17 @@ class PropertyListFragment : Fragment() {
                 observeCurrencyPref()
                 dollarToEuroRate = viewModel.dollarToEuroRate.value
                 selectedProperty = viewModel.property.value
-                
-                screenWidth(viewModel = viewModel)
+                Log.e(TAG, "onCreateView: property")
+
+                screenWidth(list = viewModel.propertyList.toMutableStateList())
             }
         }
     }
 
     @Composable
-    fun screenWidth(viewModel: PropertyListViewModel){
+    fun screenWidth(list: List<Property>) {
         viewModel.getPropertyList()
-        val list = viewModel.propertyList
+
         if (list.isNotEmpty()) Log.e(TAG, "screenWidth: ${list.last().price}")
 
         if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Expended) {
@@ -121,7 +128,7 @@ class PropertyListFragment : Fragment() {
                 viewModel.getListInternalPhoto(requireContext())
                 val listPhoto = selectedProperty.photoIDList
 
-                PropertyDetailSharedComposable.Scaffold(
+                Scaffold(
                     property = selectedProperty,
                     navController = navController,
                     navDirections = action,
@@ -242,7 +249,8 @@ class PropertyListFragment : Fragment() {
                 modifier = Modifier
                     .padding(12.dp)
             ) {
-                Image(painter = rememberImagePainter(Uri.parse(property.photoIDList[0])),
+                Image(
+                    painter = rememberImagePainter(Uri.parse(property.photoIDList[0])),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.size(50.dp)
@@ -254,24 +262,24 @@ class PropertyListFragment : Fragment() {
                     modifier = Modifier.weight(2f),
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
-                    SharedComposable.TextPropertyType(
+                    TextPropertyType(
                         propertyType = property.type,
                         style = MaterialTheme.typography.body1,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.onSecondary
                     )
-                    SharedComposable.TextNeighbourhoodAndCity(
+                    TextNeighbourhoodAndCity(
                         neighbourhood = property.neighbourhood,
                         city = property.city
                     )
                     if (euro) {
-                        SharedComposable.TextPrice(
+                        TextPrice(
                             price = priceToEuro(property.price),
                             euro = currencyEuro,
                             dollarToEuroRate = dollarToEuroRate
                         )
                     } else {
-                        SharedComposable.TextPrice(
+                        TextPrice(
                             price = property.price,
                             euro = currencyEuro,
                             dollarToEuroRate = dollarToEuroRate
@@ -316,8 +324,8 @@ class PropertyListFragment : Fragment() {
                         .padding(4.dp)
                         .fillMaxWidth(), horizontalAlignment = Alignment.Start
                 ) {
-                    SharedComposable.TextAddress(address = property.address)
-                    SharedComposable.PropertyAttributes(
+                    TextAddress(address = property.address)
+                    PropertyAttributes(
                         surface = property.surface,
                         rooms = property.numberOfRooms,
                         bedRooms = property.numberOfBedrooms,
@@ -365,7 +373,4 @@ class PropertyListFragment : Fragment() {
         return (price * dollarToEuroRate).toInt()
     }
 
-    private fun setNew() {
-
-    }
 }

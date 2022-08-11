@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyDetailViewModel
-import com.example.realestatemanager.domain.PropertyDetailSharedComposable
+import com.example.realestatemanager.domain.Scaffold
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
 
@@ -41,18 +41,25 @@ class PropertyDetailFragment : Fragment() {
                 val propertyID = args.propertyID
                 fetchPropertyData(propertyID)
                 val property: Property = getDataFromViewModel()
-                val action1 = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(property.price)
-                val action2 = PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment("null", property)
+                val action1 =
+                    PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
+                        property.price
+                    )
+                val action2 =
+                    PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment(
+                        "null",
+                        property
+                    )
 
                 viewModel.getListInternalPhoto(requireContext())
 
                 val propertyPhoto = property.photoIDList
 
-                PropertyDetailSharedComposable.Scaffold(
+                Scaffold(
                     property = property,
                     navController = navController,
                     navDirections = action1,
-                    navDirections2 =  action2,
+                    navDirections2 = action2,
                     euro = currencyEuro,
                     dollarToEuroRate = dollarToEuroRate,
                     listPhoto = propertyPhoto
@@ -60,32 +67,6 @@ class PropertyDetailFragment : Fragment() {
             }
         }
     }
-
-/*    @Preview(
-        showBackground = true,
-        widthDp = 320,
-        uiMode = Configuration.UI_MODE_NIGHT_YES,
-        name = "DefaultPreviewDark"
-    )
-    @Preview(showBackground = true)
-    @Composable
-    fun FragmentPreview() {
-        RealEstateManagerTheme {
-            PropertyDetailSharedComposable.Scaffold(
-                property = SampleProperties.samplePropertyList[0],
-                navController = navController,
-                navDirections = PropertyDetailFragmentDirections.actionPropertyDetailToMortgageCalculatorFragment(
-                    SampleProperties.samplePropertyList[0].price
-                ),
-                navDirections2 = PropertyDetailFragmentDirections.actionPropertyDetailToCreateModifyFragment(
-                    "null", SampleProperties.samplePropertyList[0]
-                ),
-                euro = currencyEuro,
-                dollarToEuroRate = dollarToEuroRate,
-                listInternalPhoto = listInternalPhoto
-            )
-        }
-    }*/
 
     /**
      * Getting data from viewModel
@@ -102,10 +83,5 @@ class PropertyDetailFragment : Fragment() {
     private fun fetchPropertyData(id: Int) {
         viewModel.getProperty(id)
     }
-
-    /**
-     *
-     */
-
 
 }

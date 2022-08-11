@@ -11,9 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.localData.PhotoDao
 import com.example.realestatemanager.data.model.Agent
-import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
-import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.model.media.SharedStoragePhoto
 import com.example.realestatemanager.data.model.nearBySearch.Result
 import com.example.realestatemanager.data.repository.agent.AgentRepository
@@ -47,14 +45,14 @@ class CreateEditViewModel @Inject constructor(
     /**
      * Media Storage repository
      */
-
+/*
     private val _listInternalPhoto: MutableLiveData<List<InternalStoragePhoto>> = MutableLiveData()
-    val listInternalPhoto: LiveData<List<InternalStoragePhoto>> get() = _listInternalPhoto
+    val listInternalPhoto: LiveData<List<InternalStoragePhoto>> get() = _listInternalPhoto*/
 
     private val _listExternalPhoto: MutableLiveData<List<SharedStoragePhoto>> = MutableLiveData()
     val listExternalPhoto: LiveData<List<SharedStoragePhoto>> get() = _listExternalPhoto
 
-    fun savePhotoToInternalStorage(filename: String, bmp: Bitmap, context: Context): Boolean {
+/*    fun savePhotoToInternalStorage(filename: String, bmp: Bitmap, context: Context): Boolean {
         var result = false
         viewModelScope.launch {
             result = mediaStoreRepository.savePhotoToInternalStorage(filename, bmp, context)
@@ -77,16 +75,20 @@ class CreateEditViewModel @Inject constructor(
     }
 
     fun getPhotoPath(context: Context, filename: String) =
-        mediaStoreRepository.getPhotoPath(context, filename)
+        mediaStoreRepository.getPhotoPath(context, filename)*/
 
 
     fun initContentProvider(context: Context) = mediaStoreRepository.initContentObserver(context)
 
-    fun loadPhotoFromExternalStorage(context: Context) = viewModelScope.launch { _listExternalPhoto.value = mediaStoreRepository.loadPhotosFromExternalStorage(context) }
+    fun loadPhotoFromExternalStorage(context: Context) = viewModelScope.launch {
+        _listExternalPhoto.value = mediaStoreRepository.loadPhotosFromExternalStorage(context)
+    }
 
     fun savePhotoInExternalStorage(name: String, bmp: Bitmap, context: Context): Boolean {
-        var result = false
-        viewModelScope.launch { result = mediaStoreRepository.savePhotoToExternalStorage(name, bmp, context) }
+        var result = true
+        viewModelScope.launch {
+            result = mediaStoreRepository.savePhotoToExternalStorage(name, bmp, context)
+        }
         return result
     }
 
@@ -94,16 +96,16 @@ class CreateEditViewModel @Inject constructor(
      * Photo Dao
      */
 
-    private val _listPhotoRoom: MutableLiveData<List<Photo>> = MutableLiveData()
+/*    private val _listPhotoRoom: MutableLiveData<List<Photo>> = MutableLiveData()
     val listPhotoRoom: LiveData<List<Photo>> get() = _listPhotoRoom
 
     fun getPhotoList() {
         viewModelScope.launch {
             _listPhotoRoom.value = photoDao.getListOfPhotos().first()
         }
-    }
+    }*/
 
-    fun savePhotoInRoom(internalStoragePhoto: InternalStoragePhoto) {
+/*   fun savePhotoInRoom(internalStoragePhoto: InternalStoragePhoto) {
         var isAlreadyInDB = false
         var photo = Photo(0, internalStoragePhoto.bmp, internalStoragePhoto.name)
         for (item in listPhotoRoom.value!!) {
@@ -116,17 +118,16 @@ class CreateEditViewModel @Inject constructor(
             if (!isAlreadyInDB) {
                 photoDao.insertPhoto(photo)
             }
-
         }
-    }
+    }*/
 
-    fun getPhotoByName(name: String): Photo? {
+/*    fun getPhotoByName(name: String): Photo? {
         var photo: Photo? = null
         viewModelScope.launch {
             photo = photoDao.getPhotoWithName(name).first()
         }
         return photo
-    }
+    }*/
 
     /**
      * NearBySearch repository
@@ -192,15 +193,15 @@ class CreateEditViewModel @Inject constructor(
 
     fun getAgentList() {
         viewModelScope.launch {
-            if (agentRepository.getAllAgent().first() != null) _listAgent.value =
+            if (_listAgent != null)_listAgent.value =
                 agentRepository.getAllAgent().first()
         }
     }
 
     fun getAgentID(name: String): String {
-        var id: String = ""
+        var id = ""
         for (agent in listAgent.value!!) {
-            if (agent.name.equals(name)) {
+            if (agent.name == name) {
                 id = agent.id
                 break
             }

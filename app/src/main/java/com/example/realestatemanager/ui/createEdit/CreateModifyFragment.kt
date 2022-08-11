@@ -27,7 +27,6 @@ import com.example.realestatemanager.databinding.FragmentCreateModifyBinding
 import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.Utils
 import com.example.realestatemanager.ui.createEdit.adapter.ExternalStorageAdapter
-import com.example.realestatemanager.ui.createEdit.adapter.InternalStorageAdapter
 import com.example.realestatemanager.ui.createEdit.adapter.PhotoListAdapter
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
@@ -42,14 +41,12 @@ import java.util.*
 
 @AndroidEntryPoint
 class CreateModifyFragment : Fragment(),
-    InternalStorageAdapter.OnItemInternalStoragePhotoClickListener,
     ExternalStorageAdapter.OnItemExternalStoragePhotoClickListener,
     PhotoListAdapter.OnItemPhotoListClickListener {
 
     private lateinit var binding: FragmentCreateModifyBinding
     private lateinit var navController: NavController
     private lateinit var placesClient: PlacesClient
-    private lateinit var adapter: InternalStorageAdapter
     private lateinit var adapterExt: ExternalStorageAdapter
     private lateinit var photoListAdapter: PhotoListAdapter
     lateinit var viewModel: CreateEditViewModel
@@ -67,7 +64,6 @@ class CreateModifyFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCreateModifyBinding.inflate(inflater, container, false)
-        val view = inflater.inflate(R.layout.fragment_mortgage_calculator, container, false)
         viewModel = ViewModelProvider(requireActivity())[CreateEditViewModel::class.java]
         return binding.root
     }
@@ -76,8 +72,6 @@ class CreateModifyFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         getArgsFromNav()
-
-        setPhotoAdapter()
 
         setExternalPhotoAdapter()
 
@@ -107,52 +101,6 @@ class CreateModifyFragment : Fragment(),
     }
 
     /**
-     * List Internal Photo
-     */
-    private fun setPhotoAdapter() {
-        viewModel.getPhotoList()
-
-        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
-        binding.recyclerview.adapter = adapter
-        binding.recyclerview.layoutManager =
-            (LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false))
-
-        updateRV()
-    }
-
-    private fun updateRV() {
-        viewModel.loadPhotosFromInternalStorage(requireContext())
-        viewModel.listInternalPhoto.observe(requireActivity()) {
-            it?.let {
-                adapter.submitList(it)
-            }
-        }
-    }
-
-    private fun updateAdapter() {
-        adapter = InternalStorageAdapter(InternalStorageAdapter.ListDiff(), this)
-    }
-
-    override fun onItemClick(position: Int) {
-        val internalPhotoList = viewModel.listInternalPhoto.value
-        val photo = internalPhotoList?.get(position)
-
-        /*if (photo != null) {
-
-            if (listPhoto.contains(photo.uri.toPath().toString())) {
-                val test = listPhoto.remove(photo.uri.toPath().toString())
-                Log.i(TAG, "onItemClick: $test")
-            } else {
-                listPhoto.add(photo.uri.toPath().toString())
-                Log.i(TAG, "onItemClick: $listPhoto")
-            }
-
-            updateAdapter()
-            updatePhotoListRV()
-        }*/
-    }
-
-    /**
      * List External Photo
      */
     private fun setExternalPhotoAdapter() {
@@ -171,6 +119,7 @@ class CreateModifyFragment : Fragment(),
         viewModel.listExternalPhoto.observe(requireActivity()) {
             it?.let {
                 adapterExt.submitList(it)
+                Log.i(TAG, "updateExternalRV: here")
             }
         }
     }
@@ -318,7 +267,7 @@ class CreateModifyFragment : Fragment(),
                 location.latitude = place.latLng?.latitude!!
                 location.longitude = place.latLng?.longitude!!
 
-                latLng = place.latLng
+                latLng = place.latLng!!
 
                 viewModel.getInterestsAround(location)
 
@@ -343,7 +292,10 @@ class CreateModifyFragment : Fragment(),
     private fun checkList(list: List<Result>) {
         for (item in list) {
             Log.i(TAG, "checkList: ${item.types}")
-            if (item.types.toString().contains(Constant.SCHOOL) || item.types.toString().contains(Constant.S_SCHOOL) || item.types.toString().contains(Constant.P_SCHOOL)) {
+            if (item.types.toString().contains(Constant.SCHOOL) || item.types.toString()
+                    .contains(Constant.S_SCHOOL) || item.types.toString()
+                    .contains(Constant.P_SCHOOL)
+            ) {
                 isCloseToSchool = true
                 Log.i(TAG, "school")
             }
@@ -488,13 +440,13 @@ class CreateModifyFragment : Fragment(),
             val isSavedSuccessfully =
                 viewModel.savePhotoInExternalStorage(fileName, it!!, requireContext())
             //viewModel.savePhotoToInternalStorage(fileName, it!!, requireContext())
-            if (isSavedSuccessfully) Utils.snackBarMaker(
-                binding.root,
-                "Photo saved successfully"
-            ) else Utils.snackBarMaker(binding.root, "Error saving photo")
-            val test = viewModel.getPhotoPath(requireContext(), fileName)
-            Utils.snackBarMaker(binding.root, test)
-            updateRV()
+            if (isSavedSuccessfully) {
+                Utils.snackBarMaker(binding.root, "Photo saved successfully")
+                viewModel.loadPhotoFromExternalStorage(requireContext())
+                adapterExt.submitList(viewModel.listExternalPhoto.value)
+            } else {
+                Utils.snackBarMaker(binding.root, "Error saving photo")
+            }
         }
 
     /**
@@ -570,8 +522,9 @@ class CreateModifyFragment : Fragment(),
                 property
             )
 
-            navController.navigateUp()
-
+            binding.btnSave.visibility = View.GONE
+            /*val action = CreateModifyFragmentDirections.actionCreateModifyFragmentToPropertyListFragment()
+            navController.navigate(action)*/
         } else {
             Utils.snackBarMaker(binding.root, getString(R.string.fill_all_field))
         }
