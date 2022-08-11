@@ -85,7 +85,29 @@ class PropertyListFragment : Fragment() {
                 selectedProperty = viewModel.property.value
                 Log.e(TAG, "onCreateView: property")
 
-                screenWidth(list = viewModel.propertyList.toMutableStateList())
+                var compose by remember { mutableStateOf(false) }
+
+                viewModel.pList.observe(requireActivity()) {
+                    if (propertyList.isEmpty()) {
+                        propertyList = it
+                        Log.i(TAG, "onCreateView: list was empty")
+                    } else if (propertyList.isNotEmpty()) {
+                        if (it.size == propertyList.size) {
+                            compose = true
+                            Log.i(TAG, "onCreateView: list was the same size")
+                        } else {
+                            propertyList = it
+                            viewModel.getPropertyList()
+                            Log.i(TAG, "onCreateView: list was not the same size")
+                        }
+                    }
+                }
+
+                if (compose){
+                    Log.e(TAG, "onCreateView: here composing")
+                    screenWidth(list = propertyList)
+                }
+
             }
         }
     }

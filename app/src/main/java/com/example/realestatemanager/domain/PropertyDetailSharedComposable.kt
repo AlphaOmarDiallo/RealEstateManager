@@ -333,7 +333,7 @@ fun AddMap(latLng: LatLng, address: String, type: String, list: List<PlaceDetail
                         onClick = markerClick,
                         snippet = place.placeType
                     ) {
-                        Column() {
+                        Column {
                             Text(text = it.title ?: "Title", style = MaterialTheme.typography.body1,color = Color.Blue)
                             Text(text = it.snippet ?: "Title", color = Color.Black)
                         }

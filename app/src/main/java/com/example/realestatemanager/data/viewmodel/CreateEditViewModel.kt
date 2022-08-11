@@ -113,6 +113,15 @@ class CreateEditViewModel @Inject constructor(
         viewModelScope.launch { propertyRepository.updateProperty(property) }
     }
 
+    fun getLastPropertyAdded(): Int {
+        var idLast = 0
+        viewModelScope.launch {
+            val list = propertyRepository.getListOfProperties().first()
+            idLast = list.last().id
+        }
+        return idLast
+    }
+
     /**
      * Agent repository
      */
