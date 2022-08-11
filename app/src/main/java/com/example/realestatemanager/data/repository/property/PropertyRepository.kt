@@ -1,5 +1,6 @@
 package com.example.realestatemanager.data.repository.property
 
+import android.database.Cursor
 import com.example.realestatemanager.data.model.Property
 import kotlinx.coroutines.flow.Flow
 
@@ -12,5 +13,13 @@ interface PropertyRepository {
     fun getListOfProperties(): Flow<List<Property>>
 
     fun getProperty(propertyID: Int): Flow<Property>
+
+    /**
+     * Content provider
+     */
+
+    fun getPropertyListWithCursor(): Cursor
+
+    fun getPropertyWithCursor(id: Int): Cursor
 
 }

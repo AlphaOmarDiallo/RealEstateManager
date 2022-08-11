@@ -20,13 +20,14 @@ interface PropertyDao {
     @Query("SELECT * FROM property_table WHERE property_id= :id")
     fun getProperty(id: Int): Flow<Property>
 
-    //Todo add more queries to get filtered list in order to kee code clean
-
     /**
      * Content provider
      */
     @Query("SELECT * FROM property_table WHERE property_id= :id")
     fun getPropertyWithCursor(id: Int): Cursor
+
+    @Query("SELECT * FROM property_table")
+    fun getPropertyListWithCursor(): Cursor
 
     /**
      * Only for test purpose, app does not allow to delete properties
