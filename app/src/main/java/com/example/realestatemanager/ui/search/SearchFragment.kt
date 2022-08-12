@@ -54,8 +54,11 @@ class SearchFragment : Fragment() {
     private fun setType() {
         val listType = mutableListOf<String>()
 
-        for (item in listProperties!!){
-            if (listType.contains(item.type)) Log.i(TAG, "setType: already in list") else listType.add(item.type)
+        for (item in listProperties!!) {
+            if (listType.contains(item.type)) Log.i(
+                TAG,
+                "setType: already in list"
+            ) else listType.add(item.type)
         }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, listType)
@@ -65,20 +68,23 @@ class SearchFragment : Fragment() {
     private fun setCity() {
 
         for (item in listProperties!!) {
-            if (cityList.contains(item.city)) Log.i(TAG, "setCity: already in list") else cityList.add(item.city)
+            if (cityList.contains(item.city)) Log.i(
+                TAG,
+                "setCity: already in list"
+            ) else cityList.add(item.city)
         }
 
         setCityAdapter()
     }
 
-    private fun setCityAdapter(){
+    private fun setCityAdapter() {
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, cityList)
         (binding.TILPropertyCityS.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         setCityListener()
     }
 
-    private fun setCityListener(){
+    private fun setCityListener() {
         binding.autoCompleteTextViewCityS.onItemClickListener =
             AdapterView.OnItemClickListener { adapterView, view, i, l ->
                 val currentCity = cityList[i]
@@ -91,8 +97,11 @@ class SearchFragment : Fragment() {
         val neiList: MutableList<String> = mutableListOf()
 
         for (item in listProperties!!) {
-            if (item.city == city){
-                if (neiList.contains(item.neighbourhood)) Log.i(TAG, "setCity: already in list") else neiList.add(item.neighbourhood)
+            if (item.city == city) {
+                if (neiList.contains(item.neighbourhood)) Log.i(
+                    TAG,
+                    "setCity: already in list"
+                ) else neiList.add(item.neighbourhood)
             }
         }
 
@@ -100,7 +109,7 @@ class SearchFragment : Fragment() {
 
     }
 
-    private fun setNeighbourHoodAdapter(list: List<String>){
+    private fun setNeighbourHoodAdapter(list: List<String>) {
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, list)
         (binding.TILPropertyNeiS.editText as? AutoCompleteTextView)?.setAdapter(adapter)
     }
@@ -113,7 +122,7 @@ class SearchFragment : Fragment() {
         viewModel.getPropertyList()
         viewModel.propertyList.observe(requireActivity()) {
             listProperties = it
-            if (!it.isNullOrEmpty()){
+            if (!it.isNullOrEmpty()) {
                 listProperties = it
                 setViews()
             }
@@ -123,7 +132,32 @@ class SearchFragment : Fragment() {
     private fun getNumberProperties() {
         val number = viewModel.getNumberOfProperties()
         if (binding.textView.text == "0")
-        binding.textView.text = "$number"
+            binding.textView.text = "$number"
+    }
+
+    /**
+     * Search
+     */
+
+    fun setupOnClick() {
+        binding.btnSearch.setOnClickListener { }
+    }
+
+    fun collectDataToSearchFun(
+        type: String?,
+        city: String?,
+        neighbourhood: String?,
+        school: Boolean,
+        shops: Boolean,
+        parks: Boolean,
+        soldLast3Month: Boolean,
+        addedLess7Days: Boolean,
+        startingPrice: Int?,
+        priceLimit: Int?,
+        sizeFrom: Int?,
+        sizeUpTo: Int?
+    ) {
+
     }
 
 }
