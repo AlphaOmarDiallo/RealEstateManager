@@ -21,6 +21,41 @@ interface PropertyDao {
     fun getProperty(id: Int): Flow<Property>
 
     /**
+     * SEARCH MULTI CRITERIA
+     */
+    @Query(
+        "SELECT * FROM property_table WHERE property_type IN (:isNearTypeProperty) " +
+                "AND property_surface BETWEEN :isNearMinSurface AND :isNearMaxSurface " +
+                "AND property_close_school IN (:isNearSchool) " +
+                "AND property_close_park IN (:isNearParc) " +
+                "AND property_close_shops IN (:isNearStore) " +
+                "AND property_photos >= :isNearNumberOfPhotos " +
+                "AND property_price BETWEEN :isNearMinPrice AND :isNearMaxPrice " +
+                "AND property_on_market_since BETWEEN :isNearMinDateOfSale AND :isNearMaxDateOfSale " +
+                "AND property_sale_status = :isNearSaleStatus " +
+                "AND property_off_market_since BETWEEN :isNearMinDateSold AND :isNearMaxDateSold"
+    )
+    fun getPropertyResearch(
+        isNearTypeProperty: List<String>,
+        isNearMinSurface: Int,
+        isNearMaxSurface: Int,
+        isNearSchool: List<Boolean>,
+        isNearHobbies: List<Boolean>,
+        isNearTransport: List<Boolean>,
+        isNearParc: List<Boolean>,
+        isNearStore: List<Boolean>,
+        isNearCity: String,
+        isNearNumberOfPhotos: Int,
+        isNearMinPrice: Int,
+        isNearMaxPrice: Int,
+        isNearMinDateOfSale: Long,
+        isNearMaxDateOfSale: Long,
+        isNearSaleStatus: Boolean,
+        isNearMinDateSold: Long,
+        isNearMaxDateSold: Long
+    ): Flow<List<Property>>
+
+    /**
      * Content provider
      */
     @Query("SELECT * FROM property_table WHERE property_id= :id")

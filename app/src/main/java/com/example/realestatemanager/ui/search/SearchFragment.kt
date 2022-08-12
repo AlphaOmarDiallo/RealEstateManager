@@ -38,7 +38,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getListProperties()
-
+        setupOnClick()
     }
 
     private fun setViews() {
@@ -139,8 +139,23 @@ class SearchFragment : Fragment() {
      * Search
      */
 
-    fun setupOnClick() {
-        binding.btnSearch.setOnClickListener { }
+    private fun setupOnClick() {
+        binding.btnSearch.setOnClickListener{
+            collectDataToSearchFun(
+                binding.autoCompleteTextViewTypeS.text.toString(),
+                binding.autoCompleteTextViewCityS.toString(),
+                binding.autoCompleteTextViewNeiS.text.toString(),
+                binding.switch1.isChecked,
+                binding.switch2.isChecked,
+                binding.switch3.isChecked,
+                binding.switch4.isChecked,
+                binding.switch5.isChecked,
+                if(binding.tiedPriceFrom.text.toString() != "") binding.tiedPriceFrom.text.toString().toInt() else null,
+                if (binding.tiedPriceUpTo.text.toString() != "") binding.tiedPriceUpTo.text.toString().toInt() else null,
+                if (binding.tiedSizeFrom.text.toString() != "") binding.tiedSizeFrom.text.toString().toInt() else null,
+                if (binding.tiedSizeTo.text.toString() != "") binding.tiedSizeTo.text.toString().toInt() else null
+            )
+        }
     }
 
     fun collectDataToSearchFun(
@@ -157,7 +172,20 @@ class SearchFragment : Fragment() {
         sizeFrom: Int?,
         sizeUpTo: Int?
     ) {
-
+        viewModel.searchUserCriteria(
+            type,
+            city,
+            neighbourhood,
+            school,
+            shops,
+            parks,
+            soldLast3Month,
+            addedLess7Days,
+            startingPrice,
+            priceLimit,
+            sizeFrom,
+            sizeUpTo
+        )
     }
 
 }
