@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SearchFragment"
-    android:id="@+id/frameLayout3">
+    tools:context=".ui.search.SearchFragment">
 
     <ScrollView
         android:id="@+id/scrollView3"
@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Schools"
+                        android:text="@string/schools"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/switch2"
                         app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +137,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="Shops"
+                        android:text="@string/shops"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/switch3"
                         app:layout_constraintStart_toEndOf="@+id/switch1"
@@ -149,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Parks"
+                        android:text="@string/parks"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/switch2"
@@ -158,43 +158,139 @@
 
             </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/sliderSize"
-                style="Widget.MaterialComponents.Slider"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:contentDescription="@string/slider_to_modify_the_mortgage_rate_from_2_to_6"
-                android:stepSize="0.5"
-                android:value="2"
-                android:valueFrom="2"
-                android:valueTo="6"
-                app:labelStyle="@style/Widget.MaterialComponents.Tooltip"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ivPlus2"
-                app:layout_constraintStart_toEndOf="@+id/ivMinus2"
-                app:layout_constraintTop_toBottomOf="@+id/tvMortgageRateValue" />
+                android:layout_margin="8dp">
 
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/sliderPrice"
-                style="Widget.MaterialComponents.Slider"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/sold_in_the_last_3_month"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/switch5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/added_1_week"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/switch4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILPriceFrom"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:contentDescription="@string/slider_to_modify_the_mortgage_rate_from_2_to_6"
-                android:stepSize="0.5"
-                android:value="2"
-                android:valueFrom="2"
-                android:valueTo="6"
-                app:labelStyle="@style/Widget.MaterialComponents.Tooltip"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ivPlus2"
-                app:layout_constraintStart_toEndOf="@+id/ivMinus2"
-                app:layout_constraintTop_toBottomOf="@+id/tvMortgageRateValue" />
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="@string/starting_price"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:boxStrokeColor="@color/primaryColor"
+                app:startIconContentDescription="@string/currency_sign"
+                app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
+                tools:text="10000">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiedPriceFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILPriceUpTo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="@string/price_limit"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:boxStrokeColor="@color/primaryColor"
+                app:startIconContentDescription="@string/currency_sign"
+                app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
+                tools:text="10000">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiedPriceUpTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILSizeFrom"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="@string/size_from"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:boxStrokeColor="@color/primaryColor"
+                app:startIconContentDescription="@string/currency_sign"
+                app:startIconDrawable="@drawable/ic_baseline_house_24"
+                tools:text="10000">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiedSizeFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILSizeTo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="@string/size_up_to"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:boxStrokeColor="@color/primaryColor"
+                app:startIconContentDescription="@string/currency_sign"
+                app:startIconDrawable="@drawable/ic_baseline_house_24"
+                tools:text="10000">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiedSizeTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -207,7 +303,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView3" >
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -218,7 +314,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="0"
+                android:text="@string/_0"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -231,7 +327,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="1dp"
-                android:text="Search"
+                android:text="@string/search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

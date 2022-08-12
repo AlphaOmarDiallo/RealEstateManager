@@ -116,7 +116,6 @@ class MortgageCalculatorActivity : AppCompatActivity() {
     private fun reactToPriceChange() {
         binding.autoCompleteTextView.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, p2, _ ->
-                Log.d(TAG, "onItemClick: accessed")
                 propertyPrice = priceList[p2]
                 setMonthlyPayment()
             }

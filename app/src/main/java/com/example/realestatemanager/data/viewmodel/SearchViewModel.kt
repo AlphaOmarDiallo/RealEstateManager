@@ -16,17 +16,22 @@ class SearchViewModel @Inject constructor(
     private val propertyRepository: PropertyRepository
 ) : ViewModel() {
 
-    private val _PropertyList: MutableLiveData<List<Property>> = MutableLiveData()
-    val propertyList: LiveData<List<Property>> get() = _PropertyList
+    private val _propertyList: MutableLiveData<List<Property>> = MutableLiveData()
+    val propertyList: LiveData<List<Property>> get() = _propertyList
 
-    init {
-        getPropertyList()
-    }
+    private val _filteredList: MutableLiveData<List<Property>> = MutableLiveData()
+    val filteredList: LiveData<List<Property>> get() = _filteredList
 
-    private fun getPropertyList() {
+    fun getPropertyList() {
         viewModelScope.launch {
-            _PropertyList.value = propertyRepository.getListOfProperties().first()
+            _propertyList.value = propertyRepository.getListOfProperties().first()
         }
     }
+
+    fun setFilteredList() {
+
+    }
+
+    fun getNumberOfProperties() = if (!propertyList.value.isNullOrEmpty()) _propertyList.value?.size else 0
 
 }
