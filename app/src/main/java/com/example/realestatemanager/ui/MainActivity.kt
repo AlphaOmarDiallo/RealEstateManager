@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -121,10 +122,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun checkConnectivity(context: Context) {
         viewModel.checkConnectivity(context)
         viewModel.connected.observe(this) {
-            if (it) Utils.snackBarMaker(
-                binding.root,
-                getString(R.string.you_are_connected)
-            ) else Utils.snackBarMaker(binding.root, getString(R.string.you_are_disconnected))
+            if (it) {
+                Utils.snackBarMaker(
+                    binding.root,
+                    getString(R.string.you_are_connected)
+                )
+                binding.ivOffline?.visibility = View.INVISIBLE
+            } else Utils.snackBarMaker(binding.root, getString(R.string.you_are_disconnected))
         }
     }
 

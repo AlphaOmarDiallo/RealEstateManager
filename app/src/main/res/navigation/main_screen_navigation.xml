@@ -88,14 +88,13 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_createModifyFragment_to_propertyListFragment"
-            app:destination="@id/propertyListFragment" />
+            app:destination="@id/propertyListFragment"
+            app:popUpTo="@+id/main_screen_navigation"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="property"
             app:argType="com.example.realestatemanager.data.model.Property"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_createModifyFragment_to_propertyListFragment2"
-            app:destination="@id/propertyListFragment" />
     </fragment>
     <fragment
         android:id="@+id/googleMapsFragment"
@@ -108,7 +107,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.realestatemanager.ui.SearchFragment"
+        android:name="com.example.realestatemanager.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action

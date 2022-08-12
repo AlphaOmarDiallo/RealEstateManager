@@ -2,6 +2,7 @@ package com.example.realestatemanager.data.repository.media
 
 import android.content.ContentUris
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper
@@ -9,6 +10,7 @@ import android.database.ContentObserver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
+import android.util.Log
 import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.model.media.SharedStoragePhoto
 import com.example.realestatemanager.domain.utils.sdk29AndUp
@@ -29,9 +31,7 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
     override fun initContentObserver(context: Context) {
         contentObserver = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
-                if (true) {
-                    //loadPhotosFromInternalStorage(context)
-                }
+                Log.i(TAG, "onChange: content observer initialized")
             }
         }
         context.contentResolver.registerContentObserver(
@@ -125,7 +125,6 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         id
                     )
-                    //Log.i(TAG, "loadPhotosFromExternalStorage: $contentUri")
                     photos.add(SharedStoragePhoto(id, displayName, width, height, contentUri))
                 }
                 photos.toList()
@@ -160,9 +159,5 @@ class MediaStoreRepositoryImp @Inject constructor(): MediaStoreRepository {
             }
         }
     }
-
-    /**
-     *
-     */
 
 }

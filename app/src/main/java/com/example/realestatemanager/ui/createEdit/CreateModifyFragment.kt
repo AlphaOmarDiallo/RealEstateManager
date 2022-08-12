@@ -555,13 +555,17 @@ class CreateModifyFragment : Fragment(),
         if (checkIfPropertyCanBeSaved()) {
             val property: Property = createProperty()
 
-            if (args.property != null) viewModel.updateProperty(property) else viewModel.insertProperty(property)
-
-            val service = PropertyNotificationService(requireContext())
-            service.showNewPropertyNotification(property)
-
-            val action = CreateModifyFragmentDirections.actionCreateModifyFragmentToPropertyListFragment()
-            navController.navigate(action)
+            if (args.property != null) {
+                viewModel.updateProperty(property)
+                navController.navigateUp()
+            } else {
+                viewModel.insertProperty(property)
+                val service = PropertyNotificationService(requireContext())
+                service.showNewPropertyNotification(property)
+                val action =
+                    CreateModifyFragmentDirections.actionCreateModifyFragmentToPropertyListFragment()
+                navController.navigate(action)
+            }
 
         } else {
             Utils.snackBarMaker(binding.root, getString(R.string.fill_all_field))
