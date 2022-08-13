@@ -1,7 +1,5 @@
 package com.example.realestatemanager.data.viewmodel
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,104 +43,150 @@ class SearchViewModel @Inject constructor(
         startingPrice: Int?,
         priceLimit: Int?,
         sizeFrom: Int?,
-        sizeUpTo: Int?
-    ): Int {
-        val searchList: MutableList<Property> = mutableListOf()
-        searchList.addAll(propertyList.value!!)
+        sizeUpTo: Int?,
+        numberOfPhoto: Boolean
+    ) {
+        searchQuery(
+            buildTypeList(type),
+            buildCityList(city),
+            buildNeighbourhoodList(neighbourhood),
+            buildMinSurface(sizeFrom),
+            buildMaxSurface(sizeUpTo),
+            buildSchoolList(school),
+            buildShopsList(shops),
+            buildParkList(parks),
+            buildNumberOfPhoto(numberOfPhoto),
+            buildMinPrice(startingPrice),
+            buildMaxPrice(priceLimit),
+            soldLast3Month
+        )
+    }
 
-        val toKeepList: MutableList<Property> = mutableListOf()
+    private fun buildTypeList(type: String?): List<String> {
+        val list: MutableList<String> = mutableListOf()
 
-        if(type != null){
-            for (item in searchList){
-                if (item.type == type){
-                    toKeepList.add(item)
-                }
+        if (type != null) {
+            list.add(type)
+        } else {
+            val listP = propertyList.value
+            for (item in listP!!) {
+                if (!list.contains(item.type)) list.add(item.type)
             }
         }
 
-        if(city != null){
-            for (item in searchList){
-                if (item.city == city){
-                    if (searchList.contains(item)) Log.i(TAG, "searchUserCriteria: already in list") else toKeepList.add(item)
-                }
+        return list
+    }
+
+    private fun buildCityList(city: String?): List<String> {
+        val list: MutableList<String> = mutableListOf()
+
+        if (city != null) {
+            list.add(city)
+        } else {
+            val listP = propertyList.value
+            for (item in listP!!) {
+                if (!list.contains(item.city)) list.add(item.city)
             }
         }
 
-        if(neighbourhood != null){
-            for (item in searchList){
-                if (item.neighbourhood == neighbourhood){
-                    if (searchList.contains(item)) Log.i(TAG, "searchUserCriteria: already in list") else toKeepList.add(item)
-                }
+        return list
+    }
+
+    private fun buildNeighbourhoodList(neighbourhood: String?): List<String> {
+        val list: MutableList<String> = mutableListOf()
+
+        if (neighbourhood != null) {
+            list.add(neighbourhood)
+        } else {
+            val listP = propertyList.value
+            for (item in listP!!) {
+                if (!list.contains(item.neighbourhood)) list.add(item.neighbourhood)
             }
         }
 
-        for (item in searchList){
-            if(item.closeToSchool == school) if (searchList.contains(item)) Log.i(TAG, "searchUserCriteria: already in list") else toKeepList.add(item)
+        return list
+    }
+
+    private fun buildMinSurface(sizeFrom: Int?) = sizeFrom ?: 0
+
+    private fun buildMaxSurface(sizeUpTo: Int?) = sizeUpTo ?: 1000000
+
+    private fun buildMinPrice(startingPrice: Int?) = startingPrice ?: 0
+
+    private fun buildMaxPrice(maxPrice: Int?) = maxPrice ?: 100000000
+
+    private fun buildSchoolList(school: Boolean): List<Boolean> {
+        val list: MutableList<Boolean> = mutableListOf()
+
+        if (school) {
+            list.add(school)
+        } else {
+            list.add(true)
+            list.add(false)
         }
 
-        for (item in searchList){
-            if(item.closeToShops == shops) if (searchList.contains(item)) Log.i(TAG, "searchUserCriteria: already in list") else toKeepList.add(item)
+        return list
+    }
+
+    private fun buildShopsList(school: Boolean): List<Boolean> {
+        val list: MutableList<Boolean> = mutableListOf()
+
+        if (school) {
+            list.add(school)
+        } else {
+            list.add(true)
+            list.add(false)
         }
 
-        for (item in searchList){
-            if(item.closeToPark == parks) if (searchList.contains(item)) Log.i(TAG, "searchUserCriteria: already in list") else toKeepList.add(item)
+        return list
+    }
+
+    private fun buildParkList(school: Boolean): List<Boolean> {
+        val list: MutableList<Boolean> = mutableListOf()
+
+        if (school) {
+            list.add(school)
+        } else {
+            list.add(true)
+            list.add(false)
         }
 
-        /*for (item in searchList) {
+        return list
+    }
 
-            var toKeep = false
-
-            if (type != null) {
-                if (item.type == type.toString()) toKeep = true
-            }
-
-            if (city != null) {
-                if (item.city == city.toString()) toKeep = true
-            }
-
-            if (neighbourhood != null) {
-                if (item.neighbourhood == neighbourhood.toString()) toKeep = true
-            }
-
-            if (school) {
-                if (item.closeToSchool) toKeep = true
-            }
-
-            if (shops) {
-                if (item.closeToShops) toKeep = true
-            }
-
-            if (parks) {
-                if (item.closeToPark) toKeep = true
-            }
-
-            if (soldLast3Month) {
-                if (item.closeToSchool) toKeep = true
-            }
-
-            if (addedLess7Days) {
-                if (item.closeToSchool) toKeep = true
-            }
-
-            val startPrice = startingPrice ?: 0
-            val priceLim = if (priceLimit == 0 || priceLimit == null) 10000000 else priceLimit
-            val sizeFr = sizeFrom ?: 0
-            val sizeTo = if (sizeUpTo == 0 || sizeUpTo == null) 10000000 else sizeUpTo
-
-            if (item.price in startPrice..priceLim) toKeep = true
-
-            if (item.surface in sizeFr..sizeTo) toKeep = true
-
-            if (toKeep) toKeepList.add(item)*/
-        /*}
+    private fun buildNumberOfPhoto(numberOfPhoto: Boolean) = if (numberOfPhoto) 3 else 0
 
 
-        _filteredList.value = toKeepList
-
-        Log.e("test", "searchUserCriteria: ${searchList.size}")*/
-
-        Log.e("test", "searchUserCriteria: ${toKeepList.size}")
-        return searchList.size
+    private fun searchQuery(
+        isNearTypeProperty: List<String>,
+        isNearCity: List<String>,
+        isNearNeighbourhood: List<String>,
+        isNearMinSurface: Int,
+        isNearMaxSurface: Int,
+        isNearSchool: List<Boolean>,
+        isNearStore: List<Boolean>,
+        isNearParc: List<Boolean>,
+        isNearNumberOfPhotos: Int,
+        isNearMinPrice: Int,
+        isNearMaxPrice: Int,
+        isNearSaleStatus: Boolean,
+    ) {
+        viewModelScope.launch {
+            _filteredList.value = propertyRepository.getPropertyResearch(
+                isNearTypeProperty,
+                isNearCity,
+                isNearNeighbourhood,
+                isNearMinSurface,
+                isNearMaxSurface,
+                isNearSchool,
+                isNearStore,
+                isNearParc,
+                isNearNumberOfPhotos,
+                isNearMinPrice,
+                isNearMaxPrice,
+                isNearSaleStatus,
+            ).first()
+        }
     }
 
 }

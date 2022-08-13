@@ -18,7 +18,20 @@ interface PropertyRepository {
      * Research
      */
 
-
+    fun getPropertyResearch(
+        isNearTypeProperty: List<String>,
+        isNearCity: List<String>,
+        isNearNeighbourhood: List<String>,
+        isNearMinSurface: Int,
+        isNearMaxSurface: Int,
+        isNearSchool: List<Boolean>,
+        isNearStore: List<Boolean>,
+        isNearParc: List<Boolean>,
+        isNearNumberOfPhotos: Int,
+        isNearMinPrice: Int,
+        isNearMaxPrice: Int,
+        isNearSaleStatus: Boolean,
+    ): Flow<List<Property>>
 
 
     /**

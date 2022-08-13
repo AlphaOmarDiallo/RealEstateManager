@@ -150,15 +150,15 @@ class SearchFragment : Fragment() {
                 binding.switch3.isChecked,
                 binding.switch4.isChecked,
                 binding.switch5.isChecked,
-                if(binding.tiedPriceFrom.text.toString() != "") binding.tiedPriceFrom.text.toString().toInt() else null,
-                if (binding.tiedPriceUpTo.text.toString() != "") binding.tiedPriceUpTo.text.toString().toInt() else null,
-                if (binding.tiedSizeFrom.text.toString() != "") binding.tiedSizeFrom.text.toString().toInt() else null,
-                if (binding.tiedSizeTo.text.toString() != "") binding.tiedSizeTo.text.toString().toInt() else null
+                binding.tiedPriceFrom.text.toString().toInt(),
+                binding.tiedPriceUpTo.text.toString().toInt(),
+                binding.tiedSizeFrom.text.toString().toInt(),
+                binding.tiedSizeTo.text.toString().toInt()
             )
         }
     }
 
-    fun collectDataToSearchFun(
+    private fun collectDataToSearchFun(
         type: String?,
         city: String?,
         neighbourhood: String?,

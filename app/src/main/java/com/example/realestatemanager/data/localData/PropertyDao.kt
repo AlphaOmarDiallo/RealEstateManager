@@ -33,9 +33,7 @@ interface PropertyDao {
                 "AND property_close_shops = :isNearStore " +
                 "AND property_photos >= :isNearNumberOfPhotos " +
                 "AND property_price BETWEEN :isNearMinPrice AND :isNearMaxPrice " +
-                "AND property_on_market_since BETWEEN :isNearMinDateOfSale AND :isNearMaxDateOfSale " +
-                "AND property_sale_status = :isNearSaleStatus " +
-                "AND property_off_market_since BETWEEN :isNearMinDateSold AND :isNearMaxDateSold"
+                "AND property_sale_status = :isNearSaleStatus "
     )
     fun getPropertyResearch(
         isNearTypeProperty: List<String>,
@@ -43,17 +41,13 @@ interface PropertyDao {
         isNearNeighbourhood: List<String>,
         isNearMinSurface: Int,
         isNearMaxSurface: Int,
-        isNearSchool: Boolean,
-        isNearStore: Boolean,
-        isNearParc: Boolean,
+        isNearSchool: List<Boolean>,
+        isNearStore: List<Boolean>,
+        isNearParc: List<Boolean>,
         isNearNumberOfPhotos: Int,
         isNearMinPrice: Int,
         isNearMaxPrice: Int,
-        isNearMinDateOfSale: Long,
-        isNearMaxDateOfSale: Long,
         isNearSaleStatus: Boolean,
-        isNearMinDateSold: Long,
-        isNearMaxDateSold: Long
     ): Flow<List<Property>>
 
     /**
