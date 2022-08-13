@@ -15,6 +15,13 @@ interface PropertyRepository {
     fun getProperty(propertyID: Int): Flow<Property>
 
     /**
+     * Research
+     */
+
+
+
+
+    /**
      * Content provider
      */
 

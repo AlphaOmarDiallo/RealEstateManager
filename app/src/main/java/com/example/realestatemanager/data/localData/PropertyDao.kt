@@ -25,10 +25,12 @@ interface PropertyDao {
      */
     @Query(
         "SELECT * FROM property_table WHERE property_type IN (:isNearTypeProperty) " +
+                "AND property_city IN (:isNearCity)" +
+                "AND property_neighbourhood IN (:isNearNeighbourhood)" +
                 "AND property_surface BETWEEN :isNearMinSurface AND :isNearMaxSurface " +
-                "AND property_close_school IN (:isNearSchool) " +
-                "AND property_close_park IN (:isNearParc) " +
-                "AND property_close_shops IN (:isNearStore) " +
+                "AND property_close_school = :isNearSchool " +
+                "AND property_close_park = :isNearParc " +
+                "AND property_close_shops = :isNearStore " +
                 "AND property_photos >= :isNearNumberOfPhotos " +
                 "AND property_price BETWEEN :isNearMinPrice AND :isNearMaxPrice " +
                 "AND property_on_market_since BETWEEN :isNearMinDateOfSale AND :isNearMaxDateOfSale " +
@@ -37,14 +39,13 @@ interface PropertyDao {
     )
     fun getPropertyResearch(
         isNearTypeProperty: List<String>,
+        isNearCity: List<String>,
+        isNearNeighbourhood: List<String>,
         isNearMinSurface: Int,
         isNearMaxSurface: Int,
-        isNearSchool: List<Boolean>,
-        isNearHobbies: List<Boolean>,
-        isNearTransport: List<Boolean>,
-        isNearParc: List<Boolean>,
-        isNearStore: List<Boolean>,
-        isNearCity: String,
+        isNearSchool: Boolean,
+        isNearStore: Boolean,
+        isNearParc: Boolean,
         isNearNumberOfPhotos: Int,
         isNearMinPrice: Int,
         isNearMaxPrice: Int,
