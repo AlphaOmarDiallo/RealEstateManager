@@ -195,6 +195,13 @@
 
             </androidx.cardview.widget.CardView>
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/toggleNbPicture"
+                android:layout_margin="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/more_3_pictures" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TILPriceFrom"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

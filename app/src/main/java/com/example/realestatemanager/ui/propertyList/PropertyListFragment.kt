@@ -92,6 +92,7 @@ class PropertyListFragment : Fragment() {
                 viewModel.pList.observe(requireActivity()) {
                     if (propertyList.isEmpty()) {
                         propertyList = it
+                        compose = true
                         Log.i(TAG, "onCreateView: list was empty")
                     } else if (propertyList.isNotEmpty()) {
                         if (it.size == propertyList.size) {

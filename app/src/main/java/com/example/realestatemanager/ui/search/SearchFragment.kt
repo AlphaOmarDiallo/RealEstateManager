@@ -39,6 +39,7 @@ class SearchFragment : Fragment() {
 
         getListProperties()
         setupOnClick()
+        filteredList()
     }
 
     private fun setViews() {
@@ -142,18 +143,19 @@ class SearchFragment : Fragment() {
     private fun setupOnClick() {
         binding.btnSearch.setOnClickListener{
             collectDataToSearchFun(
-                binding.autoCompleteTextViewTypeS.text.toString(),
-                binding.autoCompleteTextViewCityS.toString(),
-                binding.autoCompleteTextViewNeiS.text.toString(),
+                if (binding.autoCompleteTextViewTypeS.text.toString() != "") binding.autoCompleteTextViewTypeS.text.toString() else null,
+                if (binding.autoCompleteTextViewCityS.text.toString() !=  "") binding.autoCompleteTextViewCityS.toString() else null,
+                if (binding.autoCompleteTextViewNeiS.text.toString() != "") binding.autoCompleteTextViewNeiS.text.toString() else null,
                 binding.switch1.isChecked,
                 binding.switch2.isChecked,
                 binding.switch3.isChecked,
                 binding.switch4.isChecked,
                 binding.switch5.isChecked,
-                binding.tiedPriceFrom.text.toString().toInt(),
-                binding.tiedPriceUpTo.text.toString().toInt(),
-                binding.tiedSizeFrom.text.toString().toInt(),
-                binding.tiedSizeTo.text.toString().toInt()
+                if (binding.tiedPriceFrom.text.toString() != "") binding.tiedPriceFrom.text.toString().toInt() else null,
+                if (binding.tiedPriceUpTo.text.toString() != "") binding.tiedPriceUpTo.text.toString().toInt()else null,
+                if (binding.tiedSizeFrom.text.toString() != "") binding.tiedSizeFrom.text.toString().toInt() else null,
+                if (binding.tiedSizeTo.text.toString() != "") binding.tiedSizeTo.text.toString().toInt() else null,
+                binding.toggleNbPicture.isChecked
             )
         }
     }
@@ -170,7 +172,8 @@ class SearchFragment : Fragment() {
         startingPrice: Int?,
         priceLimit: Int?,
         sizeFrom: Int?,
-        sizeUpTo: Int?
+        sizeUpTo: Int?,
+        numberOfPhoto: Boolean
     ) {
         viewModel.searchUserCriteria(
             type,
@@ -184,8 +187,16 @@ class SearchFragment : Fragment() {
             startingPrice,
             priceLimit,
             sizeFrom,
-            sizeUpTo
+            sizeUpTo,
+            numberOfPhoto
         )
+    }
+
+    private fun filteredList(){
+        viewModel.filteredList.observe(requireActivity()){
+            Log.e(TAG, "filteredList: ${it.toString()}", )
+            binding.textView.setText(it.size.toString())
+        }
     }
 
 }

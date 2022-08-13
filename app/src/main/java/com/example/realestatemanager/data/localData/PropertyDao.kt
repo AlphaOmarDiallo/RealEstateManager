@@ -28,9 +28,9 @@ interface PropertyDao {
                 "AND property_city IN (:isNearCity)" +
                 "AND property_neighbourhood IN (:isNearNeighbourhood)" +
                 "AND property_surface BETWEEN :isNearMinSurface AND :isNearMaxSurface " +
-                "AND property_close_school = :isNearSchool " +
-                "AND property_close_park = :isNearParc " +
-                "AND property_close_shops = :isNearStore " +
+                "AND property_close_school IN (:isNearSchool) " +
+                "AND property_close_park IN (:isNearParc) " +
+                "AND property_close_shops IN (:isNearStore) " +
                 "AND property_photos >= :isNearNumberOfPhotos " +
                 "AND property_price BETWEEN :isNearMinPrice AND :isNearMaxPrice " +
                 "AND property_sale_status = :isNearSaleStatus "
