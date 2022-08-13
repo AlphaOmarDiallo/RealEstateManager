@@ -12,6 +12,7 @@ import com.example.realestatemanager.domain.Constant
 import com.google.android.material.snackbar.Snackbar
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -55,6 +56,16 @@ object Utils {
 
     fun longToDate(date: Long): String {
         return formatter.format(date)
+    }
+
+    fun dateMinusSevenDays(): Long{
+        val date: LocalDate = LocalDate.now().minusDays(7)
+        return date.toEpochDay()
+    }
+
+    fun dateMinusThreeMonth(): Long{
+        val date: LocalDate = LocalDate.now().minusMonths(3)
+        return date.toEpochDay()
     }
 
     /**

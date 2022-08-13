@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.repository.property.PropertyRepository
+import com.example.realestatemanager.domain.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -58,7 +59,8 @@ class SearchViewModel @Inject constructor(
             buildNumberOfPhoto(numberOfPhoto),
             buildMinPrice(startingPrice),
             buildMaxPrice(priceLimit),
-            soldLast3Month
+            soldLast3Month,
+            addedLess7Days
         )
     }
 
@@ -170,22 +172,48 @@ class SearchViewModel @Inject constructor(
         isNearMinPrice: Int,
         isNearMaxPrice: Int,
         isNearSaleStatus: Boolean,
+        isAddedLastSevenDays: Boolean
     ) {
+        val temp: MutableList<Property> = mutableListOf()
+
         viewModelScope.launch {
-            _filteredList.value = propertyRepository.getPropertyResearch(
-                isNearTypeProperty,
-                isNearCity,
-                isNearNeighbourhood,
-                isNearMinSurface,
-                isNearMaxSurface,
-                isNearSchool,
-                isNearStore,
-                isNearParc,
-                isNearNumberOfPhotos,
-                isNearMinPrice,
-                isNearMaxPrice,
-                isNearSaleStatus,
-            ).first()
+            temp.addAll(
+                propertyRepository.getPropertyResearch(
+                    isNearTypeProperty,
+                    isNearCity,
+                    isNearNeighbourhood,
+                    isNearMinSurface,
+                    isNearMaxSurface,
+                    isNearSchool,
+                    isNearStore,
+                    isNearParc,
+                    isNearNumberOfPhotos,
+                    isNearMinPrice,
+                    isNearMaxPrice,
+                    isNearSaleStatus,
+                ).first()
+            )
+
+            if (temp.isNotEmpty()){
+
+                if (isNearSaleStatus) {
+                    for (item in temp){
+                        if (item.offTheMarketSince!! < Utils.dateMinusThreeMonth()) {
+                            temp.remove(item)
+                        }
+                    }
+                }
+
+                if (isAddedLastSevenDays){
+                    for (item in temp){
+                        if (item.onTheMarketSince!! > Utils.dateMinusSevenDays()) {
+                            temp.remove(item)
+                        }
+                    }
+                }
+            }
+
+            _filteredList.value = temp
         }
     }
 
