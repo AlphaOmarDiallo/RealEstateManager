@@ -64,6 +64,7 @@ class CreateModifyFragment : Fragment(),
     private var isCloseToShops = false
     private var isCloseToTransport = false
     private var latLng: LatLng = LatLng(40.741694549848404, -73.98956985396345)
+    private var numberOfPhoto = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -516,6 +517,7 @@ class CreateModifyFragment : Fragment(),
         val closeToPark: Boolean = isCloseToPark
         val closeToTransport: Boolean = isCloseToTransport
         val listInterest: List<String> = listInterestID
+        numberOfPhoto = photo.size
 
         return Property(
             id = id,
@@ -540,7 +542,8 @@ class CreateModifyFragment : Fragment(),
             closeToShops = closeToShops,
             closeToTransport = closeToTransport,
             listOfInterest = listInterest,
-            listPlaceDetail = listPlaceDetail
+            listPlaceDetail = listPlaceDetail,
+            nbPhoto = numberOfPhoto
         )
     }
 
