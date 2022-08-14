@@ -1,4 +1,4 @@
-package com.example.realestatemanager.domain
+package com.example.realestatemanager.domain.composable
 
 import android.content.ContentValues.TAG
 import android.net.Uri

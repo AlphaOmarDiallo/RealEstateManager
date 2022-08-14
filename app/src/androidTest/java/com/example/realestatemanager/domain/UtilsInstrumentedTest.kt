@@ -1,4 +1,4 @@
-package com.example.realestatemanager
+package com.example.realestatemanager.domain
 
 import androidx.test.espresso.internal.inject.InstrumentationContext
 import androidx.test.ext.junit.rules.ActivityScenarioRule

@@ -1,4 +1,4 @@
-package com.example.realestatemanager.domain
+package com.example.realestatemanager.domain.composable
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

@@ -4,7 +4,7 @@ import com.example.realestatemanager.domain.utils.MortgagePaymentUtil
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class MortgagePaymentUtilTest{
+class MortgagePaymentUtilTest {
 
     @Test
     fun calculate_monthly_payment_mortgage_is_successful() {

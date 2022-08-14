@@ -1,6 +1,5 @@
 package com.example.realestatemanager.ui.search
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.net.Uri
 import android.os.Bundle
@@ -37,9 +36,7 @@ import coil.compose.rememberImagePainter
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.SearchViewModel
-import com.example.realestatemanager.domain.*
-import com.example.realestatemanager.domain.composable.WindowInfo
-import com.example.realestatemanager.domain.composable.rememberWindowInfo
+import com.example.realestatemanager.domain.composable.*
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -68,9 +65,8 @@ class SearchResults : Fragment() {
                 dollarToEuroRate = viewModel.dollarToEuroRate.value
                 currencyEuro = false
 
-                RealEstateManagerTheme() {
+                RealEstateManagerTheme {
                     propertyList = args.resultList.result
-                    Log.e(ContentValues.TAG, "onCreateView: here composing")
                     ListOfProperty(propertyList)
                 }
             }
@@ -105,7 +101,6 @@ class SearchResults : Fragment() {
     @Composable
     fun CardContent(property: Property) {
         var expended by remember { mutableStateOf(false) }
-        var euro by remember { mutableStateOf(false) }
 
         Column(
             modifier = Modifier

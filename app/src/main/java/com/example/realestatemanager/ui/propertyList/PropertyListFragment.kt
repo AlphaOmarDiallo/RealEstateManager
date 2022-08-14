@@ -40,9 +40,7 @@ import coil.compose.rememberImagePainter
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyListViewModel
-import com.example.realestatemanager.domain.*
-import com.example.realestatemanager.domain.composable.WindowInfo
-import com.example.realestatemanager.domain.composable.rememberWindowInfo
+import com.example.realestatemanager.domain.composable.*
 import com.example.realestatemanager.ui.ui.theme.RealEstateManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -153,7 +151,7 @@ class PropertyListFragment : Fragment() {
                 viewModel.getListInternalPhoto(requireContext())
                 val listPhoto = selectedProperty.photoIDList
 
-                Scaffold(
+                com.example.realestatemanager.domain.composable.Scaffold(
                     property = selectedProperty,
                     navController = navController,
                     navDirections = action,

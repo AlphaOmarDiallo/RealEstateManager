@@ -7,6 +7,7 @@ import com.example.realestatemanager.data.repository.media.MediaStoreRepositoryI
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -16,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltAndroidTest
 class PhotoRepositoryImpTest {
     @get:Rule
@@ -42,8 +44,8 @@ class PhotoRepositoryImpTest {
 
     @Test
     fun add_photo_in_db_and_delete() = runTest {
-        val IPL = mediaStoreRepositoryImp.loadPhotosFromInternalStorage(InstrumentationRegistry.getInstrumentation().context)
-        val photo = Photo(0, IPL[0].bmp,IPL[0].name)
+        val iPL = mediaStoreRepositoryImp.loadPhotosFromInternalStorage(InstrumentationRegistry.getInstrumentation().context)
+        val photo = Photo(0, iPL[0].bmp,iPL[0].name)
         val size = photoRepositoryImp.getListOfPhotos().first().size
         photoRepositoryImp.insertPhoto(photo)
         advanceUntilIdle()

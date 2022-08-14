@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.viewmodel.PropertyDetailViewModel
-import com.example.realestatemanager.domain.Scaffold
+import com.example.realestatemanager.domain.composable.Scaffold
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
 

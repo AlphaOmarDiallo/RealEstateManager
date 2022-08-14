@@ -9,9 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.model.Photo
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.data.model.media.InternalStoragePhoto
 import com.example.realestatemanager.data.repository.dataStore.DataStoreRepository
 import com.example.realestatemanager.data.repository.media.MediaStoreRepository
 import com.example.realestatemanager.data.repository.photo.PhotoRepository
@@ -68,7 +68,7 @@ class PropertyDetailViewModel @Inject constructor(
      */
 
     val listInternalStoragePhoto: MutableState<List<InternalStoragePhoto>> = mutableStateOf(listOf())
-    val _listInternalStoragePhoto: MutableLiveData<List<InternalStoragePhoto>> = MutableLiveData()
+    private val _listInternalStoragePhoto: MutableLiveData<List<InternalStoragePhoto>> = MutableLiveData()
 
     fun getListInternalPhoto(context: Context){
         viewModelScope.launch {
@@ -93,8 +93,6 @@ class PropertyDetailViewModel @Inject constructor(
 
             listPhoto.addAll(photoRepository.getListOfPhotos().first())
         }
-
-        Log.e(TAG, "getListOfPropertyPhoto: $listPhoto", )
         
         return listPhoto
     }

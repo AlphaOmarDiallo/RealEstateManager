@@ -92,7 +92,7 @@ class SearchFragment : Fragment() {
 
     private fun setCityListener() {
         binding.autoCompleteTextViewCityS.onItemClickListener =
-            AdapterView.OnItemClickListener { adapterView, view, i, l ->
+            AdapterView.OnItemClickListener { _, _, i, _ ->
                 val currentCity = cityList[i]
                 binding.autoCompleteTextViewNeiS.setText("")
                 setNeighbourHood(currentCity)

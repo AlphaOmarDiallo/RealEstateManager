@@ -35,7 +35,6 @@ class PropertyRepositoryImpTest {
     @Before
     fun init() {
         hiltRule.inject()
-
     }
 
     @After
@@ -120,6 +119,48 @@ class PropertyRepositoryImpTest {
         //Then
         assertThat(propertyListTest).contains(property)
         assertThat(propertyListTest).contains(property1)
+    }
+
+    @Test
+    fun test_Search_Request() = runTest {
+        //Given
+        addProperties()
+        advanceUntilIdle()
+
+        //When
+        val property = SampleProperties.samplePropertyList[0]
+        val isNearTypeProperty: List<String> = listOf(property.type)
+        val isNearCity: List<String> = listOf(property.city)
+        val isNearNeighbourhood: List<String> = listOf(property.neighbourhood)
+        val isNearMinSurface: Int = property.surface - 10
+        val isNearMaxSurface: Int = property.surface + 10
+        val isNearSchool: List<Boolean> = listOf(property.closeToSchool)
+        val isNearStore: List<Boolean> = listOf(property.closeToShops)
+        val isNearParc: List<Boolean> = listOf(property.closeToPark)
+        val isNearNumberOfPhotos = 0
+        val isNearMinPrice = property.price - 1000
+        val isNearMaxPrice = property.price + 1000
+        val isNearSaleStatus: Boolean = property.saleStatus
+
+        val result =
+            propertyDao.getPropertyResearch(
+                isNearTypeProperty,
+                isNearCity,
+                isNearNeighbourhood,
+                isNearMinSurface,
+                isNearMaxSurface,
+                isNearSchool,
+                isNearStore,
+                isNearParc,
+                isNearNumberOfPhotos,
+                isNearMinPrice,
+                isNearMaxPrice,
+                isNearSaleStatus
+            )
+        advanceUntilIdle()
+
+        // Then
+        assertThat(result.first().size).isNotEqualTo(0)
     }
 
     private suspend fun addProperties() {
