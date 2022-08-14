@@ -1,11 +1,14 @@
 package com.example.realestatemanager.data.viewmodel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.realestatemanager.data.model.Property
 import com.example.realestatemanager.data.repository.property.PropertyRepository
+import com.example.realestatemanager.domain.Constant
 import com.example.realestatemanager.domain.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
@@ -14,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val propertyRepository: PropertyRepository
+    private val propertyRepository: PropertyRepository,
 ) : ViewModel() {
 
     private val _propertyList: MutableLiveData<List<Property>> = MutableLiveData()
@@ -28,9 +31,6 @@ class SearchViewModel @Inject constructor(
             _propertyList.value = propertyRepository.getListOfProperties().first()
         }
     }
-
-    fun getNumberOfProperties() =
-        if (!propertyList.value.isNullOrEmpty()) _propertyList.value?.size else 0
 
     fun searchUserCriteria(
         type: String?,
@@ -194,27 +194,32 @@ class SearchViewModel @Inject constructor(
                 ).first()
             )
 
-            if (temp.isNotEmpty()){
+            if (temp.isNotEmpty()) {
 
                 if (isNearSaleStatus) {
-                    for (item in temp){
+                    for (item in temp) {
                         if (item.offTheMarketSince!! < Utils.dateMinusThreeMonth()) {
                             temp.remove(item)
                         }
                     }
                 }
 
-                if (isAddedLastSevenDays){
-                    for (item in temp){
-                        if (item.onTheMarketSince!! > Utils.dateMinusSevenDays()) {
+                if (isAddedLastSevenDays) {
+                    for (item in temp) {
+                        if (item.onTheMarketSince > Utils.dateMinusSevenDays()) {
                             temp.remove(item)
                         }
                     }
                 }
             }
-
             _filteredList.value = temp
         }
     }
+
+    /**
+     * Currency
+     */
+
+    val dollarToEuroRate: MutableState<Double> = mutableStateOf(Constant.DOLLARS_TO_EURO)
 
 }

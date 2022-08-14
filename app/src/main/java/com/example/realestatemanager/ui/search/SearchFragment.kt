@@ -12,10 +12,13 @@ import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.realestatemanager.R
 import com.example.realestatemanager.data.model.Property
+import com.example.realestatemanager.data.model.SearchResultObject
 import com.example.realestatemanager.data.viewmodel.SearchViewModel
 import com.example.realestatemanager.databinding.FragmentSearchBinding
+import com.example.realestatemanager.domain.utils.Utils
 
 private lateinit var binding: FragmentSearchBinding
 private lateinit var navController: NavController
@@ -31,6 +34,7 @@ class SearchFragment : Fragment() {
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(requireActivity())[SearchViewModel::class.java]
+        navController = findNavController()
         return binding.root
     }
 
@@ -46,9 +50,10 @@ class SearchFragment : Fragment() {
         if (listProperties.isNullOrEmpty()) {
             Log.i(TAG, "setViews: empty or null")
         } else {
-            getNumberProperties()
-            setCity()
-            setType()
+            if (this.isAdded) {
+                setCity()
+                setType()
+            }
         }
     }
 
@@ -130,31 +135,29 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun getNumberProperties() {
-        val number = viewModel.getNumberOfProperties()
-        if (binding.textView.text == "0")
-            binding.textView.text = "$number"
-    }
-
     /**
      * Search
      */
 
     private fun setupOnClick() {
-        binding.btnSearch.setOnClickListener{
+        binding.btnSearch.setOnClickListener {
             collectDataToSearchFun(
                 if (binding.autoCompleteTextViewTypeS.text.toString() != "") binding.autoCompleteTextViewTypeS.text.toString() else null,
-                if (binding.autoCompleteTextViewCityS.text.toString() !=  "") binding.autoCompleteTextViewCityS.toString() else null,
+                if (binding.autoCompleteTextViewCityS.text.toString() != "") binding.autoCompleteTextViewCityS.toString() else null,
                 if (binding.autoCompleteTextViewNeiS.text.toString() != "") binding.autoCompleteTextViewNeiS.text.toString() else null,
                 binding.switch1.isChecked,
                 binding.switch2.isChecked,
                 binding.switch3.isChecked,
                 binding.switch4.isChecked,
                 binding.switch5.isChecked,
-                if (binding.tiedPriceFrom.text.toString() != "") binding.tiedPriceFrom.text.toString().toInt() else null,
-                if (binding.tiedPriceUpTo.text.toString() != "") binding.tiedPriceUpTo.text.toString().toInt()else null,
-                if (binding.tiedSizeFrom.text.toString() != "") binding.tiedSizeFrom.text.toString().toInt() else null,
-                if (binding.tiedSizeTo.text.toString() != "") binding.tiedSizeTo.text.toString().toInt() else null,
+                if (binding.tiedPriceFrom.text.toString() != "") binding.tiedPriceFrom.text.toString()
+                    .toInt() else null,
+                if (binding.tiedPriceUpTo.text.toString() != "") binding.tiedPriceUpTo.text.toString()
+                    .toInt() else null,
+                if (binding.tiedSizeFrom.text.toString() != "") binding.tiedSizeFrom.text.toString()
+                    .toInt() else null,
+                if (binding.tiedSizeTo.text.toString() != "") binding.tiedSizeTo.text.toString()
+                    .toInt() else null,
                 binding.toggleNbPicture.isChecked
             )
         }
@@ -192,10 +195,26 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun filteredList(){
-        viewModel.filteredList.observe(requireActivity()){
-            Log.e(TAG, "filteredList: ${it.toString()}", )
-            binding.textView.setText(it.size.toString())
+    private fun filteredList() {
+        viewModel.filteredList.observe(requireActivity()) {
+            Log.e(TAG, "filteredList: ${it.size}")
+            btnSeeResultsVisible(it.size, it)
+        }
+    }
+
+    private fun btnSeeResultsVisible(result: Int, list: List<Property>) {
+        Log.e(TAG, "btnSeeResultsVisible: here")
+        if (result == 0) {
+            binding.btnSeeResult.visibility = View.INVISIBLE
+            Utils.snackBarMaker(binding.root, getString(R.string.no_results))
+        } else {
+            binding.btnSeeResult.visibility = View.VISIBLE
+            val searchResults = SearchResultObject(list)
+            binding.btnSeeResult.setOnClickListener {
+                val action =
+                    SearchFragmentDirections.actionSearchFragmentToSearchResults(searchResults)
+                navController.navigate(action)
+            }
         }
     }
 

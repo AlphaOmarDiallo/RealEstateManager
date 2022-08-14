@@ -111,9 +111,18 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_propertyDetail"
-            app:destination="@id/propertyDetail"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            android:id="@+id/action_searchFragment_to_searchResults"
+            app:destination="@id/searchResults" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchResults"
+        android:name="com.example.realestatemanager.ui.search.SearchResults"
+        android:label="fragment_search_results">
+        <action
+            android:id="@+id/action_searchResults_to_propertyDetail"
+            app:destination="@id/propertyDetail" />
+        <argument
+            android:name="resultList"
+            app:argType="com.example.realestatemanager.data.model.SearchResultObject" />
     </fragment>
 </navigation>
