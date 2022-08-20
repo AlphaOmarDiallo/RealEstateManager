@@ -26,6 +26,7 @@ Tech stack used:
 * REST API: Retrofit, Okhttp 
 * REST API with Retrofit
 * API's: Maps, Places, Autocomplete, Abstract currency
+* Testing: Junit4, Truth, Mockito 
 * Versionning: GIT
 
 ## Project setup
