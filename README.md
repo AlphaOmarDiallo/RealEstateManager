@@ -21,7 +21,7 @@ Tech stack used:
 * Dependency injection: DAGGER2 / HILT
 * Asynchronous tasks: Coroutines, LiveData
 * SQLite database: Room persistence library
-* UI: Compose, XML
+* UI: Material 2, Compose, XML
 * Backend: Firebase
 * REST API: Retrofit, Okhttp 
 * REST API with Retrofit
